@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="http://visualcomponents.org/Visual.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://visualcomponents.org/Visual.xsd"
+    xmlns:mstns="http://visualcomponents.org/Visual.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="mxGraphModel">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="root">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="mxCell" type="mxCellType" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="mxCellType">
+    <xs:sequence>
+      <xs:element name="mxGeometry" type="mxGeometryType" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:integer"/>
+    <xs:attribute name="parent" type="xs:integer"/>
+    <xs:attribute name="value" type="xs:string"/>
+    <xs:attribute name="vertex" type="xs:integer"/>
+    <xs:attribute name="style" type="xs:string"/>
+    <xs:attribute name="target" type="xs:integer"/>
+    <xs:attribute name="source" type="xs:integer"/>
+    <xs:attribute name="edge" type="xs:integer"/>
+  </xs:complexType>
+  <xs:complexType name="mxGeometryType">
+    <xs:attribute name="as" type="xs:string"/>
+    <xs:attribute name="relative" type="xs:integer"/>
+    <xs:attribute name="height" type="xs:double"/>
+    <xs:attribute name="width" type="xs:double"/>
+    <xs:attribute name="x" type="xs:double"/>
+    <xs:attribute name="y" type="xs:double"/>
+  </xs:complexType>
+</xs:schema>

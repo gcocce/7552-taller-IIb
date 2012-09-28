@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+
+    <xs:element name="diagram" type="diagramType"/>
+    <xs:complexType name="diagramType">
+        <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="0" name="entities" type="entityCollection"/>
+            <xs:element maxOccurs="1" minOccurs="0" name="relationships" type="relationshipCollection"/>
+            <xs:element maxOccurs="1" minOccurs="0" name="hierarchies" type="hierarchiesCollection"/>
+            <xs:element maxOccurs="1" minOccurs="0" name="diagrams">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element type="diagramType" name="diagram" maxOccurs="unbounded" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="id" type="guid"/>
+        <xs:attribute name="state" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="entityCollection">
+        <xs:sequence>
+            <xs:element name="entity" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="attributes" type="attributeCollection" maxOccurs="1" minOccurs="0"/>
+                    </xs:sequence>
+                    <xs:attribute name="id" type="guid" use="required"/>
+                    <xs:attribute name="name" type="xs:string" use="required"/>
+                    <xs:attribute name="type">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="thing"/>
+                                <xs:enumeration value="domain"/>
+                                <xs:enumeration value="historic"/>
+                                <xs:enumeration value="programmed"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="idGroupCollection">
+        <xs:sequence>
+            <xs:element name="idGroup" maxOccurs="unbounded" minOccurs="1">
+                <xs:complexType>
+                    <xs:attribute name="name" type="xs:string" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="relationshipCollection">
+        <xs:sequence>
+            <xs:element name="relationship" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="entities" maxOccurs="1" minOccurs="1">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="entity" type="relationshipEntity" minOccurs="1" maxOccurs="unbounded"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="attributes" type="attributeCollection" maxOccurs="1" minOccurs="0"/>
+                    </xs:sequence>
+                    <xs:attribute name="id" type="guid" use="required"/>
+                    <xs:attribute name="name" type="xs:string"/>
+                    <xs:attribute name="composition" type="xs:boolean"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="attributeCollection">
+        <xs:sequence>
+            <xs:element name="attribute" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="attributes" type="attributeCollection" maxOccurs="1" minOccurs="0"/>
+                        <xs:element name="idGroups" type="idGroupCollection" maxOccurs="1" minOccurs="0"/>
+                    </xs:sequence>
+                    <xs:attribute name="name" type="xs:string" use="required"/>
+                    <xs:attribute name="type">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="characterization"/>
+                                <xs:enumeration value="calculated"/>
+                                <xs:enumeration value="copy"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="expression" type="xs:string"/>
+                    <xs:attribute name="minimumCardinality" type="cardinality"/>
+                    <xs:attribute name="maximumCardinality" type="cardinality"/>
+                    <xs:attribute name="id" type="guid" use="required"/>
+                    <xs:attribute name="isKeyField" type="xs:boolean" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <!-- If the attribute refers to an external element so the guid is necessary -->
+        
+    </xs:complexType>
+
+    <xs:complexType name="hierarchiesCollection">
+        <xs:sequence>
+            <xs:element name="hierarchy" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="specificEntities">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="entityId" type="guid"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:all>
+                    <xs:attribute name="generalEntityId" type="guid" use="required"/>
+                    <xs:attribute name="total" type="xs:boolean"/>
+                    <xs:attribute name="exclusive" type="xs:boolean"/>
+                    <xs:attribute name="id" type="guid" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="cardinality">
+        <xs:restriction base="xs:string">
+            <!--either a number or *-->
+            <xs:pattern value="[0-9]+|\*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="guid">
+        <xs:restriction base="xs:string">
+            <!--either a number or *-->
+            <xs:pattern value="[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="relationshipEntity">
+        <xs:attribute name="entityId" type="guid" use="required"/>
+        <xs:attribute name="minimumCardinality" type="cardinality" use="optional"/>
+        <xs:attribute name="maximumCardinality" type="cardinality" use="optional"/>
+        <xs:attribute name="role" type="xs:string" use="optional"/>
+        <xs:attribute name="isStrongEntity" type="xs:boolean" use="required"/>
+    </xs:complexType>
+    
+</xs:schema>

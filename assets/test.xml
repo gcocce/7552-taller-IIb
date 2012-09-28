@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<diagram xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Domain.xsd">
+
+    <entities>
+        <entity name="entityName" id="3F2504E0-4F89-11D3-9A0C-030CFFFFFFFF">
+            <attributes>
+                <attribute name="attributeName" type="copy" expression="expr" minimumCardinality="123245"
+                           id="3F2504E0-4F89-11D3-9A0C-030CFFFFEEEE">
+                    <idGroups>
+                        <idGroup number="1"/>
+                        <idGroup number="2"/>
+                    </idGroups>
+                </attribute>
+                <attribute name="attributeName" type="copy" expression="expr" id="3F2504E0-4F89-11D3-9A0C-030CFFFFFFFA">
+                    <idGroups>
+                        <idGroup number="1"/>
+                    </idGroups>
+                </attribute>
+            </attributes>
+            <strongEntities>
+                <strongEntity name="strongEntity1" id="3F2504E0-4F89-11D3-9A0C-030CFFFAAAAA"/>
+                <strongEntity name="strongEntity2" id="3F2504E0-4F89-11D3-9A0C-030CFFFAAABA"/>
+            </strongEntities>
+        </entity>
+    </entities>
+
+    <relationships>
+        <relationship id="3F2504E0-4F89-11D3-9A0C-030CFFFFFFFA">
+            <entities>
+                <entity entityId="3F2504E0-4F89-11D3-9A0C-030CFFFFFFFF"/>
+            </entities>
+        </relationship>
+    </relationships>
+
+    <hierarchies>
+        <hierarchy total="true" exclusive="false" id="3F2504E0-4F89-11D3-9A0C-030CFFFFFFFC"
+                   generalEntityId="3F2504E0-4F89-11D3-9A0C-030CFFFFFFFC">
+            <specificEntities>
+                <entityId>3F2504E0-4F89-11D3-9A0C-030CFFFFFFFC</entityId>
+            </specificEntities>
+        </hierarchy>
+        <hierarchy id="3F2504E0-4F89-11D3-9A0C-030CFFFFFFAC" generalEntityId="3F2504E0-4F89-11D3-9A0C-030CFFFFFFFC">
+            <specificEntities>
+                <entityId>3F2504E0-4F89-11D3-9A0C-030CFFFFFFFC</entityId>
+            </specificEntities>
+        </hierarchy>
+    </hierarchies>
+
+    <diagrams>
+        <diagram/>
+        <diagram id="3F2504E0-4F89-11D3-9A0C-0301FFFFFFFF"/>
+        <diagram id="3F2504E0-4F89-11D3-9A0C-0302FFFFFFFF"/>
+    </diagrams>
+
+</diagram>
+
+

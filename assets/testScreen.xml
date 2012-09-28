@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<diagram xmlns="Screen.xsd" name="firstDiagram">
+
+    <components>
+        <component id="line" positionX="0" positionY="0">
+            <components>
+                <component id="entity1" positionX="10" positionY="10"/>
+                <component id="relationship" positionX="10" positionY="100"/>
+            </components>
+        </component>
+
+        <component id="line2" positionX="0" positionY="0">
+            <components>
+                <component id="entity2" positionX="50" positionY="200"/>
+                <component id="relationship" positionX="10" positionY="100"/>
+            </components>
+        </component>
+
+        <component id="line3" positionX="0" positionY="0">
+            <components>
+                <component id="entity2" positionX="50" positionY="200"/>
+                <component id="childEntity" positionX="10" positionY="100"/>
+            </components>
+        </component>
+    </components>
+
+</diagram>

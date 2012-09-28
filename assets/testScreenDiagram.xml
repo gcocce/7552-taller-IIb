@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<diagram xmlns="ScreenDiagram.xsd" name="firstDiagram">
+    <components>
+        <component id="entity2" positionX="0" positionY="0" name="My entity 1"/>
+        <component id="entity1" positionX="200" positionY="0" name="My entity 2"/>
+        <component id="childEntity1" positionX="0" positionY="100" name="My child entity 2"/>
+        <component id="childEntity2" positionX="100" positionY="100" name="My child entity 2"/>
+        <component id="relation" positionX="100" positionY="0" name="Relation between entities"/>
+    </components>
+
+    <unions>
+        <line from="entity1" to="relation" type="simpleRelation"/>
+        <line from="relation" to="entity2" type="simpleRelation"/>
+        <line from="entity1" to="childEntity1" type="hierarchy"/>
+        <line from="entity1" to="childEntity2" type="hierarchy"/>
+    </unions>
+</diagram>

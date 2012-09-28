@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mxGraphModel xmlns="http://visualcomponents.org/Visual.xsd">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="2" parent="1" value="BillEntry" vertex="1">
+      <mxGeometry as="geometry" height="30.0" width="80.0" x="170.0"/>
+    </mxCell>
+    <mxCell id="3" parent="1" value="Product" vertex="1">
+      <mxGeometry as="geometry" height="30.0" width="60.0" x="240.0" y="150.0"/>
+    </mxCell>
+    <mxCell id="4" parent="1" style="fontSize=9;strokeColor=white;fillColor=white;gradientColor=white;verticalAlign=top;align=center" value="Name" vertex="1">
+      <mxGeometry as="geometry" x="320.0" y="190.0"/>
+    </mxCell>
+    <mxCell id="5" parent="1" style="fontSize=9;strokeColor=white;fillColor=white;gradientColor=white;verticalAlign=top;align=center" value="Price" vertex="1">
+      <mxGeometry as="geometry" x="320.0" y="160.0"/>
+    </mxCell>
+    <mxCell id="6" parent="1" value="Bill" vertex="1">
+      <mxGeometry as="geometry" height="30.0" width="60.0" x="100.0" y="150.0"/>
+    </mxCell>
+    <mxCell id="7" parent="1" style="shape=rhombus;perimeter=rhombusPerimeter" value="" vertex="1">
+      <mxGeometry as="geometry" height="30.0" width="30.0" x="240.0" y="70.0"/>
+    </mxCell>
+    <mxCell id="8" parent="1" style="shape=rhombus;perimeter=rhombusPerimeter" value="" vertex="1">
+      <mxGeometry as="geometry" height="30.0" width="30.0" x="100.0" y="70.0"/>
+    </mxCell>
+    <mxCell edge="1" id="9" parent="1" source="6" style="endArrow=none;edgeStyle=elbowEdgeStyle;verticalAlign=bottom;align=left" target="8" value="(1,n)">
+      <mxGeometry as="geometry" relative="1"/>
+    </mxCell>
+    <mxCell edge="1" id="10" parent="1" source="3" style="endArrow=none;edgeStyle=elbowEdgeStyle;verticalAlign=bottom;align=left" target="7" value="(0,n)">
+      <mxGeometry as="geometry" relative="1"/>
+    </mxCell>
+    <mxCell edge="1" id="11" parent="1" source="2" style="endArrow=none;edgeStyle=elbowEdgeStyle;verticalAlign=bottom;align=left" target="7" value="(1,1)">
+      <mxGeometry as="geometry" relative="1"/>
+    </mxCell>
+    <mxCell edge="1" id="12" parent="1" source="2" style="endArrow=none;edgeStyle=elbowEdgeStyle;verticalAlign=bottom;align=left" target="8" value="(1,1)">
+      <mxGeometry as="geometry" relative="1"/>
+    </mxCell>
+    <mxCell edge="1" id="13" parent="1" source="3" style="endArrow=oval" target="4" value="">
+      <mxGeometry as="geometry" relative="1"/>
+    </mxCell>
+    <mxCell edge="1" id="14" parent="1" source="3" style="endArrow=emptyCircle" target="5" value="">
+      <mxGeometry as="geometry" relative="1"/>
+    </mxCell>
+    <mxCell edge="1" id="15" parent="1" source="2" style="endArrow=none;" target="6" value="">
+      <mxGeometry as="geometry" relative="1"/>
+    </mxCell>
+    <mxCell edge="1" id="16" parent="1" source="2" style="endArrow=none;" target="3" value="">
+      <mxGeometry as="geometry" relative="1"/>
+    </mxCell>
+    <mxCell edge="1" id="17" parent="1" source="15" style="endArrow=oval;startArrow=oval" target="16" value="">
+      <mxGeometry as="geometry" relative="1"/>
+    </mxCell>
+    <mxCell edge="1" id="18" parent="1" source="13" style="shape=curve;endArrow=oval;startArrow=oval" target="14" value="">
+      <mxGeometry as="geometry" relative="1"/>
+    </mxCell>
+  </root>
+</mxGraphModel>
