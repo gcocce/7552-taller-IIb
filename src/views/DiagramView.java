@@ -2,6 +2,8 @@ package views;
 
 import infrastructure.IterableExtensions;
 
+import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
@@ -30,6 +32,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
 
 import models.Entity;
 
@@ -63,6 +67,7 @@ public class DiagramView extends JPanel implements IDiagramView, DropTargetListe
     private final JButton btnValidate;
     private final JButton btnPrint;
     private final JButton btnExport;
+    private final JButton btnTransform;
     private JButton btnZoomIn;
     private JButton btnZoomOut;
 
@@ -90,29 +95,39 @@ public class DiagramView extends JPanel implements IDiagramView, DropTargetListe
         		FormFactory.RELATED_GAP_ROWSPEC,
         		RowSpec.decode("default:grow"),}));
 
-        this.btnEntity = new JButton("Entity");
-        add(this.btnEntity, "2, 2");
+        		Insets inset=new Insets(2, 9, 2, 9);
+        
+        		this.btnEntity = new JButton("Entity");
+        		//this.btnEntity.setMinimumSize(new Dimension(50,10));
+        		this.btnEntity.setMargin(inset);
+        		add(this.btnEntity, "2, 2");
         
                 this.btnRelationship = new JButton("Relationship");
                 btnRelationship.addActionListener(new ActionListener() {
                 	public void actionPerformed(ActionEvent e) {
                 	}
                 });
+                this.btnRelationship.setMargin(inset);
                 add(this.btnRelationship, "3, 2");
         
                 this.btnHierarchy = new JButton("Hierarchy");
+                this.btnHierarchy.setMargin(inset);
                 add(this.btnHierarchy, "4, 2");
         
                 this.btnSave = new JButton("Save");
+                this.btnSave.setMargin(inset);
                 add(this.btnSave, "5, 2");
         
                 this.btnSubdiagram = new JButton("Sub-Diagram");
+                this.btnSubdiagram.setMargin(inset);
                 add(this.btnSubdiagram, "6, 2");
         
                 this.btnPrint = new JButton("Print");
+                this.btnPrint.setMargin(inset);
                 add(this.btnPrint, "7, 2");
         
                 this.btnExport = new JButton("Export");
+                this.btnExport.setMargin(inset);
                 add(this.btnExport, "8, 2");
 
         this.entityMenu = new JPopupMenu();
@@ -141,13 +156,18 @@ public class DiagramView extends JPanel implements IDiagramView, DropTargetListe
         });
         
                 this.btnValidate = new JButton("Validate");
+                this.btnValidate.setMargin(inset);
                 add(this.btnValidate, "9, 2");
+                
+                this.btnTransform = new JButton("Transform");
+                this.btnTransform.setMargin(inset);
+                add(this.btnTransform, "10, 2");
         
         btnZoomIn = new JButton("+");
-        add(btnZoomIn, "10, 2");
+        add(btnZoomIn, "11, 2");
         
         btnZoomOut = new JButton("-");
-        add(btnZoomOut, "11, 2");
+        add(btnZoomOut, "12, 2");
 
 
         this.entityMenu.add(new JMenuItem(new AbstractAction("New Entity") {
@@ -242,6 +262,18 @@ public class DiagramView extends JPanel implements IDiagramView, DropTargetListe
             @Override
             public void actionPerformed(ActionEvent e) {
                 diagramController.validate();
+            }
+        });
+        
+        this.btnTransform.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+					diagramController.transform();
+				} catch (ParserConfigurationException | SAXException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
             }
         });
         

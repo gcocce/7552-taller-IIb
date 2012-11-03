@@ -54,4 +54,10 @@ public class MockGraphPersistenceService implements IGraphPersistenceService {
 	public String getSavePath() {
 		return this.savePath;
 	}
+
+	@Override
+	public String getXml(mxGraph graph) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

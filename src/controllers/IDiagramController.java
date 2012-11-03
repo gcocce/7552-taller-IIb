@@ -1,8 +1,11 @@
 package controllers;
 
 import java.awt.Point;
+import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
 
 import models.Diagram;
 import models.Entity;
@@ -48,4 +51,6 @@ public interface IDiagramController extends IEntityEventListener, IRelationshipE
 	boolean deleteRelationship(Relationship relationship);
 	boolean deleteHierarchy(Hierarchy hierarchy);
     void validate();
+    // Agregamos metodo para tranformar a modelo de dominio de analisis
+    void transform() throws ParserConfigurationException, SAXException, IOException;
 }

@@ -3,6 +3,7 @@ package controllers;
 import infrastructure.*;
 
 import java.awt.*;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -17,10 +18,16 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.jdom.input.SAXBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import persistence.IGraphPersistenceService;
 import persistence.IXmlFileManager;
@@ -37,6 +44,7 @@ import models.Hierarchy;
 import models.IdGroup;
 import models.Relationship;
 import models.RelationshipEntity;
+import models.TransformER_Domain;
 
 import jgraph.extensions.CustomGraph;
 
@@ -659,7 +667,14 @@ public class DiagramController extends BaseController
         return this.projectContext.getDataDirectory() + "/" + this.diagram.getName() + "-comp";
     }
 
+    private String getDomainFilePath() {
+        return this.projectContext.getDataDirectory() + "/" + this.diagram.getName() + "-domain.xml";
+    }
 
+    private String getGraphDomainFilePath() {
+        return this.projectContext.getDataDirectory() + "/" + this.diagram.getName() + "-graph_domain.xml";
+    }
+    
     public void openDiagram(String path) throws Exception {
         Document document = this.xmlFileManager.read(path);
         Element element = document.getDocumentElement();
@@ -1186,4 +1201,32 @@ public class DiagramController extends BaseController
             e.printStackTrace();
         }
     }
+
+    /* Transformacion a modelo de dominio */
+	@Override
+	public void transform() throws ParserConfigurationException, SAXException, IOException {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	    factory.setNamespaceAware(true);
+	    DocumentBuilder builder = factory.newDocumentBuilder();
+
+		/* Seccion para obtener el xml del modelo de entidad relacion */
+        Document diagramDoc = this.xmlFileManager.createDocument();
+        Element element = this.diagramXmlManager.getElementFromItem(this.diagram, diagramDoc);
+        diagramDoc.appendChild(element);
+        
+        /* Sección para obtener el xml del grafico */
+		String xml=this.graphPersistenceService.getXml(this.graph);
+	    Document graphDoc=builder.parse(new ByteArrayInputStream(xml.getBytes()));
+	    
+		TransformER_Domain transfTool=new TransformER_Domain(diagramDoc,graphDoc);	    
+
+		Document dominioDoc=transfTool.GetDomainModel();
+		
+        // Guardamos el xml del modelo de dominio
+        this.xmlFileManager.write(dominioDoc, this.getDomainFilePath());
+        
+        //TODO: obtener y guardar el xml del nuevo grafico
+		//Document newgraphDoc=transfTool.getGraphDomain();
+        //this.xmlFileManager.write(newgraphDoc, this.getGraphDomainFilePath());
+	}
 }

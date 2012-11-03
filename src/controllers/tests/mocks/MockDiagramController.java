@@ -259,4 +259,10 @@ public class MockDiagramController implements IDiagramController {
     public void validate() {
         //To change body of implemented methods use File | Settings | File Templates.
     }
+
+	@Override
+	public void transform() {
+		// TODO Auto-generated method stub
+		
+	}
 }

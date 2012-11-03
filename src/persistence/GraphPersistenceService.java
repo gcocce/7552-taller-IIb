@@ -47,4 +47,12 @@ public class GraphPersistenceService implements IGraphPersistenceService{
 		}
 	}
 
+	@Override
+	public String getXml(mxGraph graph) {
+		// TODO Auto-generated method stub
+		mxCodec codec = new mxCodec();
+		String xml = mxXmlUtils.getXml(codec.encode(graph.getModel()));
+		return xml;
+	}
+
 }
