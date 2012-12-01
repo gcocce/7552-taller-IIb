@@ -1,8 +1,13 @@
 package controllers;
 
-import infrastructure.*;
+import infrastructure.Func;
+import infrastructure.IFileSystemService;
+import infrastructure.IProjectContext;
+import infrastructure.IterableExtensions;
+import infrastructure.StringExtensions;
 
-import java.awt.*;
+import java.awt.Desktop;
+import java.awt.Point;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -22,19 +27,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.jdom.input.SAXBuilder;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import persistence.IGraphPersistenceService;
-import persistence.IXmlFileManager;
-import persistence.IXmlManager;
-import styling.StyleConstants;
-import styling.Styler;
-
+import jgraph.extensions.CustomGraph;
 import models.Attribute;
 import models.AttributeCollection;
 import models.Cardinality;
@@ -46,7 +39,17 @@ import models.Relationship;
 import models.RelationshipEntity;
 import models.TransformER_Domain;
 
-import jgraph.extensions.CustomGraph;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
+
+import persistence.IGraphPersistenceService;
+import persistence.IXmlFileManager;
+import persistence.IXmlManager;
+import styling.StyleConstants;
+import styling.Styler;
+import validation.IProjectValidationService;
+import views.IDiagramView;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxIGraphModel;
@@ -59,8 +62,6 @@ import controllers.factories.IEntityControllerFactory;
 import controllers.factories.IHierarchyControllerFactory;
 import controllers.factories.IRelationshipControllerFactory;
 import controllers.listeners.IDiagramEventListener;
-import validation.IProjectValidationService;
-import views.IDiagramView;
 
 public class DiagramController extends BaseController
         implements IDiagramController, mxIEventListener {

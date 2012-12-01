@@ -2,9 +2,8 @@ package views.mock;
 
 import java.util.List;
 
-import controllers.IRelationshipEntityController;
-import controllers.RelationshipEntityController;
 import views.IRelationshipEntityView;
+import controllers.IRelationshipEntityController;
 
 public class MockRelationshipEntityView implements IRelationshipEntityView{
 

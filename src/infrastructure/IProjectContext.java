@@ -1,9 +1,10 @@
 package infrastructure;
 
+import java.util.UUID;
+
 import models.Diagram;
 import models.Entity;
 import models.Hierarchy;
-import java.util.UUID;
 
 public interface IProjectContext {
 	String getName();
@@ -19,6 +20,8 @@ public interface IProjectContext {
 	Iterable<Hierarchy> getFamilyHierarchies();
 	Iterable<Hierarchy> getContextHierarchies();
 	Iterable<Diagram> getProjectDiagrams();
+	// TODO: See if we need it
+//	Iterable<DomainClass> getAllDomainClasses();
 	void addContextDiagram(Diagram diagram);
 	void addProjectDiagram(Diagram diagram);
 	Hierarchy getHierarchy(UUID id);

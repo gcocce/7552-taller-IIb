@@ -1,11 +1,10 @@
 package views.mock;
 
-import controllers.IRelationshipController;
-import controllers.RelationshipController;
 import views.IAttributeView;
 import views.IRelationshipEntityView;
 import views.IRelationshipView;
 import views.RelationshipEntityViewImpl;
+import controllers.IRelationshipController;
 
 public class MockRelationshipView implements IRelationshipView {
 

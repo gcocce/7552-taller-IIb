@@ -4,22 +4,30 @@
 
 package views;
 
-import java.awt.*;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.*;
-import javax.swing.*;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import com.jgoodies.forms.factories.*;
 
-import com.jgoodies.forms.layout.*;
-import controllers.IKeysController;
 import models.IKey;
 import models.IdGroup;
 import models.IdGroupCollection;
+
+import com.jgoodies.forms.factories.CC;
+import com.jgoodies.forms.layout.FormLayout;
+
+import controllers.IKeysController;
 
 public class KeyView extends JFrame implements IKeysView {
 

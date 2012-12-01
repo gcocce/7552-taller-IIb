@@ -11,8 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -349,7 +347,6 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 	@Override
 	public void validateProject(int toleranceLevel) {
 		String reportHtml = this.validationService.generateGlobalReport(this.projectContext.getName(), this.projectContext.getProjectDiagrams(), toleranceLevel);
-		Date date = Calendar.getInstance().getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		String reportName = this.projectContext.getDataDirectory() + "/" + this.projectContext.getName() + "_" + sdf.toString() + ".html";
 		this.fileSystemService.save(reportName, reportHtml);

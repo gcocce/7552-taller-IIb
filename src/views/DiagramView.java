@@ -2,7 +2,6 @@ package views;
 
 import infrastructure.IterableExtensions;
 
-import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.dnd.DropTargetDragEvent;
@@ -33,9 +32,9 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.xml.sax.SAXException;
-
 import models.Entity;
+
+import org.xml.sax.SAXException;
 
 import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
