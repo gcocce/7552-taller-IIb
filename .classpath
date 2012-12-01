@@ -11,7 +11,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/ERMDevEnv/lib/swing-layout-javadoc.zip!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/velocity-1.7.jar"/>
 	<classpathentry kind="lib" path="lib/antlr-2.7.5.jar"/>
 	<classpathentry kind="lib" path="lib/avalon-logkit-2.1.jar"/>
@@ -24,7 +23,8 @@
 	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
 	<classpathentry kind="lib" path="lib/servletapi-2.3.jar"/>
 	<classpathentry kind="lib" path="lib/werken-xpath-0.9.4.jar"/>
-	<classpathentry kind="lib" path="Z:/Facultad/Computacion/Taller2/Taller2/ERMDevEnv/lib/velocity-tools-2.0.jar"/>
-	<classpathentry kind="lib" path="Z:/Facultad/Computacion/Taller2/Taller2/ERMDevEnv/lib/velocity-tools-generic-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/velocity-tools-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/velocity-tools-generic-2.0.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.7.0"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
