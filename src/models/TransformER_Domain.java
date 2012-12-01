@@ -30,6 +30,8 @@ public class TransformER_Domain {
 		
 		this.diagramDoc=diagram;
 		this.graphDoc=graph;
+		this.dominioDoc = null;
+		this.newGraphDoc = null;
 	}
 	
 	
@@ -41,6 +43,9 @@ public class TransformER_Domain {
         
         Element eClases = dominioDoc.createElement("clases");
         eDominio.appendChild(eClases);
+        
+        Element eRelations = dominioDoc.createElement("relationships");
+        eDominio.appendChild(eRelations);
 	
         // Diagram element
         Element diagram=this.diagramDoc.getDocumentElement();
@@ -59,6 +64,7 @@ public class TransformER_Domain {
 	
 	private void procesarRelaciones(Element relationshipsElement){
         Element eClases= (Element)dominioDoc.getElementsByTagName("clases").item(0);
+        Element eRelations= (Element)dominioDoc.getElementsByTagName("relationships").item(0);
         
         NodeList nList = relationshipsElement.getElementsByTagName("relationship");
         
@@ -69,23 +75,76 @@ public class TransformER_Domain {
 				  
 				  String sId=eEntity.getAttribute("id");
 				  String sName=eEntity.getAttribute("name");
-				  
-				  System.out.println("Relationship name: " + sName);
-	      
-				  Element clase = dominioDoc.createElement("clase");
-				  clase.setAttribute("name", sName);
-				  clase.setAttribute("id", sId);
-				  eClases.appendChild(clase);
-				  
-				  // Procesar nodos hijos
+				  String sComposition = eEntity.getAttribute("composition");
+
+			
 				  Element eAtributos=(Element)eEntity.getElementsByTagName("attributes").item(0);
-				  this.procesarAtributos(clase, eAtributos);
+				  NodeList attrList=eAtributos.getChildNodes();
+				  //si no tiene atributos no mapea a clase
+				  if(attrList.getLength()!=0){
+					  System.out.println("Relationship name: " + sName);
+
+					  Element clase = dominioDoc.createElement("clase");
+					  clase.setAttribute("name", sName);
+					  clase.setAttribute("id", sId);
+					  eClases.appendChild(clase);
+
+					  // Procesar nodos hijos
+
+					  this.procesarAtributos(clase, eAtributos);
+					  
+				  }
+				  crearRelacion(eEntity,eRelations);
+				  
+				  
+				  
 				  
 				  System.out.println("Fin Relationship: " + sName);
  		   }
  		}        
 	}
 	
+	private void crearRelacion(Element eEntity, Element eRelations) {
+
+		Element eEntities=(Element)eEntity.getElementsByTagName("entities").item(0);
+
+
+		Element eRelation = dominioDoc.createElement("relationship");
+		  String sId1=eEntity.getAttribute("id");
+		  String sName1=eEntity.getAttribute("name");
+		  String sComposition = eEntity.getAttribute("composition");
+		  eRelation.setAttribute("id", sId1);
+		  eRelation.setAttribute("cardinality", sComposition);
+		  eRelations.appendChild(eRelation);
+		
+		Element eClases = dominioDoc.createElement("clases");
+		NodeList nList=eEntities.getChildNodes(); 
+        
+        System.out.println("Numero de clases: " + nList.getLength());
+        
+        for (int temp = 0; temp < nList.getLength(); temp++) {
+ 		   Node nNode = nList.item(temp);
+ 		   if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+				  Element eClass= (Element) nNode;
+				  
+				  String sId=eClass.getAttribute("id");
+				  String sCardinality = eClass.getAttribute("maximumCardinality");
+				  
+				  System.out.println("class ID: " + sId);
+	      
+				  Element eclase = dominioDoc.createElement("class");
+				  eclase.setAttribute("id", sId);
+				  eclase.setAttribute("cardinality", sCardinality);
+				  eClases.appendChild(eclase);
+				  
+ 		   }
+ 		} 
+        eRelation.appendChild(eClases);
+		
+		
+	}
+
+
 	private void procesarEntidades(Element entitiesElement){
         Element eClases= (Element)dominioDoc.getElementsByTagName("clases").item(0);
         
@@ -131,15 +190,18 @@ public class TransformER_Domain {
 				  
 				  String sId=eAtribute.getAttribute("id");
 				  String sName=eAtribute.getAttribute("name");
+				  String sCardinality = eAtribute.getAttribute("maximumCardinality");
 				  
 				  System.out.println("Attribute name: " + sName);
 	      
 				  Element eAtributo = dominioDoc.createElement("attribute");
 				  eAtributo.setAttribute("name", sName);
 				  eAtributo.setAttribute("id", sId);
+				  eAtributo.setAttribute("cardinality", sCardinality);
 				  eAtributos.appendChild(eAtributo);
 				  
 				  // Procesar nodos hijos
+				  //TODO recursivo
 				  Element eAtributosHijos=(Element) eAtribute.getElementsByTagName("attributes").item(0);
 				  NodeList nListaHijos = eAtributosHijos.getElementsByTagName("attribute");				  
 				  if (nListaHijos.getLength()>0){
@@ -168,12 +230,14 @@ public class TransformER_Domain {
 	 				  
 				  String sId=eAtribute.getAttribute("id");
 				  String sName=eAtribute.getAttribute("name");
+				  String sCardinality = eAtribute.getAttribute("maximumCardinality");
 				  
 				  System.out.println("Attribute name: " + sName);
 				  
 				  Element eAtributo = dominioDoc.createElement("attribute");
 				  eAtributo.setAttribute("name", sName);
 				  eAtributo.setAttribute("id", sId);
+				  eAtributo.setAttribute("cardinality", sCardinality);
 				  clase.appendChild(eAtributo);
 				  
 				  // Procesar nodos hijos
