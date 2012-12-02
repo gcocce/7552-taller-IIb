@@ -1,7 +1,5 @@
 package views;
 
-import infrastructure.IterableExtensions;
-
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.dnd.DropTargetDragEvent;
@@ -12,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
@@ -24,17 +21,11 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.TooManyListenersException;
 
-import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.xml.parsers.ParserConfigurationException;
-
-import models.Entity;
-
-import org.xml.sax.SAXException;
 
 import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -49,32 +40,30 @@ import com.mxgraph.util.png.mxPngEncodeParam;
 import com.mxgraph.util.png.mxPngImageEncoder;
 import com.mxgraph.view.mxGraph;
 
-import controllers.IDiagramController;
+import controllers.IDomainDiagramController;
 
-public class DiagramView extends JPanel implements IDiagramView,
+public class DomainDiagramView extends JPanel implements IDomainDiagramView,
 		DropTargetListener {
 
-	private IDiagramController diagramController;
-	private final JButton btnEntity;
-	private final JButton btnRelationship;
-	private final JButton btnHierarchy;
+	private static final long serialVersionUID = 1385530682356119350L;
+
+	private IDomainDiagramController diagramController;
+	private final JButton btnClass;
 	private final JButton btnSave;
 	private final JButton btnSubdiagram;
 	private mxGraphComponent graphComponent;
 	private JPopupMenu entityMenu;
 	private JPopupMenu existingEntitiesMenu;
 	private JMenuItem existingEntitiesMenuItem;
-	private final JButton btnValidate;
 	private final JButton btnPrint;
 	private final JButton btnExport;
-	private final JButton btnTransform;
 	private JButton btnZoomIn;
 	private JButton btnZoomOut;
 
 	/**
 	 * Create the panel.
 	 */
-	public DiagramView() {
+	public DomainDiagramView() {
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC, FormFactory.DEFAULT_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC, FormFactory.DEFAULT_COLSPEC,
@@ -89,22 +78,10 @@ public class DiagramView extends JPanel implements IDiagramView,
 
 		Insets inset = new Insets(2, 9, 2, 9);
 
-		this.btnEntity = new JButton("Entity");
+		this.btnClass = new JButton("Class");
 		// this.btnEntity.setMinimumSize(new Dimension(50,10));
-		this.btnEntity.setMargin(inset);
-		add(this.btnEntity, "2, 2");
-
-		this.btnRelationship = new JButton("Relationship");
-		btnRelationship.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		this.btnRelationship.setMargin(inset);
-		add(this.btnRelationship, "3, 2");
-
-		this.btnHierarchy = new JButton("Hierarchy");
-		this.btnHierarchy.setMargin(inset);
-		add(this.btnHierarchy, "4, 2");
+		this.btnClass.setMargin(inset);
+		add(this.btnClass, "2, 2");
 
 		this.btnSave = new JButton("Save");
 		this.btnSave.setMargin(inset);
@@ -124,58 +101,41 @@ public class DiagramView extends JPanel implements IDiagramView,
 
 		this.entityMenu = new JPopupMenu();
 		this.existingEntitiesMenu = new JPopupMenu();
-		this.existingEntitiesMenuItem = new JMenuItem(new AbstractAction(
-				"Existing Entity") {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Iterable<Entity> entities = diagramController
-						.getAvailableEntities();
-				existingEntitiesMenu.removeAll();
-
-				if (IterableExtensions.count(entities) == 0) {
-					return;
-				}
-
-				for (final Entity entity : entities) {
-					existingEntitiesMenu.add(new JMenuItem(new AbstractAction(
-							entity.getName()) {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							diagramController.handleCreatedEvent(entity);
-						}
-					}));
-				}
-				existingEntitiesMenu.show(btnEntity, btnEntity.getX(),
-						btnEntity.getY() + btnEntity.getHeight());
-			}
-		});
-
-		this.btnValidate = new JButton("Validate");
-		this.btnValidate.setMargin(inset);
-		add(this.btnValidate, "9, 2");
-
-		this.btnTransform = new JButton("Transform");
-		this.btnTransform.setMargin(inset);
-		add(this.btnTransform, "10, 2");
-
+		/*
+		 * this.existingEntitiesMenuItem = new JMenuItem(new AbstractAction(
+		 * "Existing Entity") {
+		 * 
+		 * @Override public void actionPerformed(ActionEvent e) {
+		 * Iterable<Entity> entities = diagramController
+		 * .getAvailableEntities(); existingEntitiesMenu.removeAll();
+		 * 
+		 * if (IterableExtensions.count(entities) == 0) { return; }
+		 * 
+		 * for (final Entity entity : entities) { existingEntitiesMenu.add(new
+		 * JMenuItem(new AbstractAction( entity.getName()) {
+		 * 
+		 * @Override public void actionPerformed(ActionEvent e) {
+		 * diagramController.handleCreatedEvent(entity); } })); }
+		 * existingEntitiesMenu.show(btnEntity, btnEntity.getX(),
+		 * btnEntity.getY() + btnEntity.getHeight()); } });
+		 */
 		btnZoomIn = new JButton("+");
 		add(btnZoomIn, "11, 2");
 
 		btnZoomOut = new JButton("-");
 		add(btnZoomOut, "12, 2");
 
-		this.entityMenu.add(new JMenuItem(new AbstractAction("New Entity") {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				diagramController.createEntity();
-			}
-		}));
-
-		this.entityMenu.add(this.existingEntitiesMenuItem);
+		/*
+		 * this.entityMenu.add(new JMenuItem(new AbstractAction("New Entity") {
+		 * 
+		 * @Override public void actionPerformed(ActionEvent e) {
+		 * diagramController.createEntity(); } }));
+		 */
+		// this.entityMenu.add(this.existingEntitiesMenuItem);
 	}
 
 	@Override
-	public void setController(IDiagramController controller) {
+	public void setController(IDomainDiagramController controller) {
 		this.diagramController = controller;
 
 		this.graphComponent = new mxGraphComponent(
@@ -185,20 +145,6 @@ public class DiagramView extends JPanel implements IDiagramView,
 		// cannot create new arrows clicking from entity
 		this.graphComponent.getConnectionHandler().setCreateTarget(false);
 		this.graphComponent.setConnectable(false);
-		MouseListener listener = new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (diagramController.hasPendingEntity()) {
-					try {
-						diagramController.addEntity(e.getPoint().x,
-								e.getPoint().y);
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
-				}
-			}
-		};
-		this.graphComponent.getGraphControl().addMouseListener(listener);
 
 		try {
 			this.graphComponent.getDropTarget().addDropTargetListener(this);
@@ -209,37 +155,23 @@ public class DiagramView extends JPanel implements IDiagramView,
 
 		this.add(this.graphComponent, "2, 4, 12, 1, fill, fill");
 
-		this.btnEntity.addMouseListener(new MouseAdapter() {
+		this.btnClass.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				entityMenu.show(e.getComponent(), btnEntity.getX(),
-						btnEntity.getY() + btnEntity.getHeight());
+				entityMenu.show(e.getComponent(), btnClass.getX(),
+						btnClass.getY() + btnClass.getHeight());
 				// diagramController.createEntity();
-			}
-		});
-
-		this.btnRelationship.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				diagramController.createRelationship();
-			}
-		});
-
-		this.btnHierarchy.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				diagramController.createHierarchy();
 			}
 		});
 
 		this.btnSave.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				try {
-					diagramController.save();
-				} catch (ParserConfigurationException exception) {
-					exception.printStackTrace();
-				}
+//				try {
+//					diagramController.save();
+//				} catch (ParserConfigurationException exception) {
+//					exception.printStackTrace();
+//				}
 			}
 		});
 
@@ -250,32 +182,13 @@ public class DiagramView extends JPanel implements IDiagramView,
 						"Provide the diagram's name", "New Diagram",
 						JOptionPane.QUESTION_MESSAGE);
 				if (diagramName != null) {
-					diagramController.createSubDiagram(diagramName);
+//					diagramController.createSubDiagram(diagramName);
 				}
 			}
 		});
 
 		this.btnPrint.addActionListener(new PrintAction());
 		this.btnExport.addActionListener(new ExportAction());
-		this.btnValidate.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				diagramController.validate();
-			}
-		});
-
-		this.btnTransform.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				try {
-					diagramController.transform();
-				} catch (ParserConfigurationException | SAXException
-						| IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		});
 
 		this.btnZoomIn.addMouseListener(new MouseAdapter() {
 			@Override

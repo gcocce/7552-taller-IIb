@@ -5,6 +5,7 @@ import infrastructure.IFileSystemService;
 import infrastructure.IProjectContext;
 import infrastructure.IterableExtensions;
 import infrastructure.visual.DiagramTreeNode;
+import infrastructure.visual.DomainDiagramTreeNode;
 
 import java.awt.Desktop;
 import java.io.File;
@@ -21,6 +22,7 @@ import javax.swing.tree.TreePath;
 import javax.xml.parsers.ParserConfigurationException;
 
 import models.Diagram;
+import models.DomainDiagram;
 import models.Entity;
 import models.Hierarchy;
 import models.Relationship;
@@ -34,6 +36,7 @@ import validation.IProjectValidationService;
 import views.IProjectView;
 import application.IShell;
 import controllers.factories.IDiagramControllerFactory;
+import controllers.factories.IDomainDiagramControllerFactory;
 import controllers.listeners.IDiagramEventListener;
 
 public class ProjectController implements IProjectController, IDiagramEventListener {
@@ -55,13 +58,18 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 	private IFileSystemService fileSystemService;
 
 	private IProjectValidationService validationService;
+
+	private IDomainDiagramController domainDiagramController;
+	private IDomainDiagramControllerFactory domainDiagramControllerFactory;
+	private DomainDiagramTreeNode currentDomainDiagramNode;
 	
 	public ProjectController(IProjectContext projectContext, IProjectView projectView, 
-			IShell shell, IDiagramControllerFactory diagramControllerFactory,
+			IShell shell, IDiagramControllerFactory diagramControllerFactory, IDomainDiagramControllerFactory domainDiagramControllerFactory,
 			IXmlFileManager xmlFileManager, IXmlManager<Diagram> diagramXmlManager, 
 			IFileSystemService fileSystemService, IProjectValidationService validationService) {
 		this.projectContext = projectContext;
 		this.diagramControllerFactory = diagramControllerFactory;
+		this.domainDiagramControllerFactory = domainDiagramControllerFactory;
 		this.shell = shell;
 		this.projectView = projectView;
 		this.projectView.setController(this);
@@ -83,7 +91,7 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 		
 		Diagram mainDiagram = this.diagramController.getDiagram();
 		
-		this.currentDiagramNode = new DiagramTreeNode(this.diagramController.getDiagram(), this.projectContext);
+		this.currentDiagramNode = new DiagramTreeNode(mainDiagram, this.projectContext);
 		this.projectTree = new DefaultTreeModel(this.currentDiagramNode);
 		
 		this.projectContext.addContextDiagram(mainDiagram);
@@ -225,18 +233,37 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 		
 		this.projectContext.setName(projectName);
 		
-		if (!this.fileSystemService.exists(this.projectContext.getDataDirectory(), DefaultDiagramName)) {
+		if (!this.fileSystemService.exists(projectContext.getDataDirectory(), DefaultDiagramName)) {
 			return false;
 		}
 		this.loadDiagram(DefaultDiagramName, null);
 		this.diagramController = this.diagramControllerFactory.create();
 		this.diagramController.addListener(this);
 		
-		this.diagramController.load(this.projectContext.getContextDiagram(DefaultDiagramName));
+		this.diagramController.load(projectContext.getContextDiagram(DefaultDiagramName));
 		
 		this.shell.setRightContent(this.diagramController.getView());
 		this.shell.activateFullSize();
 		return true;
+	}
+	
+	@Override
+	public void showDomainDiagram(DomainDiagram diagram) {
+		domainDiagramController = domainDiagramControllerFactory.create();
+		
+		// XXX: Handle loading from transform in DiagramController
+		if (diagram.getName() == null) {
+			diagram.setName(DefaultDiagramName);
+			DomainDiagramTreeNode currentTreeNode = new DomainDiagramTreeNode(diagram, this.projectContext);
+			currentDomainDiagramNode = currentTreeNode;
+			projectTree = new DefaultTreeModel(currentDomainDiagramNode);
+			projectView.refreshTree(projectTree);
+		}
+		
+		domainDiagramController.load(diagram);
+		
+		shell.setRightContent(domainDiagramController.getView());
+		shell.activateFullSize();
 	}
 	
 	private void loadDiagram(String diagramName, DiagramTreeNode parentTreeNode) throws Exception{
@@ -247,21 +274,20 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 		
 		DiagramTreeNode currentTreeNode;
 		
-		if (diagramName.equalsIgnoreCase(DefaultDiagramName)){
+		if (diagramName.equalsIgnoreCase(DefaultDiagramName)) {
 			this.projectContext.addContextDiagram(diagram);
 			currentTreeNode = new DiagramTreeNode(diagram, this.projectContext);
 			this.currentDiagramNode = currentTreeNode;
 			this.projectTree = new DefaultTreeModel(this.currentDiagramNode);
-		}
-		else
-		{
-			currentTreeNode = parentTreeNode.addSubdiagram(diagram, this.projectTree);
+		} else {
+			currentTreeNode = parentTreeNode.addSubdiagram(diagram,
+					this.projectTree);
 		}
 		
 		this.projectContext.addProjectDiagram(diagram);
 		
 		for (String childDiagramName : diagram.getSubDiagramNames()) {
-			this.loadDiagram(childDiagramName, currentTreeNode);
+			loadDiagram(childDiagramName, currentTreeNode);
 		}
 	}
 

@@ -1,5 +1,7 @@
 package controllers.tests.mocks;
 
+import javax.swing.tree.TreeModel;
+
 import controllers.IProjectController;
 import views.IProjectView;
 
@@ -14,6 +16,12 @@ public class MockProjectView implements IProjectView {
 	
 	public IProjectController getController(){
 		return this.controller;
+	}
+
+	@Override
+	public void refreshTree(TreeModel projectTree) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

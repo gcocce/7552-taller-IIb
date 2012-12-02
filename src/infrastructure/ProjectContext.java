@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import models.Diagram;
+import models.DomainDiagram;
 import models.Entity;
 import models.Hierarchy;
 
@@ -16,6 +17,7 @@ public class ProjectContext implements IProjectContext {
 	
 	private List<Diagram> projectDiagrams;
 	private List<Diagram> contextDiagrams;
+	private List<DomainDiagram> projectDomainDiagrams;
 
 	private String name;
 
@@ -139,6 +141,14 @@ public class ProjectContext implements IProjectContext {
 	@Override
 	public Diagram getContextDiagram(String diagramName) {
 		for (Diagram diagram : this.projectDiagrams)
+			if (diagram.getName().equals(diagramName))
+				return diagram;
+		return null;
+	}
+	
+	@Override
+	public DomainDiagram getContextDomainDiagram(String diagramName) {
+		for (DomainDiagram diagram : projectDomainDiagrams)
 			if (diagram.getName().equals(diagramName))
 				return diagram;
 		return null;

@@ -39,6 +39,7 @@ public class DiagramControllerTestCase {
 	private MockProjectContext projectContext;
 	private MockDiagramView diagramView;
 	private MockEntityController entityController;
+	private MockProjectController projectController;
 	private MockEntityControllerFactory entityControllerFactory;
 	private MockRelationshipControllerFactory relationshipControllerFactory;
 	private MockRelationshipController relationshipController;
@@ -920,7 +921,6 @@ public class DiagramControllerTestCase {
 		this.addEntityToDiagram(diagramController, entity1, 20, 30);
 		this.addEntityToDiagram(diagramController, entity2, 60, 30);
 		
-		mxCell attribute1To2ConnectorCell = diagramController.getIdGroupConnectorCell(entity1.getId()+"_Attribute1_Attribute2_1");
 		mxCell attribute2To3ConnectorCell = diagramController.getIdGroupConnectorCell(entity1.getId()+"_Attribute2_Attribute3_2");
 		mxCell attribute3To4ConnectorCell = diagramController.getIdGroupConnectorCell(entity1.getId()+"_Attribute3_Attribute4_2");
 		
@@ -1220,7 +1220,7 @@ public class DiagramControllerTestCase {
 	}
 	
 	private DiagramController createController() {
-		return new DiagramController(this.projectContext, this.diagramView,
+		return new DiagramController(this.projectContext, this.projectController, this.diagramView,
 				this.entityControllerFactory, this.relationshipControllerFactory, 
 				this.hierarchyControllerFactory, this.xmlFileManager, this.diagramXmlManager,
                 this.graphPersistenceService , this.projectValidationService,this.fileSystemService);

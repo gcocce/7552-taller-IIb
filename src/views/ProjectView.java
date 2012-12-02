@@ -18,6 +18,7 @@ import controllers.IProjectController;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTree;
+import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 public class ProjectView extends JPanel implements IProjectView {
@@ -73,7 +74,7 @@ public class ProjectView extends JPanel implements IProjectView {
 				String name = JOptionPane.showInputDialog(null, "Provide the project's name", "New Project", JOptionPane.QUESTION_MESSAGE);
 				if (name != null){
 					projectController.createProject(name);
-					tree.setModel(projectController.getProjectTree());
+					refreshTree(projectController.getProjectTree());
 				}
 			}	
 		});
@@ -88,7 +89,7 @@ public class ProjectView extends JPanel implements IProjectView {
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
-					tree.setModel(projectController.getProjectTree());
+					refreshTree(projectController.getProjectTree());
 				}
 			}	
 		});
@@ -126,5 +127,10 @@ public class ProjectView extends JPanel implements IProjectView {
 				}
 			}
 		});
+	}
+
+	@Override
+	public void refreshTree(TreeModel projectTree) {
+		tree.setModel(projectTree);
 	}
 }

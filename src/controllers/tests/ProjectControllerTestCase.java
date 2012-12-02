@@ -854,13 +854,13 @@ public class ProjectControllerTestCase {
 	}
 	
 	private DefaultMutableTreeNode getNodeChildWithObject(DefaultMutableTreeNode node, String childName, Object object) {	
-		Enumeration children = node.children();
+		Enumeration<?> children = node.children();
 		while (children.hasMoreElements()) {
 		  DefaultMutableTreeNode element = (DefaultMutableTreeNode)children.nextElement();
 		  if (String.class.isInstance(element.getUserObject())){
 			  String value = (String)element.getUserObject();
 			  if (value.equalsIgnoreCase(childName)){
-				  Enumeration grandChildren = element.children();
+				  Enumeration<?> grandChildren = element.children();
 				  while (grandChildren.hasMoreElements()) {
 					  element = (DefaultMutableTreeNode)grandChildren.nextElement();
 					  if (element.getUserObject() == object){
@@ -886,7 +886,7 @@ public class ProjectControllerTestCase {
 	
 	private ProjectController createController(){
 		return new ProjectController(this.projectContext, this.projectView,
-				this.shell, this.diagramControllerFactory, this.xmlFileManager,
+				this.shell, this.diagramControllerFactory, null, this.xmlFileManager,
 				this.diagramXmlManager, this.fileSystemService, this.projectValidationService);
 	}
 }

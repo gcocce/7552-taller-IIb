@@ -1,6 +1,5 @@
 package controllers;
 
-import infrastructure.IFileSystemService;
 import infrastructure.IProjectContext;
 
 import java.awt.Point;
@@ -37,18 +36,16 @@ public class DomainDiagramController extends BaseController implements
 		public static final String ClassPrefix = "Class";
 	}
 
-	private IFileSystemService fileSystemService;
-
-//	private enum Operations {
-//		None,
-//		// TODO: For now we don't have any operation
-//		// CreateEntity,
-//		// UpdateEntity,
-//		// CreateRelationship,
-//		// UpdateRelationship,
-//		// CreateHierarchy,
-//		// UpdateHierarchy
-//	}
+	// private enum Operations {
+	// None,
+	// // TODO: For now we don't have any operation
+	// // CreateEntity,
+	// // UpdateEntity,
+	// // CreateRelationship,
+	// // UpdateRelationship,
+	// // CreateHierarchy,
+	// // UpdateHierarchy
+	// }
 
 	private CustomGraph graph;
 	private Map<String, mxCell> classCells;
@@ -61,18 +58,16 @@ public class DomainDiagramController extends BaseController implements
 	private List<mxCell> selectedCells;
 	private Point dragStartPoint;
 	private IGraphPersistenceService graphPersistenceService;
-//	private Pattern regex;
-//	private Operations currentOperation;
+
+	// private Pattern regex;
+	// private Operations currentOperation;
 
 	public DomainDiagramController(IProjectContext projectContext,
-			IDomainDiagramView diagramView,
-			IXmlFileManager xmlFileManager,
+			IDomainDiagramView diagramView, IXmlFileManager xmlFileManager,
 			IXmlManager<DomainDiagram> diagramXmlManager,
-			IGraphPersistenceService graphPersistenceService,
-			IFileSystemService fileSystemService) {
+			IGraphPersistenceService graphPersistenceService) {
 		super(projectContext);
-		this.fileSystemService = fileSystemService;
-//		this.currentOperation = Operations.None;
+		// this.currentOperation = Operations.None;
 		this.diagram = new DomainDiagram();
 		this.selectedCells = new ArrayList<mxCell>();
 		this.graph = new CustomGraph();
@@ -86,17 +81,20 @@ public class DomainDiagramController extends BaseController implements
 		this.diagramView.setController(this);
 		this.graphPersistenceService = graphPersistenceService;
 
-//		this.regex = Pattern
-//				.compile("(?:"
-//						+ CellConstants.ClassPrefix
-//						+ ")"
-//						+ "([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}).*");
+		// this.regex = Pattern
+		// .compile("(?:"
+		// + CellConstants.ClassPrefix
+		// + ")"
+		// +
+		// "([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}).*");
 	}
 
+	@Override
 	public IDomainDiagramView getView() {
 		return diagramView;
 	}
 
+	@Override
 	public mxGraph getGraph() {
 		return graph;
 	}
@@ -112,21 +110,11 @@ public class DomainDiagramController extends BaseController implements
 				this.diagram, document);
 
 		document.appendChild(element);
-		this.xmlFileManager.write(document, this.getComponentFilePath());
+		this.xmlFileManager.write(document, this.getDomainFilePath());
 
-		this.graphPersistenceService.save(this.getRepresentationFilePath(),
+		this.graphPersistenceService.save(this.getGraphDomainFilePath(),
 				this.graph);
 
-	}
-
-	private String getRepresentationFilePath() {
-		return this.projectContext.getDataDirectory() + "/"
-				+ this.diagram.getName() + "-rep";
-	}
-
-	private String getComponentFilePath() {
-		return this.projectContext.getDataDirectory() + "/"
-				+ this.diagram.getName() + "-comp";
 	}
 
 	private String getDomainFilePath() {
@@ -139,7 +127,7 @@ public class DomainDiagramController extends BaseController implements
 				+ this.diagram.getName() + "-graph_domain.xml";
 	}
 
-	public void openDiagram(String path) throws Exception {
+	public void openDomainDiagram(String path) throws Exception {
 		Document document = this.xmlFileManager.read(path);
 		Element element = document.getDocumentElement();
 		this.diagram = this.diagramXmlManager.getItemFromXmlElement(element);
@@ -149,7 +137,7 @@ public class DomainDiagramController extends BaseController implements
 	public void load(DomainDiagram diagram) {
 
 		this.diagram = diagram;
-		String fileName = this.getRepresentationFilePath();
+		String fileName = this.getGraphDomainFilePath();
 		this.graphPersistenceService.load(fileName, this.graph);
 
 		Pattern classRegexp = Pattern.compile(CellConstants.ClassPrefix);
@@ -170,9 +158,9 @@ public class DomainDiagramController extends BaseController implements
 	public void invoke(Object arg0, mxEventObject arg1) {
 		// JGraph has a bug "removed" are those added to the selection. "added"
 		// are those that were removed from the selection
-		ArrayList added = arg1.getProperties().containsKey("removed") ? (ArrayList) arg1
+		List<?> added = arg1.getProperties().containsKey("removed") ? (List<?>) arg1
 				.getProperties().get("removed") : null;
-		ArrayList removed = arg1.getProperties().containsKey("added") ? (ArrayList) arg1
+		List<?> removed = arg1.getProperties().containsKey("added") ? (List<?>) arg1
 				.getProperties().get("added") : null;
 
 		if (removed != null) {
@@ -190,15 +178,15 @@ public class DomainDiagramController extends BaseController implements
 		}
 	}
 
-//	private String getElementUUID(String elementId) {
-//		Matcher matcher = this.regex.matcher(elementId);
-//		boolean matchFound = matcher.find();
-//
-//		if (matchFound) {
-//			return matcher.group(1);
-//		}
-//		return null;
-//	}
+	// private String getElementUUID(String elementId) {
+	// Matcher matcher = this.regex.matcher(elementId);
+	// boolean matchFound = matcher.find();
+	//
+	// if (matchFound) {
+	// return matcher.group(1);
+	// }
+	// return null;
+	// }
 
 	public void handleDrop(Point end) {
 		if (this.dragStartPoint != null) {
@@ -208,20 +196,20 @@ public class DomainDiagramController extends BaseController implements
 			List<mxCell> attributesCellsToMove = new ArrayList<mxCell>();
 
 			// FIXME: I think we need the attributes cells....
-//			for (mxCell cell : this.selectedCells) {
-//				String elementId = this.getElementUUID(cell.getId());
-//				for (String attributeKey : this.attributeCells.keySet()) {
-//					if (elementId != null) {
-//						if (attributeKey
-//								.startsWith(CellConstants.AttributePrefix
-//										+ elementId)) {
-//							mxCell attributeCell = this.attributeCells
-//									.get(attributeKey);
-//							attributesCellsToMove.add(attributeCell);
-//						}
-//					}
-//				}
-//			}
+			// for (mxCell cell : this.selectedCells) {
+			// String elementId = this.getElementUUID(cell.getId());
+			// for (String attributeKey : this.attributeCells.keySet()) {
+			// if (elementId != null) {
+			// if (attributeKey
+			// .startsWith(CellConstants.AttributePrefix
+			// + elementId)) {
+			// mxCell attributeCell = this.attributeCells
+			// .get(attributeKey);
+			// attributesCellsToMove.add(attributeCell);
+			// }
+			// }
+			// }
+			// }
 
 			if (attributesCellsToMove.size() == 0) {
 				return;
@@ -250,16 +238,17 @@ public class DomainDiagramController extends BaseController implements
 		return diagram;
 	}
 
-//	@Override
-//	public Iterable<DomainClass> getAvailableClasses() {
-//		Iterable<DomainClass> entities = this.projectContext.getAllDomainClasses();
-//		List<DomainClass> entityList = IterableExtensions.getListOf(entities);
-//
-//		for (DomainClass entity : this.diagram.getDomainClasses()) {
-//			entityList.remove(entity);
-//		}
-//
-//		return entityList;
-//	}
-//
+	// @Override
+	// public Iterable<DomainClass> getAvailableClasses() {
+	// Iterable<DomainClass> entities =
+	// this.projectContext.getAllDomainClasses();
+	// List<DomainClass> entityList = IterableExtensions.getListOf(entities);
+	//
+	// for (DomainClass entity : this.diagram.getDomainClasses()) {
+	// entityList.remove(entity);
+	// }
+	//
+	// return entityList;
+	// }
+	//
 }

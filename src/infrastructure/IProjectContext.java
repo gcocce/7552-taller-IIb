@@ -3,6 +3,7 @@ package infrastructure;
 import java.util.UUID;
 
 import models.Diagram;
+import models.DomainDiagram;
 import models.Entity;
 import models.Hierarchy;
 
@@ -27,5 +28,6 @@ public interface IProjectContext {
 	Hierarchy getHierarchy(UUID id);
 	Entity getEntity(UUID entityId);
 	Diagram getContextDiagram(String defaultDiagramName);
+	DomainDiagram getContextDomainDiagram(String defaultDiagramName);
 	void clearProjectDiagrams();
 }
