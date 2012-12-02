@@ -52,7 +52,7 @@ public class ShellWindow implements IShell {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setResizable(false);
+		frame.setResizable(true);
 		frame.setBounds(0, 0, 300, 675);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
