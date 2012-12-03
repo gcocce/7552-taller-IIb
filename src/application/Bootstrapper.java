@@ -37,10 +37,12 @@ import validation.rules.EntityTypeValidator;
 import validation.rules.RelationshipCardinalityValidator;
 import views.AttributeView;
 import views.DiagramView;
+import views.DomainDiagramView;
 import views.EntityView;
 import views.HierarchyView;
 import views.IAttributeView;
 import views.IDiagramView;
+import views.IDomainDiagramView;
 import views.IEntityView;
 import views.IHierarchyView;
 import views.IKeysView;
@@ -61,10 +63,12 @@ import views.RelationshipViewImpl;
 
 import controllers.AttributeController;
 import controllers.DiagramController;
+import controllers.DomainDiagramController;
 import controllers.EntityController;
 import controllers.HierarchyController;
 import controllers.IAttributeController;
 import controllers.IDiagramController;
+import controllers.IDomainDiagramController;
 import controllers.IEntityController;
 import controllers.IHierarchyController;
 import controllers.IKeysController;
@@ -76,10 +80,12 @@ import controllers.ProjectController;
 
 import controllers.factories.AttributeControllerFactory;
 import controllers.factories.DiagramControllerFactory;
+import controllers.factories.DomainDiagramControllerFactory;
 import controllers.factories.EntityControllerFactory;
 import controllers.factories.HierarchyControllerFactory;
 import controllers.factories.IAttributeControllerFactory;
 import controllers.factories.IDiagramControllerFactory;
+import controllers.factories.IDomainDiagramControllerFactory;
 import controllers.factories.IEntityControllerFactory;
 import controllers.factories.IHierarchyControllerFactory;
 import controllers.factories.IKeysControllerFactory;
@@ -168,6 +174,8 @@ public class Bootstrapper {
 					.as(CACHE).addComponent(MutablePicoContainer.class, this.container)
 					.addComponent(IDiagramController.class, DiagramController.class)
 					.addComponent(IDiagramView.class, DiagramView.class)
+					.addComponent(IDomainDiagramController.class, DomainDiagramController.class)
+					.addComponent(IDomainDiagramView.class, DomainDiagramView.class)
 					.addComponent(IXmlManager.class, DiagramXmlManager.class)
 					.as(CACHE).addComponent(IXmlFileManager.class, XmlFileManager.class)
 					.as(CACHE).addComponent(IProjectContext.class, ProjectContext.class)
@@ -188,7 +196,8 @@ public class Bootstrapper {
 					.addComponent(IKeysView.class, KeyView.class)
 					.as(CACHE).addComponent(IGraphPersistenceService.class, GraphPersistenceService.class)
 					.as(CACHE).addComponent(IDiagramControllerFactory.class, DiagramControllerFactory.class)
-					.addComponent(IProjectController.class, ProjectController.class)
+					.as(CACHE).addComponent(IDomainDiagramControllerFactory.class, DomainDiagramControllerFactory.class)
+					.as(CACHE).addComponent(IProjectController.class, ProjectController.class)
 					.addComponent(IProjectView.class, ProjectView.class)
 					.addComponent(IAttributeController.class, AttributeController.class)
 					.as(CACHE).addComponent(IProjectValidationService.class, ProjectValidationService.class)

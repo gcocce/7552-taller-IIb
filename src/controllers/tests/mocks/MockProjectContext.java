@@ -16,7 +16,6 @@ public class MockProjectContext implements IProjectContext,IRelationshipEventLis
 
 	private static String SubFolder = "Datos";
     private Iterable<Entity> entityCollection;
-    private Iterable<INameable> attributes;
     private List<Diagram> contextDiagrams;
     private List<Diagram> globalDiagrams;
 
@@ -39,7 +38,6 @@ public class MockProjectContext implements IProjectContext,IRelationshipEventLis
     }
 
     public void setPossibleAttributes(Iterable<INameable> attributeIterable){
-        this.attributes = attributeIterable;
     }
 
 	public void setRelationshipCollection(List<Relationship> relationships) {
@@ -164,6 +162,12 @@ public class MockProjectContext implements IProjectContext,IRelationshipEventLis
 
 	@Override
 	public Iterable<Diagram> getProjectDiagrams() {
+		return null;
+	}
+
+	@Override
+	public DomainDiagram getContextDomainDiagram(String defaultDiagramName) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }
