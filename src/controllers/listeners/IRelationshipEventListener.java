@@ -1,6 +1,6 @@
 package controllers.listeners;
 
-import models.Relationship;
+import models.der.Relationship;
 
 public interface IRelationshipEventListener {
 	public void handleCreatedEvent(Relationship relationship) throws Exception;

@@ -7,7 +7,7 @@ import java.util.List;
 
 import validation.IValidationEntry;
 
-import models.Diagram;
+import models.der.Diagram;
 
 public class RelationshipsPerDiagramValidator implements IMetricsValidator {
 

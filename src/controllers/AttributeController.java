@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import models.Attribute;
-import models.AttributeCollection;
-import models.AttributeType;
 import models.Cardinality;
 import models.IdGroupCollection;
+import models.der.Attribute;
+import models.der.AttributeCollection;
+import models.der.AttributeType;
 import views.IAttributeView;
 
 public class AttributeController extends BaseController implements IAttributeController {

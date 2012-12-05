@@ -3,9 +3,9 @@ package validation.rules;
 import java.util.ArrayList;
 import java.util.List;
 
-import models.Diagram;
-import models.Entity;
-import models.EntityType;
+import models.der.Diagram;
+import models.der.Entity;
+import models.der.EntityType;
 import validation.IValidationEntry;
 
 public class EntityTypeValidator implements IRulesValidator {

@@ -1,6 +1,6 @@
 package controllers.tests;
 
-import models.Diagram;
+import models.der.Diagram;
 import validation.IProjectValidationService;
 
 public class MockProjectValidationService implements IProjectValidationService {

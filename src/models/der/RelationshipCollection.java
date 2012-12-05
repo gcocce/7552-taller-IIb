@@ -1,10 +1,12 @@
-package models;
+package models.der;
 
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+
+import models.ModelCollection;
 
 public class RelationshipCollection extends ModelCollection<Relationship>{
 

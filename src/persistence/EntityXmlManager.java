@@ -4,9 +4,9 @@ import infrastructure.StringExtensions;
 
 import java.util.UUID;
 
-import models.AttributeCollection;
-import models.Entity;
-import models.EntityType;
+import models.der.AttributeCollection;
+import models.der.Entity;
+import models.der.EntityType;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

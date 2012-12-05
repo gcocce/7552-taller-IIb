@@ -1,8 +1,8 @@
 package controllers.tests.mocks;
 
 import controllers.IAttributeController;
-import models.Attribute;
-import models.AttributeType;
+import models.der.Attribute;
+import models.der.AttributeType;
 import views.IAttributeView;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package infrastructure.visual;
 
-import models.Attribute;
+import models.der.Attribute;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 

@@ -5,11 +5,11 @@ import java.util.UUID;
 
 import junit.framework.Assert;
 
-import models.Diagram;
-import models.Entity;
-import models.EntityCollection;
 import models.Hierarchy;
 import models.HierarchyCollection;
+import models.der.Diagram;
+import models.der.Entity;
+import models.der.EntityCollection;
 
 import org.junit.Before;
 import org.junit.Test;

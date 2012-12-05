@@ -13,9 +13,9 @@ import com.jgoodies.forms.layout.*;
 
 import controllers.IAttributeController;
 import infrastructure.visual.AttributeTreeNode;
-import models.Attribute;
-import models.AttributeType;
 import models.Cardinality;
+import models.der.Attribute;
+import models.der.AttributeType;
 
 import java.awt.*;
 import java.awt.event.*;

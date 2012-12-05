@@ -1,8 +1,8 @@
 package models.tests;
 
 import static org.junit.Assert.*;
-import models.Attribute;
-import models.AttributeCollection;
+import models.der.Attribute;
+import models.der.AttributeCollection;
 
 import org.junit.Before;
 import org.junit.Test;

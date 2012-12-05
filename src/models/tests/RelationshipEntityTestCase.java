@@ -2,8 +2,8 @@ package models.tests;
 
 import junit.framework.Assert;
 import models.Cardinality;
-import models.Entity;
-import models.RelationshipEntity;
+import models.der.Entity;
+import models.der.RelationshipEntity;
 
 import org.junit.After;
 import org.junit.Before;

@@ -1,4 +1,4 @@
-package models;
+package models.der;
 
 import infrastructure.Func;
 import infrastructure.IterableExtensions;
@@ -6,6 +6,8 @@ import infrastructure.IterableExtensions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import models.INameable;
 
 public class Relationship implements INameable {
 

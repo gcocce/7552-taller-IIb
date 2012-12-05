@@ -6,9 +6,9 @@ import infrastructure.IterableExtensions;
 import junit.framework.Assert;
 
 import models.Cardinality;
-import models.Entity;
-import models.Relationship;
-import models.RelationshipEntity;
+import models.der.Entity;
+import models.der.Relationship;
+import models.der.RelationshipEntity;
 
 import org.junit.Before;
 import org.junit.Test;

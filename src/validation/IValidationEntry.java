@@ -1,6 +1,6 @@
 package validation;
 
-import models.Diagram;
+import models.der.Diagram;
 
 public interface IValidationEntry {
 	public Diagram getDiagram();

@@ -2,7 +2,7 @@ package controllers.factories.mock;
 
 import java.util.List;
 
-import models.RelationshipEntity;
+import models.der.RelationshipEntity;
 import controllers.IRelationshipEntityController;
 import controllers.factories.IRelationshipEntityControllerFactory;
 import controllers.tests.mocks.MockRelationshipEntityController;

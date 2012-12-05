@@ -9,7 +9,8 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import models.RelationshipEntity;
+
+import models.der.RelationshipEntity;
 
 import controllers.IRelationshipEntityController;
 import controllers.tests.mocks.MockProjectContext;

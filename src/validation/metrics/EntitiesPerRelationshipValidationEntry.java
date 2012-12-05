@@ -2,8 +2,8 @@ package validation.metrics;
 
 import validation.IValidationEntry;
 import validation.ValidationType;
-import models.Diagram;
-import models.Relationship;
+import models.der.Diagram;
+import models.der.Relationship;
 
 public class EntitiesPerRelationshipValidationEntry implements IValidationEntry {
 

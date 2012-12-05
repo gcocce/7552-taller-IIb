@@ -4,6 +4,8 @@ import controllers.factories.IAttributeControllerFactory;
 import controllers.factories.IKeysControllerFactory;
 import controllers.listeners.IEntityEventListener;
 import models.*;
+import models.der.Attribute;
+import models.der.Entity;
 import views.IEntityView;
 
 import infrastructure.IProjectContext;

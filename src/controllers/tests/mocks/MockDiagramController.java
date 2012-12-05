@@ -6,10 +6,10 @@ import java.awt.Point;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import models.Diagram;
-import models.Entity;
 import models.Hierarchy;
-import models.Relationship;
+import models.der.Diagram;
+import models.der.Entity;
+import models.der.Relationship;
 import views.IDiagramView;
 
 import com.mxgraph.model.mxCell;

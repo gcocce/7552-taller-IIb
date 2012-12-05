@@ -11,11 +11,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import junit.framework.Assert;
-import models.Attribute;
-import models.AttributeCollection;
-import models.AttributeType;
 import models.Cardinality;
 import models.IdGroupCollection;
+import models.der.Attribute;
+import models.der.AttributeCollection;
+import models.der.AttributeType;
 
 import org.junit.Test;
 import org.w3c.dom.Document;

@@ -14,7 +14,7 @@ import validation.metrics.IMetricsValidator;
 import validation.metrics.Metrics;
 import validation.rules.IRulesValidator;
 
-import models.Diagram;
+import models.der.Diagram;
 
 public class ProjectValidationService implements IProjectValidationService {
 

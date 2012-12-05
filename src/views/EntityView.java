@@ -12,7 +12,7 @@ import javax.swing.*;
 import com.jgoodies.forms.factories.*;
 import com.jgoodies.forms.layout.*;
 import controllers.IEntityController;
-import models.EntityType;
+import models.der.EntityType;
 
 public class EntityView implements IEntityView {
     private IEntityController entityController;

@@ -5,6 +5,9 @@ import controllers.tests.mocks.*;
 import infrastructure.IterableExtensions;
 import junit.framework.Assert;
 import models.*;
+import models.der.Attribute;
+import models.der.AttributeType;
+
 import org.junit.Before;
 import org.junit.Test;
 

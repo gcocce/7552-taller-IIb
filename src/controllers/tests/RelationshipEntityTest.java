@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.UUID;
 
 import models.Cardinality;
-import models.RelationshipEntity;
+import models.der.RelationshipEntity;
 
 import org.junit.Before;
 import org.junit.Ignore;

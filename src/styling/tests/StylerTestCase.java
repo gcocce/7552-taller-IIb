@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import styling.StyleConstants;
 import styling.Styler;
-import models.EntityType;
+import models.der.EntityType;
 
 
 public class StylerTestCase {

@@ -32,7 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.xml.parsers.ParserConfigurationException;
 
-import models.Entity;
+import models.der.Entity;
 
 import org.xml.sax.SAXException;
 

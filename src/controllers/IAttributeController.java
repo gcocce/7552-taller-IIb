@@ -2,7 +2,7 @@ package controllers;
 
 import java.util.List;
 
-import models.Attribute;
+import models.der.Attribute;
 import views.IAttributeView;
 
 public interface IAttributeController {

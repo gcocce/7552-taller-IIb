@@ -1,6 +1,8 @@
-package models;
+package models.der;
 
 import java.util.UUID;
+
+import models.Cardinality;
 
 public class RelationshipEntity {
 	private Cardinality cardinality;

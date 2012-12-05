@@ -1,4 +1,4 @@
-package models;
+package models.der;
 
 public enum AttributeType {
     characterization("characterization", 0),

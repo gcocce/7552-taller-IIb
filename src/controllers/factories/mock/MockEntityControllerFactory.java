@@ -7,13 +7,13 @@ import java.util.Random;
 import controllers.factories.IEntityControllerFactory;
 import controllers.listeners.IEntityEventListener;
 import views.IEntityView;
-import models.Attribute;
-import models.AttributeType;
 import models.Cardinality;
-import models.Entity;
-import models.EntityType;
 import models.IdGroup;
 import models.IdGroupCollection;
+import models.der.Attribute;
+import models.der.AttributeType;
+import models.der.Entity;
+import models.der.EntityType;
 import controllers.IEntityController;
 
 public class MockEntityControllerFactory implements IEntityControllerFactory {

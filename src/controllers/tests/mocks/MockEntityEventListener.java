@@ -1,7 +1,7 @@
 package controllers.tests.mocks;
 
 import controllers.listeners.IEntityEventListener;
-import models.Entity;
+import models.der.Entity;
 
 public class MockEntityEventListener implements IEntityEventListener {
     public boolean called = false;

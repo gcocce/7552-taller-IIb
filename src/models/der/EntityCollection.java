@@ -1,6 +1,8 @@
-package models;
+package models.der;
 
 import java.util.UUID;
+
+import models.ModelCollection;
 
 import infrastructure.Func;
 import infrastructure.IterableExtensions;

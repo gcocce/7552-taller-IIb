@@ -14,7 +14,7 @@ import javax.swing.table.TableColumn;
 
 import views.RelationshipEntityViewImpl;
 
-import models.Entity;
+import models.der.Entity;
 
 public class EntityRelationshipTableModel extends AbstractTableModel {
 

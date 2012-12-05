@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 import javax.xml.parsers.ParserConfigurationException;
 
 import jgraph.extensions.CustomGraph;
-import models.DomainDiagram;
+import models.domain.DomainDiagram;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

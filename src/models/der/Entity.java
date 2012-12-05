@@ -1,8 +1,10 @@
-package models;
+package models.der;
 
 import java.util.UUID;
 
-public class DomainClass implements INameable, IStrongEntity {
+import models.INameable;
+
+public class Entity implements INameable, IStrongEntity {
 
     private String name;
     private UUID id;
@@ -10,23 +12,23 @@ public class DomainClass implements INameable, IStrongEntity {
     private AttributeCollection attributes;
     
 
-    public DomainClass(String name) {
+    public Entity(String name) {
         this(name, UUID.randomUUID(), EntityType.None, new AttributeCollection());
     }
 
-    public DomainClass(String name, EntityType type) {
+    public Entity(String name, EntityType type) {
         this(name, UUID.randomUUID(), type, new AttributeCollection());
     }
 
-    public DomainClass(String name, UUID id, EntityType type) {
+    public Entity(String name, UUID id, EntityType type) {
         this(name, id, type, new AttributeCollection());
     }
 
-    public DomainClass(String name, EntityType type, AttributeCollection attributes) {
+    public Entity(String name, EntityType type, AttributeCollection attributes) {
         this(name, UUID.randomUUID(), type, attributes);
     }
 
-    public DomainClass(String name, UUID id, EntityType type, AttributeCollection attributes) {
+    public Entity(String name, UUID id, EntityType type, AttributeCollection attributes) {
         super();
         this.setName(name);
         this.setType(type);

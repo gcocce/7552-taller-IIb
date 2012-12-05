@@ -1,8 +1,8 @@
 package controllers.factories.mock;
 
 import views.IHierarchyView;
-import models.Entity;
 import models.Hierarchy;
+import models.der.Entity;
 import controllers.IHierarchyController;
 import controllers.factories.IHierarchyControllerFactory;
 import controllers.listeners.IHierarchyEventListener;

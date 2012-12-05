@@ -28,17 +28,17 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import jgraph.extensions.CustomGraph;
-import models.Attribute;
-import models.AttributeCollection;
 import models.Cardinality;
-import models.Diagram;
-import models.DomainDiagram;
-import models.Entity;
 import models.Hierarchy;
 import models.IdGroup;
-import models.Relationship;
-import models.RelationshipEntity;
-import models.TransformER_Domain;
+import models.der.Attribute;
+import models.der.AttributeCollection;
+import models.der.Diagram;
+import models.der.Entity;
+import models.der.Relationship;
+import models.der.RelationshipEntity;
+import models.domain.DomainDiagram;
+import models.transform.TransformER_Domain;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -1399,7 +1399,7 @@ public class DiagramController extends BaseController implements
 				this.diagram, diagramDoc);
 		diagramDoc.appendChild(element);
 
-		/* Sección para obtener el xml del grafico */
+		/* Secciï¿½n para obtener el xml del grafico */
 		String xml = this.graphPersistenceService.getXml(this.graph);
 		Document graphDoc = builder.parse(new ByteArrayInputStream(xml
 				.getBytes()));

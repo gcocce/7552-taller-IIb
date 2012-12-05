@@ -1,8 +1,8 @@
 package validation.rules;
 
-import models.Attribute;
-import models.Diagram;
-import models.Entity;
+import models.der.Attribute;
+import models.der.Diagram;
+import models.der.Entity;
 import validation.IValidationEntry;
 import validation.ValidationType;
 

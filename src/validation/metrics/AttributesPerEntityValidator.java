@@ -5,8 +5,8 @@ import java.util.List;
 
 import validation.IValidationEntry;
 
-import models.Diagram;
-import models.Entity;
+import models.der.Diagram;
+import models.der.Entity;
 
 public class AttributesPerEntityValidator implements IMetricsValidator {
     @Override

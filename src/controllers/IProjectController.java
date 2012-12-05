@@ -3,7 +3,7 @@ package controllers;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import models.DomainDiagram;
+import models.domain.DomainDiagram;
 
 import views.IProjectView;
 

@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.UUID;
 
 import models.Cardinality;
-import models.Entity;
-import models.EntityType;
-import models.RelationshipEntity;
+import models.der.Entity;
+import models.der.EntityType;
+import models.der.RelationshipEntity;
 import views.IRelationshipEntityView;
 import controllers.listeners.IRelationshipEntityEventListener;
 

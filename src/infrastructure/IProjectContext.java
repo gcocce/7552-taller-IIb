@@ -2,10 +2,10 @@ package infrastructure;
 
 import java.util.UUID;
 
-import models.Diagram;
-import models.DomainDiagram;
-import models.Entity;
 import models.Hierarchy;
+import models.der.Diagram;
+import models.der.Entity;
+import models.domain.DomainDiagram;
 
 public interface IProjectContext {
 	String getName();

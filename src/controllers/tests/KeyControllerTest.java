@@ -3,9 +3,10 @@ package controllers.tests;
 import controllers.KeysController;
 import controllers.tests.mocks.MockKeyView;
 import infrastructure.ProjectContext;
-import models.Attribute;
 import models.IKey;
 import models.IdGroup;
+import models.der.Attribute;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

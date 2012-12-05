@@ -5,6 +5,11 @@ public class Cardinality {
 	private double maximum;
 	private double minimum;
 
+	public Cardinality(double maximum) throws Exception{
+		this.setMaximum(maximum);
+		this.setMinimum(1);
+	}
+	
 	public Cardinality(double minimum, double maximum) throws Exception {
 		this.setMaximum(maximum);
 		this.setMinimum(minimum);

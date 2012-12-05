@@ -3,7 +3,7 @@ package persistence.tests.mocks;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import models.AttributeCollection;
+import models.der.AttributeCollection;
 import persistence.IXmlManager;
 
 public class MockAttributeCollectionXmlManager implements IXmlManager<AttributeCollection> {

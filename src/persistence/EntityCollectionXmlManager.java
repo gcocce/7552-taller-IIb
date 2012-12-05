@@ -1,7 +1,7 @@
 package persistence;
 
-import models.Entity;
-import models.EntityCollection;
+import models.der.Entity;
+import models.der.EntityCollection;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

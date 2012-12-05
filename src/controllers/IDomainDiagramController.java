@@ -2,7 +2,7 @@ package controllers;
 
 import java.awt.Point;
 
-import models.DomainDiagram;
+import models.domain.DomainDiagram;
 import views.IDomainDiagramView;
 
 import com.mxgraph.model.mxCell;

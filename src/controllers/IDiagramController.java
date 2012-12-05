@@ -7,10 +7,10 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-import models.Diagram;
-import models.Entity;
 import models.Hierarchy;
-import models.Relationship;
+import models.der.Diagram;
+import models.der.Entity;
+import models.der.Relationship;
 
 import views.IDiagramView;
 

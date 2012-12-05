@@ -2,7 +2,7 @@ package validation.metrics;
 
 import validation.IValidationEntry;
 import validation.ValidationType;
-import models.Diagram;
+import models.der.Diagram;
 
 public class EntitiesPerDiagramValidationEntry implements IValidationEntry {
 

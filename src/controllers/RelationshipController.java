@@ -8,8 +8,8 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
-import models.Relationship;
-import models.RelationshipEntity;
+import models.der.Relationship;
+import models.der.RelationshipEntity;
 import views.IRelationshipView;
 import controllers.factories.IAttributeControllerFactory;
 import controllers.factories.IRelationshipEntityControllerFactory;

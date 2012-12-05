@@ -1,4 +1,4 @@
-package models;
+package models.transform;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ public class TransformER_Domain {
 	DocumentBuilder documentBuilder;
 	
 	private Document diagramDoc; // Antiguo modelo Entidad Relacion
-	private Document graphDoc;	// Antiguo xml de la representacion gr�fica
+	private Document graphDoc;	// Antiguo xml de la representacion gr�fica 
 	private Document dominioDoc; // Modelo de dominio generado
 	private Document newGraphDoc;// xml de la nueva representacion gr�fica
 	

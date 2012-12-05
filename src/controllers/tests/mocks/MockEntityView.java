@@ -1,7 +1,7 @@
 package controllers.tests.mocks;
 
 import controllers.IEntityController;
-import models.EntityType;
+import models.der.EntityType;
 import views.IAttributeView;
 import views.IEntityView;
 

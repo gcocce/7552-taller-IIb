@@ -6,13 +6,13 @@ import java.util.UUID;
 
 import junit.framework.Assert;
 
-import models.Diagram;
-import models.EntityCollection;
 import models.Hierarchy;
 import models.HierarchyCollection;
-import models.Relationship;
-import models.RelationshipCollection;
-import models.Diagram.DiagramState;
+import models.der.Diagram;
+import models.der.EntityCollection;
+import models.der.Relationship;
+import models.der.RelationshipCollection;
+import models.der.Diagram.DiagramState;
 
 import org.junit.Test;
 import org.w3c.dom.Document;

@@ -1,4 +1,4 @@
-package models;
+package models.der;
 
 import infrastructure.Func;
 import infrastructure.IterableExtensions;
@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+
+import models.Cardinality;
+import models.IdGroupCollection;
 
 public class AttributeCollection implements Iterable<Attribute> {
 

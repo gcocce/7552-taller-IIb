@@ -5,8 +5,8 @@ import java.util.List;
 
 import validation.IValidationEntry;
 
-import models.Diagram;
-import models.Relationship;
+import models.der.Diagram;
+import models.der.Relationship;
 
 public class AttributesPerRelationshipValidator implements IMetricsValidator {
 	@Override

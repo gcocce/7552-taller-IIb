@@ -3,11 +3,11 @@ package persistence;
 import java.util.Iterator;
 import java.util.UUID;
 
-import models.Attribute;
-import models.AttributeCollection;
-import models.AttributeType;
 import models.Cardinality;
 import models.IdGroupCollection;
+import models.der.Attribute;
+import models.der.AttributeCollection;
+import models.der.AttributeType;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

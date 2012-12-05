@@ -1,6 +1,6 @@
 package controllers.listeners;
 
-import models.IStrongEntity;
+import models.der.IStrongEntity;
 
 import java.util.List;
 

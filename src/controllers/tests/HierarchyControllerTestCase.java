@@ -3,9 +3,9 @@ package controllers.tests;
 
 import junit.framework.Assert;
 
-import models.Entity;
-import models.EntityCollection;
 import models.Hierarchy;
+import models.der.Entity;
+import models.der.EntityCollection;
 
 import org.junit.Before;
 import org.junit.Test;

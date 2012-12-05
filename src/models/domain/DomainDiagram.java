@@ -1,26 +1,31 @@
-package models;
+package models.domain;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+
 public class DomainDiagram implements Iterable<DomainDiagram> {
 	private UUID id;
-// TODO: This should be a Class Collection
-//	private EntityCollection entities;
+
+	private List<DomainClass> classes;
+	private List<DomainRelationship> relationships;
 	
 	private List<DomainDiagram> subDiagrams;
 	private String name;
 	private List<String> subDiagramNames;
 
 	public DomainDiagram() {
-		this(UUID.randomUUID());
+		this(UUID.randomUUID());	
 	}
-
+	
 	public DomainDiagram(UUID id)	{
 		this.id = id;
+		classes = new ArrayList<DomainClass>();
+		relationships = new ArrayList<DomainRelationship>();
 		subDiagrams = new ArrayList<DomainDiagram>();
+		
 	}
 
 	@Override
@@ -49,6 +54,19 @@ public class DomainDiagram implements Iterable<DomainDiagram> {
 	}
 
 	public List<DomainClass> getDomainClasses() {
-		return new ArrayList<DomainClass>();
+		return classes;
 	}
+	
+	public List<DomainRelationship> getDomainRelationships(){
+		return relationships;
+	}
+	
+	public void addDomainClass(DomainClass clase){
+		classes.add(clase);		
+	}
+	
+	public void addDomainRelationship(DomainRelationship relationship){
+		relationships.add(relationship);
+	}
+	
 }

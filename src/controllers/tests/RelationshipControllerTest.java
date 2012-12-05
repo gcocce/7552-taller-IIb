@@ -10,12 +10,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-import models.AttributeCollection;
-import models.Entity;
-import models.EntityCollection;
-import models.EntityType;
-import models.Relationship;
-import models.RelationshipEntity;
+import models.der.AttributeCollection;
+import models.der.Entity;
+import models.der.EntityCollection;
+import models.der.EntityType;
+import models.der.Relationship;
+import models.der.RelationshipEntity;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -5,8 +5,8 @@ import infrastructure.IProjectContext;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-import models.DomainClass;
-import models.DomainDiagram;
+import models.domain.DomainClass;
+import models.domain.DomainDiagram;
 
 public class DomainDiagramTreeNode extends DefaultMutableTreeNode {
 

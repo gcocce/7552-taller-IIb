@@ -1,6 +1,6 @@
 package controllers;
 
-import models.Entity;
+import models.der.Entity;
 import controllers.listeners.IEntityEventListener;
 import views.IEntityView;
 

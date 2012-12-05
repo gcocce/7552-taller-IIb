@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import views.IRelationshipView;
 
-import models.Relationship;
+import models.der.Relationship;
 import controllers.IRelationshipController;
 import controllers.listeners.IRelationshipEventListener;
 

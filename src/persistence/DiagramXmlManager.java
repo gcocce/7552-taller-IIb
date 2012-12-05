@@ -2,8 +2,8 @@ package persistence;
 
 import java.util.UUID;
 
-import models.Diagram;
-import models.Diagram.DiagramState;
+import models.der.Diagram;
+import models.der.Diagram.DiagramState;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

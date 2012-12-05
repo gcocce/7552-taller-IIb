@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import models.Attribute;
-import models.AttributeType;
+import models.der.Attribute;
+import models.der.AttributeType;
 import controllers.IAttributeController;
 
 public interface IAttributeView {

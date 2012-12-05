@@ -1,7 +1,7 @@
 package persistence;
 
-import models.Relationship;
-import models.RelationshipCollection;
+import models.der.Relationship;
+import models.der.RelationshipCollection;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

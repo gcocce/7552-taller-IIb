@@ -1,9 +1,9 @@
 package controllers.tests.mocks;
 
-import models.Diagram;
-import models.Entity;
 import models.Hierarchy;
-import models.Relationship;
+import models.der.Diagram;
+import models.der.Entity;
+import models.der.Relationship;
 import controllers.listeners.IDiagramEventListener;
 
 public class MockDiagramListener implements IDiagramEventListener {

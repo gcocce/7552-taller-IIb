@@ -6,7 +6,7 @@ import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import models.Diagram;
+import models.der.Diagram;
 import persistence.IXmlManager;
 
 public class MockDiagramXmlManager implements IXmlManager<Diagram> {

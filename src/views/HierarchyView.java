@@ -20,7 +20,8 @@ import javax.swing.JList;
 import javax.swing.JRadioButton;
 import javax.swing.plaf.basic.BasicArrowButton;
 
-import models.Entity;
+import models.der.Entity;
+
 import com.jgoodies.forms.factories.CC;
 import com.jgoodies.forms.layout.FormLayout;
 

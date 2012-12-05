@@ -3,9 +3,9 @@ package validation.rules;
 import java.util.ArrayList;
 import java.util.List;
 
-import models.Attribute;
-import models.Diagram;
-import models.Entity;
+import models.der.Attribute;
+import models.der.Diagram;
+import models.der.Entity;
 import validation.IValidationEntry;
 
 public class AttributeCardinalityValidator implements IRulesValidator {

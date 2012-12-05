@@ -1,7 +1,7 @@
 package validation.metrics;
 
-import models.Diagram;
 import models.Hierarchy;
+import models.der.Diagram;
 import validation.IValidationEntry;
 import validation.ValidationType;
 

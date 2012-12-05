@@ -1,4 +1,4 @@
-package models;
+package models.der;
 
 public enum EntityType {
     None("None", 0), Thing("Thing", 1), Domain("Domain", 2), Historic("Historic", 3), Programmed("Programmed", 4);

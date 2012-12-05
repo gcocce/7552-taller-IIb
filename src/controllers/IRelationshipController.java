@@ -4,7 +4,7 @@ import controllers.listeners.IRelationshipEventListener;
 
 import views.IRelationshipView;
 
-import models.Relationship;
+import models.der.Relationship;
 
 
 public interface IRelationshipController {

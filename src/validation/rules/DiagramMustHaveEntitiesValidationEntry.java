@@ -1,6 +1,6 @@
 package validation.rules;
 
-import models.Diagram;
+import models.der.Diagram;
 import validation.IValidationEntry;
 import validation.ValidationType;
 

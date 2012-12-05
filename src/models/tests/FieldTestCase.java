@@ -2,7 +2,7 @@ package models.tests;
 
 
 import junit.framework.Assert;
-import models.Attribute;
+import models.der.Attribute;
 
 import org.junit.After;
 import org.junit.Before;

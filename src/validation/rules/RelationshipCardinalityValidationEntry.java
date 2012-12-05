@@ -1,7 +1,7 @@
 package validation.rules;
 
-import models.Diagram;
-import models.Relationship;
+import models.der.Diagram;
+import models.der.Relationship;
 import validation.IValidationEntry;
 import validation.ValidationType;
 

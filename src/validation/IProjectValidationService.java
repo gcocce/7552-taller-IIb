@@ -1,6 +1,6 @@
 package validation;
 
-import models.Diagram;
+import models.der.Diagram;
 
 public interface IProjectValidationService {
     String generateGlobalReport(String diagramName, Iterable<Diagram> diagrams, int tolerance);

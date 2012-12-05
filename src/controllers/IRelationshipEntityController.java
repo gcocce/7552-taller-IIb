@@ -6,8 +6,8 @@ import java.util.UUID;
 import controllers.listeners.IRelationshipEntityEventListener;
 
 import models.Cardinality;
-import models.Entity;
-import models.RelationshipEntity;
+import models.der.Entity;
+import models.der.RelationshipEntity;
 
 import views.IRelationshipEntityView;
 

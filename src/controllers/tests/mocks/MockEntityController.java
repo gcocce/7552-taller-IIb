@@ -3,7 +3,7 @@ package controllers.tests.mocks;
 import java.util.ArrayList;
 import java.util.List;
 
-import models.Entity;
+import models.der.Entity;
 
 import views.IEntityView;
 import controllers.IEntityController;

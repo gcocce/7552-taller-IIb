@@ -1,6 +1,6 @@
 package validation.metrics;
 
-import models.Diagram;
+import models.der.Diagram;
 
 public interface IMetricsCalculator {
 	Metrics calculateMetrics(Iterable<Diagram> diagrams);

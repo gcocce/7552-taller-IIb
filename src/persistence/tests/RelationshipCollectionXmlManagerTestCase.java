@@ -5,10 +5,10 @@ import infrastructure.IterableExtensions;
 import java.util.UUID;
 
 import models.Cardinality;
-import models.Entity;
-import models.Relationship;
-import models.RelationshipCollection;
-import models.RelationshipEntity;
+import models.der.Entity;
+import models.der.Relationship;
+import models.der.RelationshipCollection;
+import models.der.RelationshipEntity;
 
 import org.junit.Assert;
 import org.junit.Test;

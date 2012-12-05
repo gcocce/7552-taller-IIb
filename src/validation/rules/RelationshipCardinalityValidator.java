@@ -3,9 +3,9 @@ package validation.rules;
 import java.util.ArrayList;
 import java.util.List;
 
-import models.Diagram;
-import models.Relationship;
-import models.RelationshipEntity;
+import models.der.Diagram;
+import models.der.Relationship;
+import models.der.RelationshipEntity;
 import validation.IValidationEntry;
 
 public class RelationshipCardinalityValidator implements IRulesValidator {

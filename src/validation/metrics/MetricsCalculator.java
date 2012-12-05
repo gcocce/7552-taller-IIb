@@ -2,11 +2,11 @@ package validation.metrics;
 
 import validation.metrics.MetricPair.MetricNames;
 import infrastructure.IterableExtensions;
-import models.Attribute;
-import models.Diagram;
-import models.Entity;
 import models.Hierarchy;
-import models.Relationship;
+import models.der.Attribute;
+import models.der.Diagram;
+import models.der.Entity;
+import models.der.Relationship;
 
 public class MetricsCalculator implements IMetricsCalculator {
 	@Override

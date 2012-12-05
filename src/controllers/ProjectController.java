@@ -21,11 +21,11 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.xml.parsers.ParserConfigurationException;
 
-import models.Diagram;
-import models.DomainDiagram;
-import models.Entity;
 import models.Hierarchy;
-import models.Relationship;
+import models.der.Diagram;
+import models.der.Entity;
+import models.der.Relationship;
+import models.domain.DomainDiagram;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

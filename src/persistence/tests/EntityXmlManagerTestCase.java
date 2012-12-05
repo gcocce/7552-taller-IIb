@@ -2,9 +2,9 @@ package persistence.tests;
 
 
 import junit.framework.Assert;
-import models.AttributeCollection;
-import models.Entity;
-import models.EntityType;
+import models.der.AttributeCollection;
+import models.der.Entity;
+import models.der.EntityType;
 
 import org.junit.After;
 import org.junit.Before;

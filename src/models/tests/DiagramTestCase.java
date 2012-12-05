@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import junit.framework.Assert;
-import models.Diagram;
-import models.EntityCollection;
 import models.HierarchyCollection;
-import models.Relationship;
-import models.RelationshipCollection;
+import models.der.Diagram;
+import models.der.EntityCollection;
+import models.der.Relationship;
+import models.der.RelationshipCollection;
 
 import org.junit.After;
 import org.junit.Before;

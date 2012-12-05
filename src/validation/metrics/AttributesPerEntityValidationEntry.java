@@ -2,8 +2,8 @@ package validation.metrics;
 
 import validation.IValidationEntry;
 import validation.ValidationType;
-import models.Diagram;
-import models.Entity;
+import models.der.Diagram;
+import models.der.Entity;
 
 public class AttributesPerEntityValidationEntry implements IValidationEntry {
 	private Diagram diagram;

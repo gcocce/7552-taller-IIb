@@ -12,11 +12,11 @@ import java.util.UUID;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import models.Diagram;
-import models.Entity;
 import models.Hierarchy;
-import models.Relationship;
-import models.RelationshipEntity;
+import models.der.Diagram;
+import models.der.Entity;
+import models.der.Relationship;
+import models.der.RelationshipEntity;
 
 import org.junit.Assert;
 import org.junit.Before;

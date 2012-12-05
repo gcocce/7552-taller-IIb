@@ -1,6 +1,11 @@
-package models;
+package models.der;
 
 import java.util.UUID;
+
+import models.Cardinality;
+import models.IKey;
+import models.INameable;
+import models.IdGroupCollection;
 
 public class Attribute implements INameable, IKey {
     private String name;

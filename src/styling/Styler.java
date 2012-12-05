@@ -1,7 +1,7 @@
 package styling;
 
-import models.AttributeType;
-import models.EntityType;
+import models.der.AttributeType;
+import models.der.EntityType;
 
 public class Styler {
 

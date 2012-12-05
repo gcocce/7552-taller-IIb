@@ -4,10 +4,10 @@ import infrastructure.StringExtensions;
 
 import java.util.UUID;
 
-import models.AttributeCollection;
 import models.Cardinality;
-import models.Relationship;
-import models.RelationshipEntity;
+import models.der.AttributeCollection;
+import models.der.Relationship;
+import models.der.RelationshipEntity;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

@@ -5,7 +5,7 @@ import infrastructure.IterableExtensions;
 import java.util.ArrayList;
 import java.util.List;
 
-import models.Diagram;
+import models.der.Diagram;
 import validation.IValidationEntry;
 
 public class DiagramMustHaveEntitiesValidator implements IRulesValidator {

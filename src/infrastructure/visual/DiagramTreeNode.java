@@ -4,10 +4,10 @@ import infrastructure.IProjectContext;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-import models.Diagram;
 import models.Hierarchy;
-import models.Relationship;
-import models.Entity;
+import models.der.Diagram;
+import models.der.Entity;
+import models.der.Relationship;
 
 public class DiagramTreeNode extends DefaultMutableTreeNode {
 

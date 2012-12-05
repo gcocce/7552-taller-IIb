@@ -1,6 +1,10 @@
 package controllers.tests.mocks;
 
 import models.*;
+import models.der.Diagram;
+import models.der.Entity;
+import models.der.Relationship;
+import models.domain.DomainDiagram;
 
 import infrastructure.IProjectContext;
 

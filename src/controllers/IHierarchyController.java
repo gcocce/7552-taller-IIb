@@ -1,8 +1,8 @@
 package controllers;
 
 import controllers.listeners.IHierarchyEventListener;
-import models.Entity;
 import models.Hierarchy;
+import models.der.Entity;
 import views.IHierarchyView;
 
 public interface IHierarchyController {

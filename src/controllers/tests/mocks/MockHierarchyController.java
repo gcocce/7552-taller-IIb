@@ -2,8 +2,8 @@ package controllers.tests.mocks;
 
 import java.util.ArrayList;
 import java.util.List;
-import models.Entity;
 import models.Hierarchy;
+import models.der.Entity;
 import views.IHierarchyView;
 import controllers.IHierarchyController;
 import controllers.listeners.IHierarchyEventListener;

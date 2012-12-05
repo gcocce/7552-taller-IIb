@@ -1,7 +1,7 @@
 package models.tests;
 
-import models.Entity;
-import models.EntityType;
+import models.der.Entity;
+import models.der.EntityType;
 import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;

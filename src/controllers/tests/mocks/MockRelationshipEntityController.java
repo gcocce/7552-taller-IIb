@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.UUID;
 
 import models.Cardinality;
-import models.Entity;
-import models.EntityCollection;
-import models.RelationshipEntity;
+import models.der.Entity;
+import models.der.EntityCollection;
+import models.der.RelationshipEntity;
 import views.IRelationshipEntityView;
 import controllers.BaseController;
 import controllers.IRelationshipEntityController;

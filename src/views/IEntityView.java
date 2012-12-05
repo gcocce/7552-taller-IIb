@@ -1,7 +1,7 @@
 package views;
 
 import controllers.IEntityController;
-import models.EntityType;
+import models.der.EntityType;
 
 public interface IEntityView {
 

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import controllers.listeners.IHierarchyEventListener;
-import models.Entity;
 import models.Hierarchy;
+import models.der.Entity;
 import views.IHierarchyView;
 import infrastructure.IProjectContext;
 

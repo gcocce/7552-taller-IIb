@@ -4,6 +4,12 @@ import controllers.EntityController;
 import controllers.tests.mocks.*;
 import junit.framework.Assert;
 import models.*;
+import models.der.Attribute;
+import models.der.AttributeCollection;
+import models.der.Entity;
+import models.der.EntityCollection;
+import models.der.EntityType;
+
 import org.junit.Before;
 import org.junit.Test;
 
