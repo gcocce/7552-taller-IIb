@@ -1,5 +1,8 @@
 package models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -14,9 +17,9 @@ public class TransformER_Domain {
 	DocumentBuilder documentBuilder;
 	
 	private Document diagramDoc; // Antiguo modelo Entidad Relacion
-	private Document graphDoc;	// Antiguo xml de la representacion gráfica
+	private Document graphDoc;	// Antiguo xml de la representacion grï¿½fica
 	private Document dominioDoc; // Modelo de dominio generado
-	private Document newGraphDoc;// xml de la nueva representacion gráfica
+	private Document newGraphDoc;// xml de la nueva representacion grï¿½fica
 	
 	public TransformER_Domain(Document diagram, Document graph){
 		this.factoryBuilder = DocumentBuilderFactory.newInstance();
@@ -41,7 +44,7 @@ public class TransformER_Domain {
         Element eDominio = dominioDoc .createElement("dominio");
         dominioDoc.appendChild(eDominio);
         
-        Element eClases = dominioDoc.createElement("clases");
+        Element eClases = dominioDoc.createElement("classes");
         eDominio.appendChild(eClases);
         
         Element eRelations = dominioDoc.createElement("relationships");
@@ -63,82 +66,178 @@ public class TransformER_Domain {
 	}
 	
 	private void procesarRelaciones(Element relationshipsElement){
-        Element eClases= (Element)dominioDoc.getElementsByTagName("clases").item(0);
-        Element eRelations= (Element)dominioDoc.getElementsByTagName("relationships").item(0);
+        Element eClases= (Element)dominioDoc.getElementsByTagName("classes").item(0);
+        Element eRelationsDomain= (Element)dominioDoc.getElementsByTagName("relationships").item(0);
         
-        NodeList nList = relationshipsElement.getElementsByTagName("relationship");
+        NodeList DERRelationshipList = relationshipsElement.getElementsByTagName("relationship");
         
-        for (int temp = 0; temp < nList.getLength(); temp++) {
- 		   Node nNode = nList.item(temp);
+        for (int temp = 0; temp < DERRelationshipList.getLength(); temp++) {
+ 		   Node nNode = DERRelationshipList.item(temp);
  		   if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-				  Element eEntity= (Element) nNode;
+				  Element relacionDER= (Element) nNode;
 				  
-				  String sId=eEntity.getAttribute("id");
-				  String sName=eEntity.getAttribute("name");
-				  String sComposition = eEntity.getAttribute("composition");
-
-			
-				  Element eAtributos=(Element)eEntity.getElementsByTagName("attributes").item(0);
+				  String sId=relacionDER.getAttribute("id");
+				  String sName=relacionDER.getAttribute("name");
+				 			
+				  Element eAtributos=(Element)relacionDER.getElementsByTagName("attributes").item(0);
 				  NodeList attrList=eAtributos.getChildNodes();
-				  //si no tiene atributos no mapea a clase
+				  
+				  //si tiene atributos la relacion mapea a clase
 				  if(attrList.getLength()!=0){
 					  System.out.println("Relationship name: " + sName);
 
-					  Element clase = dominioDoc.createElement("clase");
-					  clase.setAttribute("name", sName);
-					  clase.setAttribute("id", sId);
-					  eClases.appendChild(clase);
+					  Element relationshipClass = dominioDoc.createElement("class");
+					  relationshipClass.setAttribute("name", sName);
+					  relationshipClass.setAttribute("id", sId);
+					  eClases.appendChild(relationshipClass);
 
 					  // Procesar nodos hijos
 
-					  this.procesarAtributos(clase, eAtributos);
+					  this.procesarAtributos(relationshipClass, eAtributos);
+					  procesarRelacionConAtributos(relacionDER,eRelationsDomain,relationshipClass);
 					  
 				  }
-				  crearRelacion(eEntity,eRelations);
-				  
-				  
-				  
-				  
+				  else
+					  procesarRelacionSinAtributos(relacionDER,eRelationsDomain);
+					   
 				  System.out.println("Fin Relationship: " + sName);
  		   }
  		}        
 	}
 	
-	private void crearRelacion(Element eEntity, Element eRelations) {
+	private void procesarRelacionConAtributos(Element relacionDER, Element eRelationsDomain,
+			Element relationshipClass) {
 
-		Element eEntities=(Element)eEntity.getElementsByTagName("entities").item(0);
+		String sComposition = relacionDER.getAttribute("composition");
+		  
+		  if(sComposition == "true"){
+			//creo una relacion normal con 2 clases
+			  procesarRelacionSinAtributos(relacionDER,eRelationsDomain); 
+			  
+		  }
+		  else{
+			  //creo 2 relaciones contra la relacion que se hizo clase
+			  crearRelacionDoble( relacionDER, eRelationsDomain, relationshipClass);
+		  }
+
+	}
 
 
-		Element eRelation = dominioDoc.createElement("relationship");
-		  String sId1=eEntity.getAttribute("id");
-		  String sName1=eEntity.getAttribute("name");
-		  String sComposition = eEntity.getAttribute("composition");
-		  eRelation.setAttribute("id", sId1);
-		  eRelation.setAttribute("cardinality", sComposition);
-		  eRelations.appendChild(eRelation);
+	private void crearRelacionDoble(Element relacionDER, Element eRelationsDomain,
+			Element relacionHechaClase) {
 		
-		Element eClases = dominioDoc.createElement("clases");
-		NodeList nList=eEntities.getChildNodes(); 
+		Element eEntities=(Element)relacionDER.getElementsByTagName("entities").item(0);
+		Element nuevaRelacionHechaClaseIzq = dominioDoc.createElement("class");
+		Element nuevaRelacionHechaClaseDer = dominioDoc.createElement("class");
+		
+		nuevaRelacionHechaClaseIzq.setAttribute("id", relacionHechaClase.getAttribute("id"));
+		nuevaRelacionHechaClaseDer.setAttribute("id", relacionHechaClase.getAttribute("id"));
+				
+
+		Element eRelationIzq = dominioDoc.createElement("relationship");
+		String sId1=relacionDER.getAttribute("id"); //TODO: NO SE PUEDE REPETIR LE ID DE LA RELACION DEL DER EN LAS 2 RELACIONES DEL MODELO DE DOMINIO
+		String sName1=relacionDER.getAttribute("name");
+		String sComposition = relacionDER.getAttribute("composition");
+		
+		eRelationIzq.setAttribute("id", sId1);
+		eRelationIzq.setAttribute("name", sName1 + "Izq");
+		eRelationIzq.setAttribute("composition", sComposition);
+		eRelationIzq.setAttribute("directionality", "bidirectional");
+		eRelationsDomain.appendChild(eRelationIzq);
+
+		Element eRelationDer = dominioDoc.createElement("relationship");
+		eRelationDer.setAttribute("id", sId1);
+		eRelationDer.setAttribute("name", sName1 + "Der");
+		eRelationDer.setAttribute("composition", sComposition);
+		eRelationDer.setAttribute("directionality", "bidirectional");
+		eRelationsDomain.appendChild(eRelationDer);
+		
+		Element eClasesIzq = dominioDoc.createElement("classes");
+		Element eClasesDer = dominioDoc.createElement("classes");
+		
+		NodeList entitiyList=eEntities.getChildNodes(); 
+		String sCardinality[] = new String[entitiyList.getLength()];
+        System.out.println("Numero de clases: " + entitiyList.getLength());
+        List<Element> elementsList = new ArrayList<Element>() ;
         
-        System.out.println("Numero de clases: " + nList.getLength());
-        
-        for (int temp = 0; temp < nList.getLength(); temp++) {
- 		   Node nNode = nList.item(temp);
+        for (int temp = 0; temp < entitiyList.getLength(); temp++) {
+ 		   Node nNode = entitiyList.item(temp);
  		   if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-				  Element eClass= (Element) nNode;
+				  Element eEntity= (Element) nNode;
 				  
-				  String sId=eClass.getAttribute("id");
-				  String sCardinality = eClass.getAttribute("maximumCardinality");
+				  String sId=eEntity.getAttribute("entityId");
+				  sCardinality[temp] = eEntity.getAttribute("maximumCardinality");
 				  
 				  System.out.println("class ID: " + sId);
 	      
-				  Element eclase = dominioDoc.createElement("class");
-				  eclase.setAttribute("id", sId);
-				  eclase.setAttribute("cardinality", sCardinality);
-				  eClases.appendChild(eclase);
+				  Element eClase = dominioDoc.createElement("class");
+				  eClase.setAttribute("id", sId);
+
+				  elementsList.add(eClase);
 				  
  		   }
- 		} 
+ 		}     
+        		
+        elementsList.get(0).setAttribute("cardinality", "1");
+		eClasesIzq.appendChild(elementsList.get(0));
+		nuevaRelacionHechaClaseIzq.setAttribute("cardinality", sCardinality[1]);
+		eClasesIzq.appendChild(nuevaRelacionHechaClaseIzq);
+		eRelationIzq.appendChild(eClasesIzq);
+		
+		elementsList.get(1).setAttribute("cardinality", "1");
+		eClasesDer.appendChild(elementsList.get(1));
+		nuevaRelacionHechaClaseDer.setAttribute("cardinality", sCardinality[0]);
+		eClasesDer.appendChild(nuevaRelacionHechaClaseDer);
+		eRelationDer.appendChild(eClasesDer);
+	}
+
+
+	private void procesarRelacionSinAtributos(Element relacionDER, Element eRelations) {
+
+		Element eEntities=(Element)relacionDER.getElementsByTagName("entities").item(0);
+		
+
+		Element eRelation = dominioDoc.createElement("relationship");
+		String sId1 = relacionDER.getAttribute("id");
+		String sName1 = relacionDER.getAttribute("name");
+		String sComposition = relacionDER.getAttribute("composition");
+		eRelation.setAttribute("id", sId1);
+		eRelation.setAttribute("name", sName1);
+		eRelation.setAttribute("composition", sComposition);
+		eRelation.setAttribute("directionality", "bidirectional");
+		eRelations.appendChild(eRelation);  
+		
+		Element eClases = dominioDoc.createElement("classes");
+		NodeList entityList=eEntities.getChildNodes(); 
+		String sCardinality[] = new String[entityList.getLength()];
+        System.out.println("Numero de clases: " + entityList.getLength());
+        List<Element> elementsList = new ArrayList<Element>() ;
+        
+        for (int temp = 0; temp < entityList.getLength(); temp++) {
+ 		   Node nNode = entityList.item(temp);
+ 		   if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+				  Element eEntity= (Element) nNode;
+				  
+				  String sId=eEntity.getAttribute("entityId");
+				  sCardinality[temp] = eEntity.getAttribute("maximumCardinality");
+				  
+				  System.out.println("class ID: " + sId);
+	      
+				  Element eClase = dominioDoc.createElement("class");
+				  eClase.setAttribute("id", sId);
+
+				  elementsList.add(eClase);
+				  
+ 		   }
+ 		}
+        
+        int i=1;
+		for(Element eClase:elementsList){
+			eClase.setAttribute("cardinality", sCardinality[i]);
+			i--;
+			eClases.appendChild(eClase);
+		}
+        
         eRelation.appendChild(eClases);
 		
 		
@@ -146,7 +245,7 @@ public class TransformER_Domain {
 
 
 	private void procesarEntidades(Element entitiesElement){
-        Element eClases= (Element)dominioDoc.getElementsByTagName("clases").item(0);
+        Element eClases= (Element)dominioDoc.getElementsByTagName("classes").item(0);
         
         NodeList nList = entitiesElement.getElementsByTagName("entity");
         
@@ -160,7 +259,7 @@ public class TransformER_Domain {
 				  
 				  System.out.println("Entity name: " + sName);
 	      
-				  Element clase = dominioDoc.createElement("clase");
+				  Element clase = dominioDoc.createElement("class");
 				  clase.setAttribute("name", sName);
 				  clase.setAttribute("id", sId);
 				  eClases.appendChild(clase);
@@ -201,7 +300,6 @@ public class TransformER_Domain {
 				  eAtributos.appendChild(eAtributo);
 				  
 				  // Procesar nodos hijos
-				  //TODO recursivo
 				  Element eAtributosHijos=(Element) eAtribute.getElementsByTagName("attributes").item(0);
 				  NodeList nListaHijos = eAtributosHijos.getElementsByTagName("attribute");				  
 				  if (nListaHijos.getLength()>0){
@@ -214,8 +312,8 @@ public class TransformER_Domain {
 	private void procesarAtributosHijos(String nombre, String id, Element atributes){
 		System.out.println("Se crea una nueva clase: " + nombre);
 		
-		Element clases = (Element)dominioDoc.getElementsByTagName("clases").item(0);
-        Element clase= dominioDoc.createElement("clase");
+		Element clases = (Element)dominioDoc.getElementsByTagName("classes").item(0);
+        Element clase= dominioDoc.createElement("class");
         clase.setAttribute("name", nombre);
         clase.setAttribute("id", id);
         clases.appendChild(clase);
