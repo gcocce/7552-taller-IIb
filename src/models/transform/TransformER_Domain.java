@@ -7,6 +7,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import models.domain.DomainClass;
+import models.domain.DomainRelationship;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -355,6 +358,77 @@ public class TransformER_Domain {
 		
 		
 		return newgraphDoc ;
+	}
+	
+	public DomainRelationCollection populateDomainRelationships(Document dominioDoc) {
+
+		DomainRelationCollection relationshipCollection = new DomainRelationCollection();
+		  // Diagram element
+      Element diagram=dominioDoc.getDocumentElement();
+      
+      // Lista de clases
+
+      Element eClases= (Element)dominioDoc.getElementsByTagName("relationships").item(0);
+      
+      NodeList nList = eClases.getElementsByTagName("relationship");
+      
+      for (int temp = 0; temp < nList.getLength(); temp++) {
+		   Node nNode = nList.item(temp);
+		   if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+				  Element myClass= (Element) nNode;
+				  
+				  String sId=myClass.getAttribute("id");
+				  String sName=myClass.getAttribute("name");
+				  String sDir = myClass.getAttribute("directionality");
+				  String sComposition = myClass.getAttribute("composition");
+				  boolean composition = false;
+				  if(sComposition.equals("true"))
+					  composition = true;
+
+				  //aca voy populando el modelo de relaciones.
+				  try {
+					relationshipCollection.add(new DomainRelationship());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+		   }
+		}                
+		return relationshipCollection;
+	}
+
+	public ClassCollection populateDomainClasses(Document dominioDoc) {
+
+		ClassCollection classCollection = new ClassCollection();
+		  // Diagram element
+        Element diagram=dominioDoc.getDocumentElement();
+        
+        // Lista de clases
+
+        Element eClases= (Element)dominioDoc.getElementsByTagName("classes").item(0);
+        
+        NodeList nList = eClases.getElementsByTagName("class");
+        
+        for (int temp = 0; temp < nList.getLength(); temp++) {
+ 		   Node nNode = nList.item(temp);
+ 		   if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+				  Element myClass= (Element) nNode;
+				  
+				  String sId=myClass.getAttribute("id");
+				  String sName=myClass.getAttribute("name");
+	      
+				  //aca voy populando el modelo de classes.
+				  classCollection.add(new DomainClass(sName));
+
+				  
+				  // Procesar nodos hijos (agregar atributos)
+				  /*Element eAtributos=(Element)myClass.getElementsByTagName("attributes").item(0);
+				  this.procesarAtributos(clase, eAtributos);
+*/
+ 		   }
+ 		}                
+		return classCollection;
 	}
 	
 }

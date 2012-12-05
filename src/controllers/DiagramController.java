@@ -1409,8 +1409,6 @@ public class DiagramController extends BaseController implements
 
 		Document dominioDoc = transfTool.GetDomainModel();
 
-		// Guardamos el xml del modelo de dominio
-		this.xmlFileManager.write(dominioDoc, this.getDomainFilePath());
 
 		// TODO: obtener y guardar el xml del nuevo grafico
 		// Document newgraphDoc=transfTool.getGraphDomain();
@@ -1418,7 +1416,17 @@ public class DiagramController extends BaseController implements
 		// this.getGraphDomainFilePath());
 		
 		// XXX: Hack for now...
-		getProjectController().showDomainDiagram(new DomainDiagram());
+		DomainDiagram domainDiagram = new DomainDiagram(); 
+		//popullo las clases
+		domainDiagram.setClasses(transfTool.populateDomainClasses(dominioDoc));
+		//populo las realaciones
+		//domainDiagram.setRelationships(populateDomainRelationships(dominioDoc));
+		
+		
+		getProjectController().showDomainDiagram(domainDiagram);
+		
+		// Guardamos el xml del modelo de dominio
+		this.xmlFileManager.write(dominioDoc, this.getDomainFilePath());
 	}
 
 	public IProjectController getProjectController() {
