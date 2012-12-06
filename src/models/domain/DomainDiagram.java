@@ -68,5 +68,18 @@ public class DomainDiagram implements Iterable<DomainDiagram> {
 	public void addDomainRelationship(DomainRelationship relationship){
 		relationships.add(relationship);
 	}
+
+	public void setRelationships(
+			List<DomainRelationship> domainRelationships) {
+		this.relationships = domainRelationships;
+		
+		
+	}
+
+	public void setClasses(List<DomainClass> domainClasses) {
+	
+		this.classes = domainClasses;
+		
+	}
 	
 }

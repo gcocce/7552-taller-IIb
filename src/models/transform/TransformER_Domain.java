@@ -23,8 +23,10 @@ public class TransformER_Domain {
 	private Document graphDoc;	// Antiguo xml de la representacion gr�fica 
 	private Document dominioDoc; // Modelo de dominio generado
 	private Document newGraphDoc;// xml de la nueva representacion gr�fica
+	private int newRelationshipNumeber;
 	
 	public TransformER_Domain(Document diagram, Document graph){
+		this.newRelationshipNumeber = 0;
 		this.factoryBuilder = DocumentBuilderFactory.newInstance();
 		this.factoryBuilder.setNamespaceAware(true);
 		try {
@@ -306,27 +308,25 @@ public class TransformER_Domain {
 				  Element eAtributosHijos=(Element) eAtribute.getElementsByTagName("attributes").item(0);
 				  NodeList nListaHijos = eAtributosHijos.getElementsByTagName("attribute");				  
 				  if (nListaHijos.getLength()>0){
-					  this.procesarAtributosHijos(sName, sId, eAtributosHijos, clase);  
+						Element clases = (Element)dominioDoc.getElementsByTagName("classes").item(0);
+				        Element attributoHechoClase= dominioDoc.createElement("class");
+				        attributoHechoClase.setAttribute("name", sName);
+				        attributoHechoClase.setAttribute("id", sId);
+				        clases.appendChild(attributoHechoClase);
+					  crearRelacion(crearClaseDeRelacion(clase,"1.0"),crearClaseDeRelacion(attributoHechoClase,sCardinality));
+					  this.procesarAtributosHijos(eAtributosHijos, attributoHechoClase);  
 				  }else
 					  eAtributos.appendChild(eAtributo);
  		   }
  		}        
  	}
 	
-	private void procesarAtributosHijos(String nombre, String id, Element atributes, Element claseContenedora){
-		System.out.println("Se crea una nueva clase: " + nombre);
-		
-		Element clases = (Element)dominioDoc.getElementsByTagName("classes").item(0);
-        Element clase= dominioDoc.createElement("class");
-        clase.setAttribute("name", nombre);
-        clase.setAttribute("id", id);
-        clases.appendChild(clase);
-        
-        Element eAtributos = dominioDoc.createElement("attributes");
-		clase.appendChild(eAtributos);
+	private void procesarAtributosHijos(Element eAtributes, Element claseContenedora){
 
-		//NodeList nListaHijos = atributes.getElementsByTagName("attribute");
-		NodeList nListaHijos =atributes.getChildNodes();
+        Element eAtributos = dominioDoc.createElement("attributes");
+		claseContenedora.appendChild(eAtributos);
+
+		NodeList nListaHijos =eAtributes.getChildNodes();
 		
 		for (int temp = 0; temp < nListaHijos.getLength(); temp++) {
 			Node nNode = nListaHijos.item(temp);
@@ -349,16 +349,21 @@ public class TransformER_Domain {
 				  Element eAtributosHijos=(Element) eAtribute.getElementsByTagName("attributes").item(0);
 				  NodeList nLista = eAtributosHijos.getElementsByTagName("attribute");				  
 				  if (nLista.getLength()>0){
-					  crearRelacion(crearClaseDeRelacion(claseContenedora,"1.0"),crearClaseDeRelacion(clase,sCardinality));
-					  this.procesarAtributosHijos(sName, sId, eAtributosHijos,clase);  
+					  //no me está agregando la ultima relacion cr
+						Element clases = (Element)dominioDoc.getElementsByTagName("classes").item(0);
+				        Element attributoHechoClase= dominioDoc.createElement("class");
+				        attributoHechoClase.setAttribute("name", sName);
+				        attributoHechoClase.setAttribute("id", sId);
+				        clases.appendChild(attributoHechoClase);
+					  crearRelacion(crearClaseDeRelacion(claseContenedora,"1.0"),crearClaseDeRelacion(attributoHechoClase,sCardinality));
+					  this.procesarAtributosHijos(eAtributosHijos,attributoHechoClase);  
 				  }else{
 					  eAtributos.appendChild(eAtributo);
 				  }
 			}
 				  
 	  	  }
-		
-		System.out.println("Fin clase: " + nombre);
+
 	}
 	
 	private Element crearClaseDeRelacion(Element clase, String cardinality) {
@@ -370,21 +375,12 @@ public class TransformER_Domain {
 		return eClase;
 	}
 
-
+	
 	private void crearRelacion(Element claseContenedora, Element clase) {
 
 		Element eRelationsDomain= (Element)dominioDoc.getElementsByTagName("relationships").item(0);
-		
-		
-		Element eRelation = dominioDoc.createElement("relationship");
-		String sId1 = claseContenedora.getAttribute("id");
-		String sName1 = claseContenedora.getAttribute("name");
-		String sComposition1 = claseContenedora.getAttribute("composition");
-		//nueva relacion, generar nuevo id
-		eRelation.setAttribute("id", null);
-		eRelation.setAttribute("name", "nuevaRelacion");
-		eRelation.setAttribute("composition", "false");
-		eRelation.setAttribute("directionality", "bidirectional");
+
+		Element eRelation = translateRelationship(claseContenedora);
 		eRelationsDomain.appendChild(eRelation);  
 		
 		Element eClases = dominioDoc.createElement("classes");
@@ -392,8 +388,23 @@ public class TransformER_Domain {
 		eClases.appendChild(clase);
         
         eRelation.appendChild(eClases);
+	
 		
+	}
+
+
+	private Element translateRelationship(Element claseContenedora) {
 		
+		Element eRelation = dominioDoc.createElement("relationship");
+		String sId1 = claseContenedora.getAttribute("id");
+		String sName1 = claseContenedora.getAttribute("name");
+		String sComposition1 = claseContenedora.getAttribute("composition");
+		//nueva relacion, generar nuevo id
+		eRelation.setAttribute("id", null);
+		eRelation.setAttribute("name", "nuevaRelacion" + this.newRelationshipNumeber++);
+		eRelation.setAttribute("composition", "false");
+		eRelation.setAttribute("directionality", "bidirectional");
+		return eRelation;
 		
 	}
 

@@ -1418,9 +1418,9 @@ public class DiagramController extends BaseController implements
 		// XXX: Hack for now...
 		DomainDiagram domainDiagram = new DomainDiagram(); 
 		//popullo las clases
-		//domainDiagram.setClasses(transfTool.populateDomainClasses(dominioDoc));
+		domainDiagram.setClasses(transfTool.populateDomainClasses(dominioDoc));
 		//populo las realaciones
-		//domainDiagram.setRelationships(populateDomainRelationships(dominioDoc));
+		domainDiagram.setRelationships(transfTool.populateDomainRelationships(dominioDoc));
 		
 		this.xmlFileManager.write(dominioDoc, this.getDomainFilePath());
 		
