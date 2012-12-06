@@ -314,66 +314,12 @@ public class TransformER_Domain {
 				        attributoHechoClase.setAttribute("id", sId);
 				        clases.appendChild(attributoHechoClase);
 					  crearRelacion(crearClaseDeRelacion(clase,"1.0"),crearClaseDeRelacion(attributoHechoClase,sCardinality));
-					  this.procesarAtributosHijos(eAtributosHijos, attributoHechoClase);  
+					  this.procesarAtributos(attributoHechoClase,eAtributosHijos );  
 				  }else
 					  eAtributos.appendChild(eAtributo);
  		   }
  		}        
  	}
-	
-	private void procesarAtributosHijos(Element eAtributes, Element claseContenedora){
-
-        Element eAtributos = dominioDoc.createElement("attributes");
-		claseContenedora.appendChild(eAtributos);
-
-		NodeList nListaHijos =eAtributes.getChildNodes();
-		
-		for (int temp = 0; temp < nListaHijos.getLength(); temp++) {
-			Node nNode = nListaHijos.item(temp);
-			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-				Element eAtribute= (Element) nNode;
-	 				  
-				  String sId=eAtribute.getAttribute("id");
-				  String sName=eAtribute.getAttribute("name");
-				  String sCardinality = eAtribute.getAttribute("maximumCardinality");
-				  
-				  System.out.println("Attribute name: " + sName);
-				  
-				  Element eAtributo = dominioDoc.createElement("attribute");
-				  eAtributo.setAttribute("name", sName);
-				  eAtributo.setAttribute("id", sId);
-				  eAtributo.setAttribute("cardinality", sCardinality);
-				  
-				  
-				  // Procesar nodos hijos
-				  Element eAtributosHijos=(Element) eAtribute.getElementsByTagName("attributes").item(0);
-				  NodeList nLista = eAtributosHijos.getElementsByTagName("attribute");				  
-				  if (nLista.getLength()>0){
-					  //no me está agregando la ultima relacion cr
-						Element clases = (Element)dominioDoc.getElementsByTagName("classes").item(0);
-				        Element attributoHechoClase= dominioDoc.createElement("class");
-				        attributoHechoClase.setAttribute("name", sName);
-				        attributoHechoClase.setAttribute("id", sId);
-				        clases.appendChild(attributoHechoClase);
-					  crearRelacion(crearClaseDeRelacion(claseContenedora,"1.0"),crearClaseDeRelacion(attributoHechoClase,sCardinality));
-					  this.procesarAtributosHijos(eAtributosHijos,attributoHechoClase);  
-				  }else{
-					  eAtributos.appendChild(eAtributo);
-				  }
-			}
-				  
-	  	  }
-
-	}
-	
-	private Element crearClaseDeRelacion(Element clase, String cardinality) {
-		
-		  Element eClase = dominioDoc.createElement("class");
-		  eClase.setAttribute("id", clase.getAttribute("id"));
-		  eClase.setAttribute("cardinality",cardinality );
-
-		return eClase;
-	}
 
 	
 	private void crearRelacion(Element claseContenedora, Element clase) {
@@ -431,19 +377,26 @@ public class TransformER_Domain {
       for (int temp = 0; temp < nList.getLength(); temp++) {
 		   Node nNode = nList.item(temp);
 		   if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-				  Element myClass= (Element) nNode;
+				  Element myRelationship= (Element) nNode;
 				  
-				  String sId=myClass.getAttribute("id");
-				  String sName=myClass.getAttribute("name");
-				  String sDir = myClass.getAttribute("directionality");
-				  String sComposition = myClass.getAttribute("composition");
+				  String sId=myRelationship.getAttribute("id");
+				  String sName=myRelationship.getAttribute("name");
+				  String sDir = myRelationship.getAttribute("directionality");
+				  String sComposition = myRelationship.getAttribute("composition");
 				  boolean composition = false;
 				  if(sComposition.equals("true"))
 					  composition = true;
-
+/*				  
+				  Element rClasses=(Element)myRelationship.getElementsByTagName("classes").item(0);
+			      NodeList rClassesList = eClases.getElementsByTagName("class");
+			      for (int temp2 = 0; temp2 < rClassesList.getLength(); temp2++) {
+					   Node rClass = rClassesList.item(temp2);
+					   if (rClass.getNodeType() == Node.ELEMENT_NODE) {
+							  Element myrClass= (Element) rClass;
+*/							  
 				  //aca voy populando el modelo de relaciones.
 				  try {
-					relationshipCollection.add(new DomainRelationship(null, sName, null, null));
+					relationshipCollection.add(new DomainRelationship(null,sName,null,null));
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
