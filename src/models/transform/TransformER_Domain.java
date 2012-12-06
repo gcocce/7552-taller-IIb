@@ -443,7 +443,7 @@ public class TransformER_Domain {
 
 				  //aca voy populando el modelo de relaciones.
 				  try {
-					relationshipCollection.add(new DomainRelationship(null, sComposition, null, null));
+					relationshipCollection.add(new DomainRelationship(null, sName, null, null));
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

@@ -75,4 +75,9 @@ public class DomainRelationship implements INameable{
 		this.isComposition = true;
 	}
 
+    public String toString()
+    {
+    	return this.name;
+    }
+
 }

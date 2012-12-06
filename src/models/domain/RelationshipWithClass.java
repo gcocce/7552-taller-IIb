@@ -36,5 +36,9 @@ public class RelationshipWithClass {
 	public void setClase(DomainClass clase) {
 		this.clase = clase;
 	}
+    public String toString()
+    {
+    	return this.clase.getName();
+    }
 
 }

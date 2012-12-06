@@ -7,6 +7,7 @@ import javax.swing.tree.DefaultTreeModel;
 
 import models.domain.DomainClass;
 import models.domain.DomainDiagram;
+import models.domain.DomainRelationship;
 
 public class DomainDiagramTreeNode extends DefaultMutableTreeNode {
 
@@ -14,10 +15,13 @@ public class DomainDiagramTreeNode extends DefaultMutableTreeNode {
 	
 	private static String SubDiagramsNodeName = "Sub-Diagrams";
 	private static String ClassesNodeName = "Classes";
+	private static String RELATIONSHIPS_NODE_NAME = "Relationships";
 
 	private DefaultMutableTreeNode subdiagramsNode;
 
 	private DefaultMutableTreeNode classesNode;
+	
+	private DefaultMutableTreeNode relationshipsNode;
 
 	private DomainDiagram diagram;
 
@@ -29,8 +33,20 @@ public class DomainDiagramTreeNode extends DefaultMutableTreeNode {
 		this.diagram = diagram;
 		addChildFolders();
 		populateClasses();
+		populateRelationships();
 	}
 	
+	private void populateRelationships() {
+		for (DomainRelationship domainRelationship : this.diagram.getDomainRelationships()) {
+			DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(domainRelationship);
+			this.relationshipsNode.add(rootNode);
+			//rootNode.add(new DefaultMutableTreeNode(domainRelationship.getRelatedClass1()));
+			//rootNode.add(new DefaultMutableTreeNode(domainRelationship.getRelatedClass2()));
+
+		}
+		
+	}
+
 	private void populateClasses() {
 		for (DomainClass domainClass : this.diagram.getDomainClasses()) {
 			this.classesNode.add(new DefaultMutableTreeNode(domainClass));
@@ -61,7 +77,9 @@ public class DomainDiagramTreeNode extends DefaultMutableTreeNode {
 	private void addChildFolders() {
 		classesNode = new DefaultMutableTreeNode(ClassesNodeName);
 		subdiagramsNode = new DefaultMutableTreeNode(SubDiagramsNodeName);
+		relationshipsNode = new DefaultMutableTreeNode(RELATIONSHIPS_NODE_NAME);
 		add(this.classesNode);
+		add(this.relationshipsNode);
 		add(this.subdiagramsNode);
 	}
 }
