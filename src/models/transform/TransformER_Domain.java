@@ -462,7 +462,6 @@ public class TransformER_Domain {
         eRoot.appendChild(eCeldaPadre);
 
         List<DomainClass> ListC=domainDiagram.getDomainClasses();
-        
         Iterator<DomainClass> iterator = ListC.iterator();
     	while (iterator.hasNext()) {
     		String x="0";
@@ -502,7 +501,7 @@ public class TransformER_Domain {
             eRoot.appendChild(eCelda);            
     	}        
     	
-    	System.out.println("Buscamos las relacioens.");
+    	System.out.println("Buscamos las relacioens."); 	
         Element eRelaciones= (Element)dominioDoc.getElementsByTagName("relationships").item(0);
         NodeList nListR = eRelaciones.getElementsByTagName("relationship");
         for (int temp = 0; temp < nListR.getLength(); temp++) {
@@ -511,6 +510,7 @@ public class TransformER_Domain {
   				  Element eRelationship= (Element) nNode;
   				  String comp=eRelationship.getAttribute("composition");
   			   	  System.out.println("First class: "+eRelationship.getAttribute("name"));
+  			   	  String sName=eRelationship.getAttribute("name");
   			   	  String relId=eRelationship.getAttribute("id");
   				  if (comp.compareTo("false")==0){
   					  Element eClasses =(Element)eRelationship.getFirstChild();
@@ -523,28 +523,30 @@ public class TransformER_Domain {
   					  System.out.println("First class: "+class1id);
   					  System.out.println("Last class: "+class2id);
   					  
-					  Element eCelda = this.newGraphDoc.createElement("mxCell");
-					  eCelda.setAttribute("edge","1");					  
-					  eCelda.setAttribute("id",relId);
-					  eCelda.setAttribute("parent","1");
-					  eCelda.setAttribute("style","endArrow=none;edgeStyle=elbowEdgeStyle;verticalAlign=bottom;align=left;strokeColor=#FF0000");
-					  eCelda.setAttribute("value","");					  
-					  eCelda.setAttribute("source",class1id);
-					  eCelda.setAttribute("target",class2id);
+					  Element eRel = this.newGraphDoc.createElement("mxCell");
+					  eRel.setAttribute("edge","1");
+					  eRel.setAttribute("id","Relacion"+relId+sName);
+					  eRel.setAttribute("parent","1");
+					  eRel.setAttribute("style","endArrow=none;edgeStyle=elbowEdgeStyle;verticalAlign=bottom;align=left;strokeColor=#000000");
+					  eRel.setAttribute("value",sName);					  
+					  eRel.setAttribute("source",class1id);
+					  eRel.setAttribute("target",class2id);
 						
-					  Element eGeometry= this.newGraphDoc.createElement("mxGeometry");
-					  eGeometry.setAttribute("as","geometry");
-					  eGeometry.setAttribute("relative","1");
-					  eCelda.appendChild(eGeometry);
+					  Element eGeom= this.newGraphDoc.createElement("mxGeometry");
+					  eGeom.setAttribute("as","geometry");
+					  eGeom.setAttribute("relative","1");
+					  eRel.appendChild(eGeom);
 						
-					  eRoot.appendChild(eCelda);            
+					  eRoot.appendChild(eRel);
+					  
+					  
   				  }else{
   					  
   					  
   				  }
   		   }
         }
-    	
+
 		return this.newGraphDoc ;
 	}
 	
