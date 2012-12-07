@@ -1,6 +1,7 @@
 package models.transform;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -11,6 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import models.der.Attribute;
+import models.domain.DomainAttribute;
 import models.domain.DomainClass;
 import models.domain.DomainDiagram;
 import models.domain.DomainRelationship;
@@ -468,8 +470,10 @@ public class TransformER_Domain {
     		
     		DomainClass dClass= iterator.next();
     		System.out.println("Procesamos Clase: " + dClass.getName());
+    		
+    		//Collection<DomainAttribute> dAttrib=dClass.getAttributes();
 
-            Element eGeometia=getElementGeometrybyID(dClass.getSID());
+            Element eGeometia=getElementGeometrybyID(dClass.getSID(),dClass.getName());
             if (eGeometia!=null){
             	x=eGeometia.getAttribute("x");
             	y=eGeometia.getAttribute("y");
@@ -480,10 +484,12 @@ public class TransformER_Domain {
             Element eCelda = this.newGraphDoc.createElement("mxCell");
             eCelda.setAttribute("id",dClass.getSID());
             eCelda.setAttribute("parent","1");
-            eCelda.setAttribute("style","fillColor=#FFFFB6;strokeColor=black");
+            eCelda.setAttribute("style","verticalAlign=top;fillColor=#FFFFB6;strokeColor=black");
             eCelda.setAttribute("value",dClass.getName());
             eCelda.setAttribute("vertex","1");
 
+            //System.out.println("Constante: " + com.mxgraph.util.mxConstants.STYLE_VERTICAL_ALIGN);
+            
             Element eGeometry= this.newGraphDoc.createElement("mxGeometry");
             eGeometry.setAttribute("as","geometry");
             eGeometry.setAttribute("height","100.0");
@@ -493,18 +499,59 @@ public class TransformER_Domain {
             
             eCelda.appendChild(eGeometry);
             
-            
-            
             eRoot.appendChild(eCelda);            
     	}        
-        
+    	
+    	System.out.println("Buscamos las relacioens.");
+        Element eRelaciones= (Element)dominioDoc.getElementsByTagName("relationships").item(0);
+        NodeList nListR = eRelaciones.getElementsByTagName("relationship");
+        for (int temp = 0; temp < nListR.getLength(); temp++) {
+  		   Node nNode = nListR.item(temp);
+  		   if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+  				  Element eRelationship= (Element) nNode;
+  				  String comp=eRelationship.getAttribute("composition");
+  			   	  System.out.println("First class: "+eRelationship.getAttribute("name"));
+  			   	  String relId=eRelationship.getAttribute("id");
+  				  if (comp.compareTo("false")==0){
+  					  Element eClasses =(Element)eRelationship.getFirstChild();
+  					  
+  					  Element firstC=(Element)eClasses .getFirstChild();
+  					  Element lastC=(Element)eClasses .getLastChild();  					  
+  					  
+  					  String class1id=firstC.getAttribute("id");
+  					  String class2id=lastC.getAttribute("id");
+  					  System.out.println("First class: "+class1id);
+  					  System.out.println("Last class: "+class2id);
+  					  
+					  Element eCelda = this.newGraphDoc.createElement("mxCell");
+					  eCelda.setAttribute("edge","1");					  
+					  eCelda.setAttribute("id",relId);
+					  eCelda.setAttribute("parent","1");
+					  eCelda.setAttribute("style","endArrow=none;edgeStyle=elbowEdgeStyle;verticalAlign=bottom;align=left;strokeColor=#FF0000");
+					  eCelda.setAttribute("value","");					  
+					  eCelda.setAttribute("source",class1id);
+					  eCelda.setAttribute("target",class2id);
+						
+					  Element eGeometry= this.newGraphDoc.createElement("mxGeometry");
+					  eGeometry.setAttribute("as","geometry");
+					  eGeometry.setAttribute("relative","1");
+					  eCelda.appendChild(eGeometry);
+						
+					  eRoot.appendChild(eCelda);            
+  				  }else{
+  					  
+  					  
+  				  }
+  		   }
+        }
+    	
 		return this.newGraphDoc ;
 	}
 	
-	private Element getElementGeometrybyID(String sId){
+	private Element getElementGeometrybyID(String sId, String sName){
 		Element e = null;
 
-		System.out.println("Se busca celda con id: "+sId);
+		System.out.println("Se busca celda con id: "+sId+ " Nombre: "+sName);
 		
 		NodeList celdas = this.graphDoc.getElementsByTagName("mxCell");
         
@@ -514,10 +561,6 @@ public class TransformER_Domain {
 			Node nNode = celdas.item(temp);
 			Element eCell= (Element) nNode;
 			String eId=eCell.getAttribute("id");
-//			if (eId.compareToIgnoreCase(sId)==0){
-//				  encontrado=true;
-//				  e=(Element)eCell.getFirstChild();
-//			}
 			Pattern regex = Pattern.compile(sId);			
 			Matcher matcher = regex.matcher(eId);
 			boolean matchFound = matcher.find();
@@ -526,6 +569,26 @@ public class TransformER_Domain {
 				  e=(Element)eCell.getFirstChild();
 			}			
 			temp++;
+        }
+        
+        if (!encontrado){ // Si no lo encontro es un atributo compuesto
+    		temp=0;
+			//System.out.println("Se busca atributo con nombre: "+sName);    		
+            while (temp < celdas.getLength() && !encontrado) {
+    			Node nNode = celdas.item(temp);
+    			Element eCell= (Element) nNode;
+    			String eId=eCell.getAttribute("id");
+    			Pattern regex = Pattern.compile("Attribute(.*)"+sName);			
+    			Matcher matcher = regex.matcher(eId);
+    			boolean matchFound = matcher.find();
+    			if (matchFound) {
+    				  encontrado=true;
+  					  //System.out.println("Se encontro atributo con nombre: "+sName);    				  
+    				  e=(Element)eCell.getFirstChild();
+    			}
+    			temp++;
+            }
+        	
         }
         
 		return e;
