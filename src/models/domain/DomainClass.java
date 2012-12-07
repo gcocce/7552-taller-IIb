@@ -14,13 +14,14 @@ public class DomainClass implements INameable, IStrongEntity {
 
     private String name;
     private UUID id;
+    private String sID;
     private Collection<DomainAttribute> attributes;
     
-    public DomainClass(String name, UUID id, EntityType type, AttributeCollection attributes) {
+    public DomainClass(String name, String sID, UUID id, EntityType type, AttributeCollection attributes) {
         this.setName(name);
+        this.setSID(sID);
         this.id = id;
         this.attributes = new ArrayList<DomainAttribute>();
-       
     }
 
     @Override
@@ -32,6 +33,14 @@ public class DomainClass implements INameable, IStrongEntity {
         this.name = name;
     }
 
+    public String getSID() {
+        return this.sID;
+    }
+
+    public void setSID(String sid) {
+        this.sID= sid;
+    }
+    
     @Override
     public UUID getId() {
         return this.id;

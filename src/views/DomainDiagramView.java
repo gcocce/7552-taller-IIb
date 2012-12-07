@@ -76,7 +76,7 @@ public class DomainDiagramView extends JPanel implements IDomainDiagramView,
 				FormFactory.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("default:grow"), }));
 
-		Insets inset = new Insets(2, 9, 2, 9);
+		Insets inset = new Insets(2, 35, 2, 35);
 
 		this.btnClass = new JButton("Class");
 		// this.btnEntity.setMinimumSize(new Dimension(50,10));
@@ -153,6 +153,7 @@ public class DomainDiagramView extends JPanel implements IDomainDiagramView,
 			e1.printStackTrace();
 		}
 
+		//this.add(this.graphComponent, "2, 4, 12, 1, fill, fill");
 		this.add(this.graphComponent, "2, 4, 12, 1, fill, fill");
 
 		this.btnClass.addMouseListener(new MouseAdapter() {

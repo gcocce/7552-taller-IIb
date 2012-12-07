@@ -1,19 +1,26 @@
 package models.transform;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import models.der.Attribute;
 import models.domain.DomainClass;
+import models.domain.DomainDiagram;
 import models.domain.DomainRelationship;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import controllers.DiagramController.CellConstants;
 
 public class TransformER_Domain {
 	DocumentBuilderFactory factoryBuilder;
@@ -313,7 +320,7 @@ public class TransformER_Domain {
 				        attributoHechoClase.setAttribute("name", sName);
 				        attributoHechoClase.setAttribute("id", sId);
 				        clases.appendChild(attributoHechoClase);
-					  crearRelacion(crearClaseDeRelacion(clase,"1.0"),crearClaseDeRelacion(attributoHechoClase,sCardinality));
+					  //crearRelacion(crearClaseDeRelacion(clase,"1.0"),crearClaseDeRelacion(attributoHechoClase,sCardinality));
 					  this.procesarAtributos(attributoHechoClase,eAtributosHijos );  
 				  }else
 					  eAtributos.appendChild(eAtributo);
@@ -354,14 +361,6 @@ public class TransformER_Domain {
 		
 	}
 
-
-	public Document getGraphDomain(){
-		Document newgraphDoc = this.documentBuilder.newDocument();
-		
-		
-		return newgraphDoc ;
-	}
-	
 	public List<DomainRelationship> populateDomainRelationships(Document dominioDoc) {
 
 		List<DomainRelationship> relationshipCollection = new ArrayList<DomainRelationship>();
@@ -428,7 +427,7 @@ public class TransformER_Domain {
 				  String sName=myClass.getAttribute("name");
 	      
 				  //aca voy populando el modelo de classes.
-				  classCollection.add(new DomainClass(sName, null, null, null));
+				  classCollection.add(new DomainClass(sName, sId, null, null, null));
 
 				  
 				  // Procesar nodos hijos (agregar atributos)
@@ -438,6 +437,98 @@ public class TransformER_Domain {
  		   }
  		}                
 		return classCollection;
+	}
+
+	public Document getGraphDomain(DomainDiagram domainDiagram){
+		this.newGraphDoc = this.documentBuilder.newDocument();
+
+		System.out.println("Se ejecuta getGraphDomain");
+		  
+		Element eGraphModel = this.newGraphDoc.createElement("mxGraphModel");
+		this.newGraphDoc .appendChild(eGraphModel);
+        
+        Element eRoot = this.newGraphDoc.createElement("root");
+        eGraphModel.appendChild(eRoot);
+        
+        Element eCeldaCero = this.newGraphDoc.createElement("mxCell");
+        eCeldaCero.setAttribute("id","0");
+        eRoot.appendChild(eCeldaCero);
+
+        Element eCeldaPadre = this.newGraphDoc.createElement("mxCell");
+        eCeldaPadre.setAttribute("id","1");        
+        eCeldaPadre.setAttribute("parent","0");        
+        eRoot.appendChild(eCeldaPadre);
+
+        List<DomainClass> ListC=domainDiagram.getDomainClasses();
+        
+        Iterator<DomainClass> iterator = ListC.iterator();
+    	while (iterator.hasNext()) {
+    		String x="0";
+    		String y="0";
+    		
+    		DomainClass dClass= iterator.next();
+    		System.out.println("Procesamos Clase: " + dClass.getName());
+
+            Element eGeometia=getElementGeometrybyID(dClass.getSID());
+            if (eGeometia!=null){
+            	x=eGeometia.getAttribute("x");
+            	y=eGeometia.getAttribute("y");
+            }else{
+        		System.out.println("Geometria no encontrada, sid: " + dClass.getSID());            	
+            }
+    		
+            Element eCelda = this.newGraphDoc.createElement("mxCell");
+            eCelda.setAttribute("id",dClass.getSID());
+            eCelda.setAttribute("parent","1");
+            eCelda.setAttribute("style","fillColor=#FFFFB6;strokeColor=black");
+            eCelda.setAttribute("value",dClass.getName());
+            eCelda.setAttribute("vertex","1");
+
+            Element eGeometry= this.newGraphDoc.createElement("mxGeometry");
+            eGeometry.setAttribute("as","geometry");
+            eGeometry.setAttribute("height","100.0");
+            eGeometry.setAttribute("width","80.0");
+            eGeometry.setAttribute("x",x);
+            eGeometry.setAttribute("y",y);
+            
+            eCelda.appendChild(eGeometry);
+            
+            
+            
+            eRoot.appendChild(eCelda);            
+    	}        
+        
+		return this.newGraphDoc ;
+	}
+	
+	private Element getElementGeometrybyID(String sId){
+		Element e = null;
+
+		System.out.println("Se busca celda con id: "+sId);
+		
+		NodeList celdas = this.graphDoc.getElementsByTagName("mxCell");
+        
+		int temp=0;
+		boolean encontrado=false;
+        while (temp < celdas.getLength() && !encontrado) {
+			Node nNode = celdas.item(temp);
+			Element eCell= (Element) nNode;
+			String eId=eCell.getAttribute("id");
+//			if (eId.compareToIgnoreCase(sId)==0){
+//				  encontrado=true;
+//				  e=(Element)eCell.getFirstChild();
+//			}
+			Pattern regex = Pattern.compile(sId);			
+			Matcher matcher = regex.matcher(eId);
+			boolean matchFound = matcher.find();
+			if (matchFound) {
+				  encontrado=true;
+				  e=(Element)eCell.getFirstChild();
+			}			
+			temp++;
+        }
+        
+		return e;
 	}
 	
 }

@@ -146,7 +146,6 @@ public class DomainDiagramController extends BaseController implements
 			mxCell cell = (mxCell) o;
 
 			Matcher matcher = classRegexp.matcher(cell.getId());
-
 			if (matcher.find()) {
 				this.classCells.put(cell.getId(), cell);
 				continue;

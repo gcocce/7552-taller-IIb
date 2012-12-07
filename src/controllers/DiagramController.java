@@ -1408,12 +1408,6 @@ public class DiagramController extends BaseController implements
 				graphDoc);
 
 		Document dominioDoc = transfTool.GetDomainModel();
-
-
-		// TODO: obtener y guardar el xml del nuevo grafico
-		// Document newgraphDoc=transfTool.getGraphDomain();
-		// this.xmlFileManager.write(newgraphDoc,
-		// this.getGraphDomainFilePath());
 		
 		// XXX: Hack for now...
 		DomainDiagram domainDiagram = new DomainDiagram(); 
@@ -1421,9 +1415,13 @@ public class DiagramController extends BaseController implements
 		domainDiagram.setClasses(transfTool.populateDomainClasses(dominioDoc));
 		//populo las realaciones
 		domainDiagram.setRelationships(transfTool.populateDomainRelationships(dominioDoc));
+
+		
+		// TODO: obtener y guardar el xml del nuevo grafico
+		Document newgraphDoc=transfTool.getGraphDomain(domainDiagram);
+		this.xmlFileManager.write(newgraphDoc, this.getGraphDomainFilePath());
 		
 		this.xmlFileManager.write(dominioDoc, this.getDomainFilePath());
-		
 		getProjectController().showDomainDiagram(domainDiagram);
 		
 		// Guardamos el xml del modelo de dominio
