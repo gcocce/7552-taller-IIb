@@ -251,12 +251,8 @@ public class TransformER_Domain {
 			i--;
 			eClases.appendChild(eClase);
 		}
-        
         eRelation.appendChild(eClases);
-		
-		
 	}
-
 
 	private void procesarEntidades(Element entitiesElement){
         Element eClases= (Element)dominioDoc.getElementsByTagName("classes").item(0);
@@ -331,10 +327,8 @@ public class TransformER_Domain {
  		   }
  		}        
  	}
-
 	
 	private void crearRelacion(Element claseContenedora, Element clase) {
-
 		Element eRelationsDomain= (Element)dominioDoc.getElementsByTagName("relationships").item(0);
 
 		Element eRelation = translateRelationship(claseContenedora,clase);
@@ -355,26 +349,22 @@ public class TransformER_Domain {
         eRelationsDomain.appendChild(eRelation);
 	}
 
-
 	private Element translateRelationship(Element claseContenedora,Element clase) {
-		
 		Element eRelation = dominioDoc.createElement("relationship");
 		String sId1 = claseContenedora.getAttribute("id");
 		String sName1 = claseContenedora.getAttribute("name");
 		String sComposition1 = claseContenedora.getAttribute("composition");
 		//nueva relacion, generar nuevo id
 		//eRelation.setAttribute("id", null);
-		eRelation.setAttribute("id", "Relacion"+sId1+ this.newRelationshipNumeber);
+		eRelation.setAttribute("id", "Relacion" + sId1);
 		//eRelation.setAttribute("name", "atributo" + this.newRelationshipNumeber++);
 		eRelation.setAttribute("name", "atributo" + clase.getAttribute("name"));
 		eRelation.setAttribute("composition", "false");
 		eRelation.setAttribute("directionality", "bidirectional");
 		return eRelation;
-		
 	}
 
 	public List<DomainRelationship> populateDomainRelationships(Document dominioDoc) {
-
 		List<DomainRelationship> relationshipCollection = new ArrayList<DomainRelationship>();
 		  // Diagram element
       Element diagram=dominioDoc.getDocumentElement();
@@ -491,7 +481,7 @@ public class TransformER_Domain {
             Element eCelda = this.newGraphDoc.createElement("mxCell");
             eCelda.setAttribute("id",dClass.getSID());
             eCelda.setAttribute("parent","1");
-            eCelda.setAttribute("style","verticalAlign=top;fillColor=#FFFFB6;strokeColor=black");
+            eCelda.setAttribute("style","verticalAlign=top;fontColor=#000000;fillColor=#FFFFB6;strokeColor=black");
             eCelda.setAttribute("value",dClass.getName());
             eCelda.setAttribute("vertex","1");
 
@@ -499,18 +489,17 @@ public class TransformER_Domain {
             
             Element eGeometry= this.newGraphDoc.createElement("mxGeometry");
             eGeometry.setAttribute("as","geometry");
-            eGeometry.setAttribute("height","100.0");
+            eGeometry.setAttribute("height","140.0");
             eGeometry.setAttribute("width","80.0");
             eGeometry.setAttribute("x",x);
             eGeometry.setAttribute("y",y);
             
             eCelda.appendChild(eGeometry);
             
+            eRoot.appendChild(eCelda);
             
-            // Agregar los atributos
-            
-            
-            eRoot.appendChild(eCelda);            
+            // Agregar celdas de los atributos
+            this.addCellAttributes(eRoot, dClass);
     	}        
     	
     	System.out.println("Buscamos las relacioens."); 	
@@ -560,6 +549,73 @@ public class TransformER_Domain {
 		return this.newGraphDoc ;
 	}
 	
+	private void addCellAttributes(Element eRoot, DomainClass clase){
+		String sNombre=clase.getName();
+		String sID=clase.getSID();
+		
+		System.out.println("Se ejecuta addCellAttributes "+sNombre);
+		
+		Element eClass=getElementClassbyName(sNombre);
+		
+		if (eClass!=null){
+			System.out.println("Se encontro la clase: "+sNombre);
+	        Element eAttributes= (Element)eClass.getElementsByTagName("attributes").item(0);
+	        NodeList nListA = eAttributes.getElementsByTagName("attribute");
+	        for (int temp = 0; temp < nListA.getLength(); temp++) {
+	  		   Node nNode = nListA.item(temp);
+	  		   if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+					Element eAttribute= (Element) nNode;
+					String sAName=eAttribute.getAttribute("name");
+					String sAID=eAttribute.getAttribute("id");
+					
+					System.out.println("Se procesa el atributo: "+sAName);
+					
+		            Element eCelda = this.newGraphDoc.createElement("mxCell");
+		            eCelda.setAttribute("id",sAID);
+		            eCelda.setAttribute("parent",sID);
+		            eCelda.setAttribute("style","align=left;fillColor=#FFFFB6;strokeColor=#FFCCB6");
+		            eCelda.setAttribute("value",sAName);
+		            eCelda.setAttribute("vertex","1");
+
+		            //System.out.println("Constante: " + com.mxgraph.util.mxConstants.STYLE_VERTICAL_ALIGN);
+		            Element eGeometry= this.newGraphDoc.createElement("mxGeometry");
+		            eGeometry.setAttribute("as","geometry");
+		            eGeometry.setAttribute("height","20.0");
+		            eGeometry.setAttribute("width","60.0");
+		            eGeometry.setAttribute("x","10");
+		            eGeometry.setAttribute("y",Integer.toString(temp * 20 + 20));
+		            
+		            eCelda.appendChild(eGeometry);
+					eRoot.appendChild(eCelda);
+	  		   }  		   
+	        }
+		}		
+	}
+	
+	private Element getElementClassbyName(String sNombre){
+		System.out.println("Se busca elemento por Nombre: " + sNombre);
+		Element e = null;
+		
+		//NodeList celdas = this.dominioDoc.getElementsByTagName("class");		
+		
+        Element eClasses= (Element)dominioDoc.getElementsByTagName("classes").item(0);
+        NodeList nListC = eClasses.getElementsByTagName("class");
+        for (int temp = 0; temp < nListC.getLength(); temp++) {
+  		   Node nNode = nListC.item(temp);
+  		   if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+  				  Element eClass= (Element) nNode;
+  			   	  String sName=eClass.getAttribute("name");
+  			   	  String relId=eClass.getAttribute("id");
+  				  if (sName.compareTo(sNombre)==0){
+  					  e=eClass;
+  					  System.out.println("Se encontro el elemento.");
+  				  }
+  		   }
+        }
+        
+		return e;
+	}
+	
 	private Element getElementGeometrybyID(String sId, String sName){
 		Element e = null;
 
@@ -600,10 +656,8 @@ public class TransformER_Domain {
     			}
     			temp++;
             }
-        	
         }
         
 		return e;
 	}
-	
 }
