@@ -358,7 +358,7 @@ public class TransformER_Domain {
 		//eRelation.setAttribute("id", null);
 		eRelation.setAttribute("id", "Relacion" + sId1);
 		//eRelation.setAttribute("name", "atributo" + this.newRelationshipNumeber++);
-		eRelation.setAttribute("name", "atributo" + clase.getAttribute("name"));
+		eRelation.setAttribute("name", "atrb_" + clase.getAttribute("name"));
 		eRelation.setAttribute("composition", "false");
 		eRelation.setAttribute("directionality", "bidirectional");
 		return eRelation;
@@ -607,10 +607,10 @@ public class TransformER_Domain {
 		            //System.out.println("Constante: " + com.mxgraph.util.mxConstants.STYLE_VERTICAL_ALIGN);
 		            Element eGeometry= this.newGraphDoc.createElement("mxGeometry");
 		            eGeometry.setAttribute("as","geometry");
-		            eGeometry.setAttribute("height","20.0");
+		            eGeometry.setAttribute("height","15.0");
 		            eGeometry.setAttribute("width","60.0");
 		            eGeometry.setAttribute("x","10");
-		            alto=temp * 15 + 22;
+		            alto=temp * 15 + 25;
 		            eGeometry.setAttribute("y",Integer.toString(alto));
 		            
 		            eCelda.appendChild(eGeometry);
@@ -624,8 +624,6 @@ public class TransformER_Domain {
 	private Element getElementClassbyName(String sNombre){
 		System.out.println("Se busca elemento por Nombre: " + sNombre);
 		Element e = null;
-		
-		//NodeList celdas = this.dominioDoc.getElementsByTagName("class");		
 		
         Element eClasses= (Element)dominioDoc.getElementsByTagName("classes").item(0);
         NodeList nListC = eClasses.getElementsByTagName("class");
