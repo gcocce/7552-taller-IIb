@@ -481,11 +481,11 @@ public class TransformER_Domain {
             Element eCelda = this.newGraphDoc.createElement("mxCell");
             eCelda.setAttribute("id",dClass.getSID());
             eCelda.setAttribute("parent","1");
-            eCelda.setAttribute("style","verticalAlign=top;fontColor=#000000;fillColor=#FFFFB6;strokeColor=black");
+            eCelda.setAttribute("style","verticalAlign=top;fontSize=12;fontColor=#000000;fillColor=#FFFFB6;strokeColor=black");
             eCelda.setAttribute("value",dClass.getName());
             eCelda.setAttribute("vertex","1");
 
-            //System.out.println("Constante: " + com.mxgraph.util.mxConstants.STYLE_VERTICAL_ALIGN);
+            System.out.println("Constante: " + com.mxgraph.util.mxConstants.FONT_BOLD);
             
             Element eGeometry= this.newGraphDoc.createElement("mxGeometry");
             eGeometry.setAttribute("as","geometry");
@@ -497,9 +497,11 @@ public class TransformER_Domain {
             eCelda.appendChild(eGeometry);
             
             eRoot.appendChild(eCelda);
-            
+
             // Agregar celdas de los atributos
-            this.addCellAttributes(eRoot, dClass);
+            addLineCell( eRoot,dClass, 20);
+            int altura=this.addCellAttributes(eRoot, dClass);
+            addLineCell( eRoot,dClass,altura+20);
     	}        
     	
     	System.out.println("Buscamos las relacioens."); 	
@@ -549,7 +551,32 @@ public class TransformER_Domain {
 		return this.newGraphDoc ;
 	}
 	
-	private void addCellAttributes(Element eRoot, DomainClass clase){
+	private void addLineCell(Element eRoot,DomainClass clase, int heigth){
+		String sID=clase.getSID();
+
+		System.out.println("Se agrega linea separadora.");
+		
+        Element eCelda = this.newGraphDoc.createElement("mxCell");
+        eCelda.setAttribute("id","Linea"+sID+heigth);
+        eCelda.setAttribute("parent",sID);
+        eCelda.setAttribute("style","align=left;fillColor=#FFFFB6;strokeColor=#000000");
+        eCelda.setAttribute("value","");
+        eCelda.setAttribute("vertex","1");
+
+        //System.out.println("Constante: " + com.mxgraph.util.mxConstants.STYLE_VERTICAL_ALIGN);
+        Element eGeometry= this.newGraphDoc.createElement("mxGeometry");
+        eGeometry.setAttribute("as","geometry");
+        eGeometry.setAttribute("height","0.0");
+        eGeometry.setAttribute("width","80.0");
+        eGeometry.setAttribute("x","0");
+        eGeometry.setAttribute("y",Integer.toString(heigth));
+        
+        eCelda.appendChild(eGeometry);
+		eRoot.appendChild(eCelda);
+	}
+	
+	private int addCellAttributes(Element eRoot, DomainClass clase){
+		int alto=30;
 		String sNombre=clase.getName();
 		String sID=clase.getSID();
 		
@@ -573,8 +600,8 @@ public class TransformER_Domain {
 		            Element eCelda = this.newGraphDoc.createElement("mxCell");
 		            eCelda.setAttribute("id",sAID);
 		            eCelda.setAttribute("parent",sID);
-		            eCelda.setAttribute("style","align=left;fillColor=#FFFFB6;strokeColor=#FFCCB6");
-		            eCelda.setAttribute("value",sAName);
+		            eCelda.setAttribute("style","align=left;fillColor=#FFFFB6;strokeColor=#FFFFB6");
+		            eCelda.setAttribute("value","- "+sAName);
 		            eCelda.setAttribute("vertex","1");
 
 		            //System.out.println("Constante: " + com.mxgraph.util.mxConstants.STYLE_VERTICAL_ALIGN);
@@ -583,13 +610,15 @@ public class TransformER_Domain {
 		            eGeometry.setAttribute("height","20.0");
 		            eGeometry.setAttribute("width","60.0");
 		            eGeometry.setAttribute("x","10");
-		            eGeometry.setAttribute("y",Integer.toString(temp * 20 + 20));
+		            alto=temp * 15 + 22;
+		            eGeometry.setAttribute("y",Integer.toString(alto));
 		            
 		            eCelda.appendChild(eGeometry);
 					eRoot.appendChild(eCelda);
 	  		   }  		   
 	        }
-		}		
+		}
+		return alto;
 	}
 	
 	private Element getElementClassbyName(String sNombre){
