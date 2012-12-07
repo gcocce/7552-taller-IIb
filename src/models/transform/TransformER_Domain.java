@@ -312,7 +312,6 @@ public class TransformER_Domain {
 				  eAtributo.setAttribute("id", sId);
 				  eAtributo.setAttribute("cardinality", sCardinality);
 				  
-				  
 				  // Procesar nodos hijos
 				  Element eAtributosHijos=(Element) eAtribute.getElementsByTagName("attributes").item(0);
 				  NodeList nListaHijos = eAtributosHijos.getElementsByTagName("attribute");				  
@@ -322,8 +321,11 @@ public class TransformER_Domain {
 				        attributoHechoClase.setAttribute("name", sName);
 				        attributoHechoClase.setAttribute("id", sId);
 				        clases.appendChild(attributoHechoClase);
-					  //crearRelacion(crearClaseDeRelacion(clase,"1.0"),crearClaseDeRelacion(attributoHechoClase,sCardinality));
-					  this.procesarAtributos(attributoHechoClase,eAtributosHijos );  
+				        
+				        //crearRelacion(crearClaseDeRelacion(clase,"1.0"),crearClaseDeRelacion(attributoHechoClase,sCardinality));
+				        crearRelacion(clase,attributoHechoClase);
+				        
+				        this.procesarAtributos(attributoHechoClase,eAtributosHijos );  
 				  }else
 					  eAtributos.appendChild(eAtributo);
  		   }
@@ -335,28 +337,36 @@ public class TransformER_Domain {
 
 		Element eRelationsDomain= (Element)dominioDoc.getElementsByTagName("relationships").item(0);
 
-		Element eRelation = translateRelationship(claseContenedora);
+		Element eRelation = translateRelationship(claseContenedora,clase);
 		eRelationsDomain.appendChild(eRelation);  
 		
 		Element eClases = dominioDoc.createElement("classes");
-		eClases.appendChild(claseContenedora);
-		eClases.appendChild(clase);
+		Element eClass1= dominioDoc.createElement("class");
+		Element eClass2= dominioDoc.createElement("class");
+		eClass1.setAttribute("id", claseContenedora.getAttribute("id"));
+		eClass1.setAttribute("cardinality", "1");
+		eClass2.setAttribute("id", clase.getAttribute("id"));
+		eClass2.setAttribute("cardinality", "1");
+		
+		eClases.appendChild(eClass1);
+		eClases.appendChild(eClass2);
         
         eRelation.appendChild(eClases);
-	
-		
+        eRelationsDomain.appendChild(eRelation);
 	}
 
 
-	private Element translateRelationship(Element claseContenedora) {
+	private Element translateRelationship(Element claseContenedora,Element clase) {
 		
 		Element eRelation = dominioDoc.createElement("relationship");
 		String sId1 = claseContenedora.getAttribute("id");
 		String sName1 = claseContenedora.getAttribute("name");
 		String sComposition1 = claseContenedora.getAttribute("composition");
 		//nueva relacion, generar nuevo id
-		eRelation.setAttribute("id", null);
-		eRelation.setAttribute("name", "nuevaRelacion" + this.newRelationshipNumeber++);
+		//eRelation.setAttribute("id", null);
+		eRelation.setAttribute("id", "Relacion"+sId1+ this.newRelationshipNumeber);
+		//eRelation.setAttribute("name", "atributo" + this.newRelationshipNumeber++);
+		eRelation.setAttribute("name", "atributo" + clase.getAttribute("name"));
 		eRelation.setAttribute("composition", "false");
 		eRelation.setAttribute("directionality", "bidirectional");
 		return eRelation;
@@ -409,12 +419,10 @@ public class TransformER_Domain {
 	}
 
 	public List<DomainClass> populateDomainClasses(Document dominioDoc) {
-
 		List<DomainClass> classCollection = new ArrayList<DomainClass>();
 		  // Diagram element
         Element diagram=dominioDoc.getDocumentElement();
-        
-        // Lista de clases
+         // Lista de clases
 
         Element eClases= (Element)dominioDoc.getElementsByTagName("classes").item(0);
         
@@ -498,6 +506,10 @@ public class TransformER_Domain {
             
             eCelda.appendChild(eGeometry);
             
+            
+            // Agregar los atributos
+            
+            
             eRoot.appendChild(eCelda);            
     	}        
     	
@@ -538,8 +550,6 @@ public class TransformER_Domain {
 					  eRel.appendChild(eGeom);
 						
 					  eRoot.appendChild(eRel);
-					  
-					  
   				  }else{
   					  
   					  
