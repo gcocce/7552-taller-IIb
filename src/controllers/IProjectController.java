@@ -1,9 +1,13 @@
 package controllers;
 
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreePath;
+import java.io.IOException;
 
-import models.domain.DomainDiagram;
+import javax.swing.tree.TreeModel;
+
+import javax.swing.tree.TreePath;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
 
 import views.IProjectView;
 
@@ -16,5 +20,5 @@ public interface IProjectController {
 	void changeElement(TreePath treePath);
 	void deleteElement(TreePath path);
 	void validateProject(int toleranceLevel);
-	void showDomainDiagram(DomainDiagram diagram);
+	void transformToDomainDiagram() throws ParserConfigurationException, SAXException, IOException;
 }

@@ -1,6 +1,7 @@
 package application;
 
 import java.awt.Component;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -13,6 +14,8 @@ import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.factories.FormFactory;
 import javax.swing.JSplitPane;
 
+import org.picocontainer.MutablePicoContainer;
+
 public class ShellWindow implements IShell {
 
 	private JFrame frame;
@@ -24,15 +27,14 @@ public class ShellWindow implements IShell {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				Bootstrapper bootstrapper = new Bootstrapper();
+				ShellWindow window = new ShellWindow();
 				try {
-					Bootstrapper bootstrapper = new Bootstrapper();
 					bootstrapper.run();
-					ShellWindow window = new ShellWindow();
-					bootstrapper.getContainer().addComponent(IShell.class, window);
-					IProjectController projectController = 
-						(IProjectController) bootstrapper.getContainer().getComponent(IProjectController.class);
-					window.frame.setVisible(true);
-					window.setLeftContent((Component) projectController.getView());
+					MutablePicoContainer container = bootstrapper.getContainer();
+					container.addComponent(IShell.class, window);
+					IProjectController projectController = container.getComponent(IProjectController.class);
+					window.setLeftContent(projectController.getView());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -66,6 +68,7 @@ public class ShellWindow implements IShell {
 		this.splitPane.setRightComponent(null);
 		this.splitPane.setLeftComponent(null);
 		frame.getContentPane().add(splitPane, "2, 2, fill, fill");
+		frame.setVisible(true);
 	}
 
 	@Override

@@ -8,7 +8,6 @@ import infrastructure.StringExtensions;
 
 import java.awt.Desktop;
 import java.awt.Point;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -23,8 +22,6 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import jgraph.extensions.CustomGraph;
@@ -37,12 +34,9 @@ import models.der.Diagram;
 import models.der.Entity;
 import models.der.Relationship;
 import models.der.RelationshipEntity;
-import models.domain.DomainDiagram;
-import models.transform.TransformER_Domain;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
 import persistence.IGraphPersistenceService;
 import persistence.IXmlFileManager;
@@ -772,29 +766,19 @@ public class DiagramController extends BaseController implements
 		document.appendChild(element);
 		this.xmlFileManager.write(document, this.getComponentFilePath());
 
-		this.graphPersistenceService.save(this.getRepresentationFilePath(),
+		this.graphPersistenceService.save(this.getRepresentationFilePath(diagram),
 				this.graph);
 
 	}
 
-	private String getRepresentationFilePath() {
+	private String getRepresentationFilePath(Diagram diagram) {
 		return this.projectContext.getDataDirectory() + "/"
-				+ this.diagram.getName() + "-rep";
+				+ diagram.getName() + "-rep";
 	}
 
 	private String getComponentFilePath() {
 		return this.projectContext.getDataDirectory() + "/"
 				+ this.diagram.getName() + "-comp";
-	}
-
-	private String getDomainFilePath() {
-		return this.projectContext.getDataDirectory() + "/"
-				+ this.diagram.getName() + "-domain.xml";
-	}
-
-	private String getGraphDomainFilePath() {
-		return this.projectContext.getDataDirectory() + "/"
-				+ this.diagram.getName() + "-graph_domain.xml";
 	}
 
 	public void openDiagram(String path) throws Exception {
@@ -807,7 +791,7 @@ public class DiagramController extends BaseController implements
 	public void load(Diagram diagram) {
 
 		this.diagram = diagram;
-		String fileName = this.getRepresentationFilePath();
+		String fileName = this.getRepresentationFilePath(diagram);
 		this.graphPersistenceService.load(fileName, this.graph);
 
 		Pattern regex1 = Pattern.compile(CellConstants.EntityPrefix);
@@ -1385,51 +1369,16 @@ public class DiagramController extends BaseController implements
 		}
 	}
 
-	/* Transformacion a modelo de dominio */
-	@Override
-	public void transform() throws ParserConfigurationException, SAXException,
-			IOException {
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		factory.setNamespaceAware(true);
-		DocumentBuilder builder = factory.newDocumentBuilder();
-
-		/* Seccion para obtener el xml del modelo de entidad relacion */
-		Document diagramDoc = this.xmlFileManager.createDocument();
-		Element element = this.diagramXmlManager.getElementFromItem(
-				this.diagram, diagramDoc);
-		diagramDoc.appendChild(element);
-
-		/* Secci�n para obtener el xml del grafico */
-		String xml = this.graphPersistenceService.getXml(this.graph);
-		Document graphDoc = builder.parse(new ByteArrayInputStream(xml
-				.getBytes()));
-
-		TransformER_Domain transfTool = new TransformER_Domain(diagramDoc,
-				graphDoc);
-
-		Document dominioDoc = transfTool.GetDomainModel();
-		
-		// XXX: Hack for now...
-		DomainDiagram domainDiagram = new DomainDiagram(); 
-		//popullo las clases
-		domainDiagram.setClasses(transfTool.populateDomainClasses(dominioDoc));
-		//populo las realaciones
-		domainDiagram.setRelationships(transfTool.populateDomainRelationships(dominioDoc));
-
-		
-		// TODO: obtener y guardar el xml del nuevo grafico
-		Document newgraphDoc=transfTool.getGraphDomain(domainDiagram);
-		this.xmlFileManager.write(newgraphDoc, this.getGraphDomainFilePath());
-		
-		this.xmlFileManager.write(dominioDoc, this.getDomainFilePath());
-		getProjectController().showDomainDiagram(domainDiagram);
-		
-		// Guardamos el xml del modelo de dominio
-		
-	}
-
 	public IProjectController getProjectController() {
 		return projectController;
+	}
+
+	@Override
+	public String getDiagramXml(Diagram mainDiagram) {
+		String fileName = this.getRepresentationFilePath(diagram);
+		mxGraph aGraph = new CustomGraph();
+		this.graphPersistenceService.load(fileName, aGraph);
+		return graphPersistenceService.getXml(aGraph);
 	}
 
 }

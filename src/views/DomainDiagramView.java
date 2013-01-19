@@ -22,10 +22,9 @@ import java.net.URLEncoder;
 import java.util.TooManyListenersException;
 
 import javax.swing.JButton;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
+import javax.xml.parsers.ParserConfigurationException;
 
 import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -48,13 +47,8 @@ public class DomainDiagramView extends JPanel implements IDomainDiagramView,
 	private static final long serialVersionUID = 1385530682356119350L;
 
 	private IDomainDiagramController diagramController;
-	private final JButton btnClass;
 	private final JButton btnSave;
-	private final JButton btnSubdiagram;
 	private mxGraphComponent graphComponent;
-	private JPopupMenu entityMenu;
-	private JPopupMenu existingEntitiesMenu;
-	private JMenuItem existingEntitiesMenuItem;
 	private final JButton btnPrint;
 	private final JButton btnExport;
 	private JButton btnZoomIn;
@@ -68,70 +62,31 @@ public class DomainDiagramView extends JPanel implements IDomainDiagramView,
 				FormFactory.RELATED_GAP_COLSPEC, FormFactory.DEFAULT_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC, FormFactory.DEFAULT_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC, FormFactory.DEFAULT_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC, FormFactory.DEFAULT_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC, FormFactory.DEFAULT_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC, FormFactory.DEFAULT_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC, }, new RowSpec[] {
+				FormFactory.DEFAULT_COLSPEC }, new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("default:grow"), }));
 
 		Insets inset = new Insets(2, 35, 2, 35);
 
-		this.btnClass = new JButton("Class");
-		// this.btnEntity.setMinimumSize(new Dimension(50,10));
-		this.btnClass.setMargin(inset);
-		add(this.btnClass, "2, 2");
-
 		this.btnSave = new JButton("Save");
 		this.btnSave.setMargin(inset);
-		add(this.btnSave, "5, 2");
-
-		this.btnSubdiagram = new JButton("Sub-Diagram");
-		this.btnSubdiagram.setMargin(inset);
-		add(this.btnSubdiagram, "6, 2");
+		add(this.btnSave, "2, 2");
 
 		this.btnPrint = new JButton("Print");
 		this.btnPrint.setMargin(inset);
-		add(this.btnPrint, "7, 2");
+		add(this.btnPrint, "3, 2");
 
 		this.btnExport = new JButton("Export");
 		this.btnExport.setMargin(inset);
-		add(this.btnExport, "8, 2");
+		add(this.btnExport, "4, 2");
 
-		this.entityMenu = new JPopupMenu();
-		this.existingEntitiesMenu = new JPopupMenu();
-		/*
-		 * this.existingEntitiesMenuItem = new JMenuItem(new AbstractAction(
-		 * "Existing Entity") {
-		 * 
-		 * @Override public void actionPerformed(ActionEvent e) {
-		 * Iterable<Entity> entities = diagramController
-		 * .getAvailableEntities(); existingEntitiesMenu.removeAll();
-		 * 
-		 * if (IterableExtensions.count(entities) == 0) { return; }
-		 * 
-		 * for (final Entity entity : entities) { existingEntitiesMenu.add(new
-		 * JMenuItem(new AbstractAction( entity.getName()) {
-		 * 
-		 * @Override public void actionPerformed(ActionEvent e) {
-		 * diagramController.handleCreatedEvent(entity); } })); }
-		 * existingEntitiesMenu.show(btnEntity, btnEntity.getX(),
-		 * btnEntity.getY() + btnEntity.getHeight()); } });
-		 */
 		btnZoomIn = new JButton("+");
-		add(btnZoomIn, "11, 2");
+		add(btnZoomIn, "5, 2");
 
 		btnZoomOut = new JButton("-");
-		add(btnZoomOut, "12, 2");
+		add(btnZoomOut, "6, 2");
 
-		/*
-		 * this.entityMenu.add(new JMenuItem(new AbstractAction("New Entity") {
-		 * 
-		 * @Override public void actionPerformed(ActionEvent e) {
-		 * diagramController.createEntity(); } }));
-		 */
-		// this.entityMenu.add(this.existingEntitiesMenuItem);
 	}
 
 	@Override
@@ -153,37 +108,15 @@ public class DomainDiagramView extends JPanel implements IDomainDiagramView,
 			e1.printStackTrace();
 		}
 
-		//this.add(this.graphComponent, "2, 4, 12, 1, fill, fill");
-		this.add(this.graphComponent, "2, 4, 12, 1, fill, fill");
-
-		this.btnClass.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				entityMenu.show(e.getComponent(), btnClass.getX(),
-						btnClass.getY() + btnClass.getHeight());
-				// diagramController.createEntity();
-			}
-		});
+		this.add(this.graphComponent, "2, 4, 6, 1, fill, fill");
 
 		this.btnSave.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-//				try {
-//					diagramController.save();
-//				} catch (ParserConfigurationException exception) {
-//					exception.printStackTrace();
-//				}
-			}
-		});
-
-		this.btnSubdiagram.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				String diagramName = JOptionPane.showInputDialog(null,
-						"Provide the diagram's name", "New Diagram",
-						JOptionPane.QUESTION_MESSAGE);
-				if (diagramName != null) {
-//					diagramController.createSubDiagram(diagramName);
+				try {
+					diagramController.save();
+				} catch (ParserConfigurationException exception) {
+					exception.printStackTrace();
 				}
 			}
 		});

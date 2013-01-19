@@ -103,7 +103,6 @@ public class DomainDiagramController extends BaseController implements
 		return classCells.get(CellConstants.ClassPrefix + id);
 	}
 
-	// TODO: Do we need a New save?
 	public void save() throws ParserConfigurationException {
 		Document document = this.xmlFileManager.createDocument();
 		Element element = this.diagramXmlManager.getElementFromItem(

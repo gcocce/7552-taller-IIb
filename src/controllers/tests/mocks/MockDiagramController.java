@@ -261,8 +261,8 @@ public class MockDiagramController implements IDiagramController {
     }
 
 	@Override
-	public void transform() {
+	public String getDiagramXml(Diagram mainDiagram) {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 }

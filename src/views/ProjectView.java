@@ -6,6 +6,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 import javax.swing.JPanel;
 import com.jgoodies.forms.layout.FormLayout;
@@ -20,14 +21,18 @@ import javax.swing.JOptionPane;
 import javax.swing.JTree;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
 
 public class ProjectView extends JPanel implements IProjectView {
 
 	private JTree tree;
 	private JButton btnOpen;
 	private JButton btnCreate;
-	private IProjectController projectController;
 	private JButton btnValidate;
+	private JButton btnTransform;
+	private IProjectController projectController;
 
 	/**
 	 * Create the panel.
@@ -35,20 +40,20 @@ public class ProjectView extends JPanel implements IProjectView {
 	public ProjectView() {
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"),
-				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,},
+				ColumnSpec.decode("default:grow")},
 			new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("default:grow"),}));
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("default:grow")}));
 		
 		this.btnCreate = new JButton("Create");
 		this.add(this.btnCreate, "2, 2");
@@ -59,9 +64,12 @@ public class ProjectView extends JPanel implements IProjectView {
 		this.btnValidate = new JButton("Validate");
 		this.add(btnValidate, "6, 2");
 		
+		this.btnTransform = new JButton("Transform");
+		this.add(this.btnTransform, "2, 4");
+
 		this.tree = new JTree();
 		tree.setModel(null);
-		this.add(this.tree, "2, 4, 7, 1, fill, fill");
+		this.add(this.tree, "2, 6, 7, 1, fill, fill");
 	}
 
 	@Override
@@ -108,7 +116,21 @@ public class ProjectView extends JPanel implements IProjectView {
 				}
 			}	
 		});
-		
+
+		this.btnTransform.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e){
+				try {
+					projectController.transformToDomainDiagram();
+				} catch (ParserConfigurationException | SAXException
+						| IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}	
+		});
+
+
 		this.tree.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
