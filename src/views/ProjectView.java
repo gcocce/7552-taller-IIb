@@ -45,8 +45,7 @@ public class ProjectView extends JPanel implements IProjectView {
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow")},
+				FormFactory.RELATED_GAP_COLSPEC},
 			new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
@@ -69,7 +68,7 @@ public class ProjectView extends JPanel implements IProjectView {
 
 		this.tree = new JTree();
 		tree.setModel(null);
-		this.add(this.tree, "2, 6, 7, 1, fill, fill");
+		this.add(this.tree, "2, 6, 6, 1, fill, fill");
 	}
 
 	@Override

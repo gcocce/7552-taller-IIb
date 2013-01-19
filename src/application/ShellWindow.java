@@ -2,6 +2,7 @@ package application;
 
 import java.awt.Component;
 
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -59,16 +60,17 @@ public class ShellWindow implements IShell {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"),},
+				FormFactory.GLUE_COLSPEC},
 			new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("default:grow"),}));
+				FormFactory.GLUE_ROWSPEC}));
 		
 		this.splitPane = new JSplitPane();
 		this.splitPane.setRightComponent(null);
 		this.splitPane.setLeftComponent(null);
 		frame.getContentPane().add(splitPane, "2, 2, fill, fill");
 		frame.setVisible(true);
+
 	}
 
 	@Override
