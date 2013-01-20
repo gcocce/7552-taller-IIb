@@ -104,12 +104,13 @@ public class DomainDiagramController extends BaseController implements
 	}
 
 	public void save() throws ParserConfigurationException {
-		Document document = this.xmlFileManager.createDocument();
-		Element element = this.diagramXmlManager.getElementFromItem(
-				this.diagram, document);
-
-		document.appendChild(element);
-		this.xmlFileManager.write(document, this.getDomainFilePath());
+//		The domainDiagram model never needs to be saved (it can't be modified)
+//		Document document = this.xmlFileManager.createDocument();
+//		Element element = this.diagramXmlManager.getElementFromItem(
+//				this.diagram, document);
+//
+//		document.appendChild(element);
+//		this.xmlFileManager.write(document, this.getDomainFilePath());
 
 		this.graphPersistenceService.save(this.getGraphDomainFilePath(),
 				this.graph);
