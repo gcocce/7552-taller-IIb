@@ -123,12 +123,11 @@ public class ProjectView extends JPanel implements IProjectView {
 			@Override
 			public void mouseClicked(MouseEvent e){
 				try {
-					projectController.transformToDomainDiagram();
+					projectController.navigateToDomainDiagram();
 					btnTransform.removeMouseListener(transformToDomainDiagram);
 					btnTransform.addMouseListener(reloadDiagram);
 					btnTransform.setText("EDR");
-				} catch (ParserConfigurationException | SAXException
-						| IOException e1) {
+				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}

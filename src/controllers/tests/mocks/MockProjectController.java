@@ -58,7 +58,7 @@ public class MockProjectController implements IProjectController {
 	}
 
 	@Override
-	public void transformToDomainDiagram() {
+	public void navigateToDomainDiagram() {
 		// TODO Auto-generated method stub
 		
 	}

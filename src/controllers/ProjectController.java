@@ -8,7 +8,6 @@ import infrastructure.visual.DiagramTreeNode;
 import infrastructure.visual.DomainDiagramTreeNode;
 
 import java.awt.Desktop;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -20,8 +19,6 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import models.Hierarchy;
@@ -33,8 +30,8 @@ import models.transform.TransformER_Domain;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
+import persistence.DomainDiagramXmlManager;
 import persistence.IXmlFileManager;
 import persistence.IXmlManager;
 import validation.IProjectValidationService;
@@ -59,6 +56,7 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 	private IXmlFileManager xmlFileManager;
 
 	private IXmlManager<Diagram> diagramXmlManager;
+	private IXmlManager<DomainDiagram> domainDiagramXmlManager;
 
 	private IFileSystemService fileSystemService;
 
@@ -82,6 +80,7 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 		this.projectView.setController(this);
 		this.xmlFileManager = xmlFileManager;
 		this.diagramXmlManager = diagramXmlManager;
+		this.domainDiagramXmlManager = new DomainDiagramXmlManager();
 		this.fileSystemService = fileSystemService;
 		this.validationService = validationService;
 	}
@@ -381,67 +380,83 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 	}
 
 	@Override
-	public void transformToDomainDiagram() throws ParserConfigurationException, SAXException, IOException {
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		factory.setNamespaceAware(true);
-		DocumentBuilder builder = factory.newDocumentBuilder();
+	public void navigateToDomainDiagram() throws Exception {
+		if (domainDiagramController == null)
+		    domainDiagramController = domainDiagramControllerFactory.create();
+		
+		if (needsToTransformDiagram()) {
+			DomainDiagram domainDiagram = transformToDomainDiagram(DefaultDiagramName);
+			loadDomainDiagram(domainDiagram, null);
+		} else {
+			showDomainDiagram(DefaultDiagramName);
+		}
+	}
 
-		/* Seccion para obtener el xml del modelo de entidad relacion */
-		Document diagramDoc = this.xmlFileManager.createDocument();
-		Element element = this.diagramXmlManager.getElementFromItem(
-				mainDiagram, diagramDoc);
-		diagramDoc.appendChild(element);
+	private boolean needsToTransformDiagram() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public DomainDiagram transformToDomainDiagram(String currentDiagram) throws Exception {
 
 		/* Seccion para obtener el xml del grafico */
-		String xml = this.diagramController.getDiagramXml(mainDiagram);
-		Document graphDoc = builder.parse(new ByteArrayInputStream(xml
-				.getBytes()));
+		Document graphDoc = this.xmlFileManager.read(getGraphDiagramFilePath(currentDiagram));
 
-		TransformER_Domain transfTool = new TransformER_Domain(diagramDoc,
-				graphDoc);
+		/* Seccion para obtener el xml del modelo de entidad relacion */
+		Document diagramDoc = this.xmlFileManager.read(getDiagramFilePath(currentDiagram));
+
+		TransformER_Domain transfTool = new TransformER_Domain(diagramDoc, graphDoc);
 
 		Document dominioDoc = transfTool.GetDomainModel();
-		
-		// XXX: Hack for now...
-		DomainDiagram domainDiagram = new DomainDiagram(); 
-		//popullo las clases
-		domainDiagram.setClasses(transfTool.populateDomainClasses(dominioDoc));
-		//populo las realaciones
-		domainDiagram.setRelationships(transfTool.populateDomainRelationships(dominioDoc));
+		Element documentElement = dominioDoc.getDocumentElement();
 
-		
-		// TODO: obtener y guardar el xml del nuevo grafico
-		Document newgraphDoc=transfTool.getGraphDomain(domainDiagram);
-		this.xmlFileManager.write(newgraphDoc, this.getGraphDomainFilePath());
-		
-		this.xmlFileManager.write(dominioDoc, this.getDomainFilePath());
+		DomainDiagram domainDiagram = domainDiagramXmlManager.getItemFromXmlElement(documentElement);
+		domainDiagram.setName(currentDiagram);
 
-		domainDiagramController = domainDiagramControllerFactory.create();
+		Document newgraphDoc = transfTool.getGraphDomain(domainDiagram);
+
+		this.xmlFileManager.write(newgraphDoc, getGraphDomainFilePath(currentDiagram));
+		this.xmlFileManager.write(dominioDoc, getDomainFilePath(currentDiagram));
+
+		return domainDiagram;
+	}
+
+	public void showDomainDiagram(String name) throws Exception{
+		Document document = this.xmlFileManager.read(getDomainFilePath(name));
+		Element documentElement = document.getDocumentElement();
+		DomainDiagram diagram = this.domainDiagramXmlManager.getItemFromXmlElement(documentElement);
+		diagram.setName(name);
 		
-		// XXX: Handle loading from transform in DiagramController
-		if (domainDiagram.getName() == null) {
-			domainDiagram.setName(DefaultDiagramName);
-			DomainDiagramTreeNode currentTreeNode = new DomainDiagramTreeNode(domainDiagram, this.projectContext);
-			currentDomainDiagramNode = currentTreeNode;
-			projectTree = new DefaultTreeModel(currentDomainDiagramNode);
-			projectView.refreshTree(projectTree);
-		}
-		
+		this.loadDomainDiagram(diagram, null);
+	}
+
+	private void loadDomainDiagram(DomainDiagram domainDiagram, DiagramTreeNode parentTreeNode) throws Exception{
+		currentDomainDiagramNode = new DomainDiagramTreeNode(domainDiagram, projectContext);
+		projectTree = new DefaultTreeModel(currentDomainDiagramNode);
+		projectView.refreshTree(projectTree);
 		domainDiagramController.load(domainDiagram);
 		
-		shell.setRightContent(domainDiagramController.getView());
-		shell.activateFullSize();
+		this.shell.setRightContent(this.domainDiagramController.getView());
 	}
 
-	private String getDomainFilePath() {
+	private String getDomainFilePath(String name) {
 		return this.projectContext.getDataDirectory() + "/"
-				+ mainDiagram.getName() + "-domain.xml";
+				+ name + "-domain.xml";
 	}
 
-	private String getGraphDomainFilePath() {
+	private String getGraphDomainFilePath(String name) {
 		return this.projectContext.getDataDirectory() + "/"
-				+ mainDiagram.getName() + "-graph_domain.xml";
+				+ name + "-graph_domain.xml";
 	}
 
+	private String getDiagramFilePath(String name) {
+		return this.projectContext.getDataDirectory() + "/"
+				+ name + "-comp";
+	}
+
+	private String getGraphDiagramFilePath(String name) {
+		return this.projectContext.getDataDirectory() + "/"
+				+ name + "-rep";
+	}
 
 }

@@ -12,7 +12,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import models.domain.DomainClass;
 import models.domain.DomainDiagram;
-import models.domain.DomainRelationship;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -48,9 +47,13 @@ public class TransformER_Domain {
 	
 	
 	public Document GetDomainModel(){
+        // Diagram element
+        Element diagram=this.diagramDoc.getDocumentElement();
+		
 	    // Creamos el Document para el modelo de dominio
 		dominioDoc = this.documentBuilder.newDocument();
-        Element eDominio = dominioDoc .createElement("dominio");
+        Element eDominio = dominioDoc.createElement("dominio");
+        eDominio.setAttribute("id", diagram.getAttribute("id"));
         dominioDoc.appendChild(eDominio);
         
         Element eClases = dominioDoc.createElement("classes");
@@ -58,9 +61,6 @@ public class TransformER_Domain {
         
         Element eRelations = dominioDoc.createElement("relationships");
         eDominio.appendChild(eRelations);
-	
-        // Diagram element
-        Element diagram=this.diagramDoc.getDocumentElement();
         
         // Lista de entities
         Element entitiesElement = (Element) diagram.getElementsByTagName("entities").item(0);
@@ -68,7 +68,7 @@ public class TransformER_Domain {
         
         // Lista de relaciones
         Element relationshipElement = (Element) diagram.getElementsByTagName("relationships").item(0);
-        this.procesarRelaciones(relationshipElement );
+        this.procesarRelaciones(relationshipElement);
         
         
         return dominioDoc;
@@ -357,81 +357,6 @@ public class TransformER_Domain {
 		eRelation.setAttribute("composition", "false");
 		eRelation.setAttribute("directionality", "bidirectional");
 		return eRelation;
-	}
-
-	public List<DomainRelationship> populateDomainRelationships(Document dominioDoc) {
-		List<DomainRelationship> relationshipCollection = new ArrayList<DomainRelationship>();
-		  // Diagram element
-      Element diagram=dominioDoc.getDocumentElement();
-      
-      // Lista de clases
-
-      Element eClases= (Element)dominioDoc.getElementsByTagName("relationships").item(0);
-      
-      NodeList nList = eClases.getElementsByTagName("relationship");
-      
-      for (int temp = 0; temp < nList.getLength(); temp++) {
-		   Node nNode = nList.item(temp);
-		   if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-				  Element myRelationship= (Element) nNode;
-				  
-				  String sId=myRelationship.getAttribute("id");
-				  String sName=myRelationship.getAttribute("name");
-				  String sDir = myRelationship.getAttribute("directionality");
-				  String sComposition = myRelationship.getAttribute("composition");
-				  boolean composition = false;
-				  if(sComposition.equals("true"))
-					  composition = true;
-/*				  
-				  Element rClasses=(Element)myRelationship.getElementsByTagName("classes").item(0);
-			      NodeList rClassesList = eClases.getElementsByTagName("class");
-			      for (int temp2 = 0; temp2 < rClassesList.getLength(); temp2++) {
-					   Node rClass = rClassesList.item(temp2);
-					   if (rClass.getNodeType() == Node.ELEMENT_NODE) {
-							  Element myrClass= (Element) rClass;
-*/							  
-				  //aca voy populando el modelo de relaciones.
-				  try {
-					relationshipCollection.add(new DomainRelationship(null,sName,null,null));
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-		   }
-		}                
-		return relationshipCollection;
-	}
-
-	public List<DomainClass> populateDomainClasses(Document dominioDoc) {
-		List<DomainClass> classCollection = new ArrayList<DomainClass>();
-		  // Diagram element
-        Element diagram=dominioDoc.getDocumentElement();
-         // Lista de clases
-
-        Element eClases= (Element)dominioDoc.getElementsByTagName("classes").item(0);
-        
-        NodeList nList = eClases.getElementsByTagName("class");
-        
-        for (int temp = 0; temp < nList.getLength(); temp++) {
- 		   Node nNode = nList.item(temp);
- 		   if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-				  Element myClass= (Element) nNode;
-				  
-				  String sId=myClass.getAttribute("id");
-				  String sName=myClass.getAttribute("name");
-	      
-				  //aca voy populando el modelo de classes.
-				  classCollection.add(new DomainClass(sName, sId, null, null, null));
-
-				  
-				  // Procesar nodos hijos (agregar atributos)
-				  /*Element eAtributos=(Element)myClass.getElementsByTagName("attributes").item(0);
-				  this.procesarAtributos(clase, eAtributos);
-*/
- 		   }
- 		}                
-		return classCollection;
 	}
 
 	public Document getGraphDomain(DomainDiagram domainDiagram){
