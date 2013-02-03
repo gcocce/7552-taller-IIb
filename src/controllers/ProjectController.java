@@ -392,11 +392,6 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 		}
 	}
 
-	private boolean needsToTransformDiagram() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	public DomainDiagram transformToDomainDiagram(String currentDiagram) throws Exception {
 
 		/* Seccion para obtener el xml del grafico */
@@ -457,6 +452,12 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 	private String getGraphDiagramFilePath(String name) {
 		return this.projectContext.getDataDirectory() + "/"
 				+ name + "-rep";
+	}
+
+	private boolean needsToTransformDiagram() {
+		File derDiagram = new File(getDiagramFilePath(DefaultDiagramName));
+		File domainDiagram = new File(getDomainFilePath(DefaultDiagramName));
+		return derDiagram.lastModified() > domainDiagram.lastModified();
 	}
 
 }
