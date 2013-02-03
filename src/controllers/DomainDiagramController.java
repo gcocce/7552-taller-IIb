@@ -117,10 +117,10 @@ public class DomainDiagramController extends BaseController implements
 
 	}
 
-	private String getDomainFilePath() {
-		return this.projectContext.getDataDirectory() + "/"
-				+ this.diagram.getName() + "-domain.xml";
-	}
+//	private String getDomainFilePath() {
+//		return this.projectContext.getDataDirectory() + "/"
+//				+ this.diagram.getName() + "-domain.xml";
+//	}
 
 	private String getGraphDomainFilePath() {
 		return this.projectContext.getDataDirectory() + "/"

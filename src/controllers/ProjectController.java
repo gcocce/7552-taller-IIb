@@ -35,7 +35,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-import persistence.IGraphPersistenceService;
 import persistence.IXmlFileManager;
 import persistence.IXmlManager;
 import validation.IProjectValidationService;
@@ -70,8 +69,7 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 	private DomainDiagramTreeNode currentDomainDiagramNode;
 
 	private Diagram mainDiagram;
-	private IGraphPersistenceService graphPersistenceService;
-	
+
 	public ProjectController(IProjectContext projectContext, IProjectView projectView, 
 			IShell shell, IDiagramControllerFactory diagramControllerFactory, IDomainDiagramControllerFactory domainDiagramControllerFactory,
 			IXmlFileManager xmlFileManager, IXmlManager<Diagram> diagramXmlManager, 
@@ -245,17 +243,23 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 		if (!this.fileSystemService.exists(projectContext.getDataDirectory(), DefaultDiagramName)) {
 			return false;
 		}
-		this.loadDiagram(DefaultDiagramName, null);
 		this.diagramController = this.diagramControllerFactory.create();
 		this.diagramController.addListener(this);
+
+		this.showDiagram();
+
+		this.shell.activateFullSize();
+		return true;
+	}
+
+	public void showDiagram() throws Exception{
+		this.loadDiagram(DefaultDiagramName, null);
 		
 		this.diagramController.load(projectContext.getContextDiagram(DefaultDiagramName));
 		
 		this.mainDiagram = diagramController.getDiagram(); 
 		
 		this.shell.setRightContent(this.diagramController.getView());
-		this.shell.activateFullSize();
-		return true;
 	}
 
 	private void loadDiagram(String diagramName, DiagramTreeNode parentTreeNode) throws Exception{

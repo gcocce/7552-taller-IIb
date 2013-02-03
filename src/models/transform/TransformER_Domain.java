@@ -1,7 +1,6 @@
 package models.transform;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -11,8 +10,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import models.der.Attribute;
-import models.domain.DomainAttribute;
 import models.domain.DomainClass;
 import models.domain.DomainDiagram;
 import models.domain.DomainRelationship;
@@ -21,8 +18,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import controllers.DiagramController.CellConstants;
 
 public class TransformER_Domain {
 	DocumentBuilderFactory factoryBuilder;

@@ -63,4 +63,10 @@ public class MockProjectController implements IProjectController {
 		
 	}
 
+	@Override
+	public void showDiagram() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

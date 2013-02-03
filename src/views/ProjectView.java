@@ -8,16 +8,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
-import javax.swing.JPanel;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.factories.FormFactory;
-
-import controllers.IProjectController;
-
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
@@ -25,14 +18,24 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import com.jgoodies.forms.factories.FormFactory;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.RowSpec;
+
+import controllers.IProjectController;
+
 public class ProjectView extends JPanel implements IProjectView {
 
+	private static final long serialVersionUID = 281050945259788431L;
 	private JTree tree;
 	private JButton btnOpen;
 	private JButton btnCreate;
 	private JButton btnValidate;
 	private JButton btnTransform;
 	private IProjectController projectController;
+	private MouseAdapter transformToDomainDiagram;
+	private MouseAdapter reloadDiagram;
 
 	/**
 	 * Create the panel.
@@ -116,19 +119,36 @@ public class ProjectView extends JPanel implements IProjectView {
 			}	
 		});
 
-		this.btnTransform.addMouseListener(new MouseAdapter() {
+		transformToDomainDiagram = new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e){
 				try {
 					projectController.transformToDomainDiagram();
+					btnTransform.removeMouseListener(transformToDomainDiagram);
+					btnTransform.addMouseListener(reloadDiagram);
+					btnTransform.setText("EDR");
 				} catch (ParserConfigurationException | SAXException
 						| IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-			}	
-		});
-
+			}
+		};
+		reloadDiagram = new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e){
+				try {
+					projectController.showDiagram();
+					btnTransform.removeMouseListener(reloadDiagram);
+					btnTransform.addMouseListener(transformToDomainDiagram);
+					btnTransform.setText("Transform");
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		};
+		this.btnTransform.addMouseListener(transformToDomainDiagram);	
 
 		this.tree.addMouseListener(new MouseAdapter() {
 			@Override
@@ -139,6 +159,7 @@ public class ProjectView extends JPanel implements IProjectView {
 				}
 			}
 		});
+
 		this.tree.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {

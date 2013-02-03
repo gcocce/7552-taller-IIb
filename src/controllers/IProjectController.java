@@ -21,4 +21,5 @@ public interface IProjectController {
 	void deleteElement(TreePath path);
 	void validateProject(int toleranceLevel);
 	void transformToDomainDiagram() throws ParserConfigurationException, SAXException, IOException;
+	void showDiagram() throws Exception;
 }
