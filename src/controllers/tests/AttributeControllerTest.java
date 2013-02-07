@@ -1,18 +1,20 @@
 package controllers.tests;
 
-import controllers.AttributeController;
-import controllers.tests.mocks.*;
 import infrastructure.IterableExtensions;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.Assert;
-import models.*;
 import models.der.Attribute;
 import models.der.AttributeType;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import controllers.AttributeController;
+import controllers.tests.mocks.MockAttributeView;
+import controllers.tests.mocks.MockProjectContext;
 
 public class AttributeControllerTest {
 

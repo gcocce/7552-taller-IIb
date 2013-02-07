@@ -34,8 +34,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import models.der.Entity;
 
-import org.xml.sax.SAXException;
-
 import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
@@ -54,6 +52,7 @@ import controllers.IDiagramController;
 public class DiagramView extends JPanel implements IDiagramView,
 		DropTargetListener {
 
+	private static final long serialVersionUID = 1331990312600233180L;
 	private IDiagramController diagramController;
 	private final JButton btnEntity;
 	private final JButton btnRelationship;
@@ -67,7 +66,6 @@ public class DiagramView extends JPanel implements IDiagramView,
 	private final JButton btnValidate;
 	private final JButton btnPrint;
 	private final JButton btnExport;
-	private final JButton btnTransform;
 	private JButton btnZoomIn;
 	private JButton btnZoomOut;
 
@@ -82,10 +80,10 @@ public class DiagramView extends JPanel implements IDiagramView,
 				FormFactory.DEFAULT_COLSPEC, FormFactory.DEFAULT_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC, FormFactory.DEFAULT_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC, FormFactory.DEFAULT_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC, }, new RowSpec[] {
+				ColumnSpec.decode("default:grow") }, new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("default:grow"), }));
+				RowSpec.decode("default:grow") }));
 
 		Insets inset = new Insets(2, 9, 2, 9);
 
@@ -153,10 +151,6 @@ public class DiagramView extends JPanel implements IDiagramView,
 		this.btnValidate = new JButton("Validate");
 		this.btnValidate.setMargin(inset);
 		add(this.btnValidate, "9, 2");
-
-		this.btnTransform = new JButton("Transform");
-		this.btnTransform.setMargin(inset);
-		add(this.btnTransform, "10, 2");
 
 		btnZoomIn = new JButton("+");
 		add(btnZoomIn, "11, 2");
@@ -261,19 +255,6 @@ public class DiagramView extends JPanel implements IDiagramView,
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				diagramController.validate();
-			}
-		});
-
-		this.btnTransform.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				try {
-					diagramController.transform();
-				} catch (ParserConfigurationException | SAXException
-						| IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
 			}
 		});
 

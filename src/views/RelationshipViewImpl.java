@@ -24,6 +24,7 @@ import controllers.tests.mocks.MockRelationshipEntityController;
 public class RelationshipViewImpl extends RelationshipViewAbstract implements
 		IRelationshipView {
 
+	private static final long serialVersionUID = -1866986963238429842L;
 	IRelationshipController relController;
 	IAttributeController attController;
 	IRelationshipEntityController relEntController;

@@ -886,7 +886,7 @@ public class ProjectControllerTestCase {
 	
 	private ProjectController createController(){
 		return new ProjectController(this.projectContext, this.projectView,
-				this.shell, this.diagramControllerFactory, null, this.xmlFileManager,
+				this.shell, this.diagramControllerFactory, null, this.xmlFileManager, 
 				this.diagramXmlManager, this.fileSystemService, this.projectValidationService);
 	}
 }

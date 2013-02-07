@@ -14,6 +14,7 @@ import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 
 import persistence.DiagramXmlManager;
+import persistence.DomainDiagramXmlManager;
 import persistence.GraphPersistenceService;
 import persistence.IGraphPersistenceService;
 import persistence.IXmlFileManager;

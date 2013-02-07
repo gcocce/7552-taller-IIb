@@ -31,7 +31,8 @@ import controllers.IKeysController;
 
 public class KeyView extends JFrame implements IKeysView {
 
-    private IKeysController controller;
+	private static final long serialVersionUID = 1847276742458386944L;
+	private IKeysController controller;
     private Iterable<IKey> possibleKeys;
     private IdGroup idGroupSelected;
     private IKey keySelectedToAdd;

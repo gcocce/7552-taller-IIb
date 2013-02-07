@@ -81,5 +81,10 @@ public class DomainDiagram implements Iterable<DomainDiagram> {
 		this.classes = domainClasses;
 		
 	}
+
+	@Override
+	public String toString() {
+		return this.getName();
+	}
 	
 }

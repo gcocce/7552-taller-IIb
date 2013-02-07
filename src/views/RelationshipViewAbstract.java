@@ -12,6 +12,8 @@ import com.jgoodies.forms.factories.*;
  * @author Santiago Storti
  */
 public abstract class RelationshipViewAbstract extends JFrame {
+
+	private static final long serialVersionUID = 4777473500601719620L;
 	public RelationshipViewAbstract(IRelationshipEntityView relEntView, IAttributeView attView) {
 		initComponents((RelationshipEntityViewImpl) relEntView, (AttributeView) attView);
 	}

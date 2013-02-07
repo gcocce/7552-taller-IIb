@@ -1,9 +1,9 @@
 package controllers.tests;
 
-import controllers.EntityController;
-import controllers.tests.mocks.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.Assert;
-import models.*;
 import models.der.Attribute;
 import models.der.AttributeCollection;
 import models.der.Entity;
@@ -13,8 +13,14 @@ import models.der.EntityType;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import controllers.EntityController;
+import controllers.tests.mocks.MockAttributeController;
+import controllers.tests.mocks.MockAttributeControllerFactory;
+import controllers.tests.mocks.MockEntityEventListener;
+import controllers.tests.mocks.MockEntityView;
+import controllers.tests.mocks.MockKeyController;
+import controllers.tests.mocks.MockKeyControllerFactory;
+import controllers.tests.mocks.MockProjectContext;
 
 public class EntityControllerTest {
 
