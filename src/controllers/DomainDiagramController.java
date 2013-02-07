@@ -103,24 +103,24 @@ public class DomainDiagramController extends BaseController implements
 		return classCells.get(CellConstants.ClassPrefix + id);
 	}
 
-	// TODO: Do we need a New save?
 	public void save() throws ParserConfigurationException {
-		Document document = this.xmlFileManager.createDocument();
-		Element element = this.diagramXmlManager.getElementFromItem(
-				this.diagram, document);
-
-		document.appendChild(element);
-		this.xmlFileManager.write(document, this.getDomainFilePath());
+//		The domainDiagram model never needs to be saved (it can't be modified)
+//		Document document = this.xmlFileManager.createDocument();
+//		Element element = this.diagramXmlManager.getElementFromItem(
+//				this.diagram, document);
+//
+//		document.appendChild(element);
+//		this.xmlFileManager.write(document, this.getDomainFilePath());
 
 		this.graphPersistenceService.save(this.getGraphDomainFilePath(),
 				this.graph);
 
 	}
 
-	private String getDomainFilePath() {
-		return this.projectContext.getDataDirectory() + "/"
-				+ this.diagram.getName() + "-domain.xml";
-	}
+//	private String getDomainFilePath() {
+//		return this.projectContext.getDataDirectory() + "/"
+//				+ this.diagram.getName() + "-domain.xml";
+//	}
 
 	private String getGraphDomainFilePath() {
 		return this.projectContext.getDataDirectory() + "/"

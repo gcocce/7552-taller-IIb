@@ -2,6 +2,8 @@ package controllers;
 
 import java.awt.Point;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import models.domain.DomainDiagram;
 import views.IDomainDiagramView;
 
@@ -18,4 +20,5 @@ public interface IDomainDiagramController {
 	void load(DomainDiagram diagram);
 	// TODO: See if we need this
 //	Iterable<DomainClass> getAvailableClasses();
+	void save() throws ParserConfigurationException;
 }

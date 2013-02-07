@@ -3,8 +3,6 @@ package controllers;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import models.domain.DomainDiagram;
-
 import views.IProjectView;
 
 public interface IProjectController {
@@ -16,5 +14,6 @@ public interface IProjectController {
 	void changeElement(TreePath treePath);
 	void deleteElement(TreePath path);
 	void validateProject(int toleranceLevel);
-	void showDomainDiagram(DomainDiagram diagram);
+	void showDiagram() throws Exception;
+	void navigateToDomainDiagram() throws Exception;
 }

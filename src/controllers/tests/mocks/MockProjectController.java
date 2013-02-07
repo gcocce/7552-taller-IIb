@@ -3,8 +3,6 @@ package controllers.tests.mocks;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import models.domain.DomainDiagram;
-
 import views.IProjectView;
 import controllers.IDiagramController;
 import controllers.IProjectController;
@@ -60,7 +58,13 @@ public class MockProjectController implements IProjectController {
 	}
 
 	@Override
-	public void showDomainDiagram(DomainDiagram diagram) {
+	public void navigateToDomainDiagram() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void showDiagram() throws Exception {
 		// TODO Auto-generated method stub
 		
 	}

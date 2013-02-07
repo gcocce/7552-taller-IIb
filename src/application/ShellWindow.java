@@ -1,17 +1,20 @@
 package application;
 
+
 import java.awt.Component;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JSplitPane;
+
+import org.picocontainer.MutablePicoContainer;
+
+import com.jgoodies.forms.factories.FormFactory;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.RowSpec;
 
 import controllers.IProjectController;
-
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.factories.FormFactory;
-import javax.swing.JSplitPane;
 
 public class ShellWindow implements IShell {
 
@@ -24,15 +27,14 @@ public class ShellWindow implements IShell {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				Bootstrapper bootstrapper = new Bootstrapper();
+				ShellWindow window = new ShellWindow();
 				try {
-					Bootstrapper bootstrapper = new Bootstrapper();
 					bootstrapper.run();
-					ShellWindow window = new ShellWindow();
-					bootstrapper.getContainer().addComponent(IShell.class, window);
-					IProjectController projectController = 
-						(IProjectController) bootstrapper.getContainer().getComponent(IProjectController.class);
-					window.frame.setVisible(true);
-					window.setLeftContent((Component) projectController.getView());
+					MutablePicoContainer container = bootstrapper.getContainer();
+					container.addComponent(IShell.class, window);
+					IProjectController projectController = container.getComponent(IProjectController.class);
+					window.setLeftContent(projectController.getView());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -57,15 +59,17 @@ public class ShellWindow implements IShell {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"),},
+				FormFactory.GLUE_COLSPEC},
 			new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("default:grow"),}));
+				FormFactory.GLUE_ROWSPEC}));
 		
 		this.splitPane = new JSplitPane();
 		this.splitPane.setRightComponent(null);
 		this.splitPane.setLeftComponent(null);
 		frame.getContentPane().add(splitPane, "2, 2, fill, fill");
+		frame.setVisible(true);
+
 	}
 
 	@Override

@@ -11,6 +11,8 @@ import javax.swing.table.*;
  * @author santiago storti
  */
 public abstract class RelationshipEntityViewAbstract extends JPanel {
+
+	private static final long serialVersionUID = 3582645057944259115L;
 	public RelationshipEntityViewAbstract() {
 		RelationshipEntity = new JTable();
 		initComponents();
