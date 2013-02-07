@@ -80,10 +80,10 @@ public class DiagramView extends JPanel implements IDiagramView,
 				FormFactory.DEFAULT_COLSPEC, FormFactory.DEFAULT_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC, FormFactory.DEFAULT_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC, FormFactory.DEFAULT_COLSPEC,
-				FormFactory.GLUE_COLSPEC, }, new RowSpec[] {
+				ColumnSpec.decode("default:grow") }, new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("default:grow"), }));
+				RowSpec.decode("default:grow") }));
 
 		Insets inset = new Insets(2, 9, 2, 9);
 

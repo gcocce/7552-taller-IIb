@@ -10,15 +10,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.TooManyListenersException;
 
 import javax.swing.JButton;
@@ -30,14 +25,7 @@ import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
-import com.mxgraph.io.mxCodec;
 import com.mxgraph.swing.mxGraphComponent;
-import com.mxgraph.util.mxCellRenderer;
-import com.mxgraph.util.mxResources;
-import com.mxgraph.util.mxXmlUtils;
-import com.mxgraph.util.png.mxPngEncodeParam;
-import com.mxgraph.util.png.mxPngImageEncoder;
-import com.mxgraph.view.mxGraph;
 
 import controllers.IDomainDiagramController;
 
@@ -50,7 +38,6 @@ public class DomainDiagramView extends JPanel implements IDomainDiagramView,
 	private final JButton btnSave;
 	private mxGraphComponent graphComponent;
 	private final JButton btnPrint;
-	private final JButton btnExport;
 	private JButton btnZoomIn;
 	private JButton btnZoomOut;
 
@@ -61,11 +48,11 @@ public class DomainDiagramView extends JPanel implements IDomainDiagramView,
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC, FormFactory.DEFAULT_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC, FormFactory.DEFAULT_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC, FormFactory.DEFAULT_COLSPEC,
-				FormFactory.GLUE_COLSPEC }, new RowSpec[] {
+				FormFactory.DEFAULT_COLSPEC, ColumnSpec.decode("default:grow") }, 
+				new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC, FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.GLUE_ROWSPEC, }));
+				FormFactory.GLUE_ROWSPEC }));
 
 		Insets inset = new Insets(2, 35, 2, 35);
 
@@ -77,15 +64,11 @@ public class DomainDiagramView extends JPanel implements IDomainDiagramView,
 		this.btnPrint.setMargin(inset);
 		add(this.btnPrint, "3, 2");
 
-		this.btnExport = new JButton("Export");
-		this.btnExport.setMargin(inset);
-		add(this.btnExport, "4, 2");
-
 		btnZoomIn = new JButton("+");
-		add(btnZoomIn, "5, 2");
+		add(btnZoomIn, "4, 2");
 
 		btnZoomOut = new JButton("-");
-		add(btnZoomOut, "6, 2");
+		add(btnZoomOut, "5, 2");
 
 	}
 
@@ -108,7 +91,7 @@ public class DomainDiagramView extends JPanel implements IDomainDiagramView,
 			e1.printStackTrace();
 		}
 
-		this.add(this.graphComponent, "2, 4, 6, 1, fill, fill");
+		this.add(this.graphComponent, "2, 4, 5, 1, fill, fill");
 
 		this.btnSave.addMouseListener(new MouseAdapter() {
 			@Override
@@ -122,7 +105,6 @@ public class DomainDiagramView extends JPanel implements IDomainDiagramView,
 		});
 
 		this.btnPrint.addActionListener(new PrintAction());
-		this.btnExport.addActionListener(new ExportAction());
 
 		this.btnZoomIn.addMouseListener(new MouseAdapter() {
 			@Override
@@ -185,58 +167,6 @@ public class DomainDiagramView extends JPanel implements IDomainDiagramView,
 			return true;
 		}
 		return false;
-	}
-
-	private class ExportAction implements ActionListener {
-
-		public void actionPerformed(ActionEvent e) {
-			mxGraph graph = graphComponent.getGraph();
-
-			// Creates the image for the PNG file
-			BufferedImage image = mxCellRenderer.createBufferedImage(graph,
-					null, 1, graphComponent.getBackground(),
-					graphComponent.isAntiAlias(), null,
-					graphComponent.getCanvas());
-
-			// Creates the URL-encoded XML data
-			mxCodec codec = new mxCodec();
-			String xml;
-			FileOutputStream outputStream = null;
-			try {
-				xml = URLEncoder.encode(
-						mxXmlUtils.getXml(codec.encode(graph.getModel())),
-						"UTF-8");
-
-				mxPngEncodeParam param = mxPngEncodeParam
-						.getDefaultEncodeParam(image);
-				param.setCompressedText(new String[] { "mxGraphModel", xml });
-
-				// Saves as a PNG file
-				String name = diagramController.getDiagram().getName();
-				outputStream = new FileOutputStream(new File(name + ".jpg"));
-
-				mxPngImageEncoder encoder = new mxPngImageEncoder(outputStream,
-						param);
-
-				if (image != null) {
-					encoder.encode(image);
-
-				} else {
-					JOptionPane.showMessageDialog(graphComponent,
-							mxResources.get("noImageData"));
-				}
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} finally {
-				try {
-					outputStream.close();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		}
 	}
 
 	private class PrintAction implements ActionListener {

@@ -454,7 +454,7 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 				+ name + "-rep";
 	}
 
-	private boolean needsToTransformDiagram() {
+	private boolean needsToTransformDiagram() {	
 		File derDiagram = new File(getDiagramFilePath(DefaultDiagramName));
 		File domainDiagram = new File(getDomainFilePath(DefaultDiagramName));
 		return derDiagram.lastModified() > domainDiagram.lastModified();
