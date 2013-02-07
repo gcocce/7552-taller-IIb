@@ -126,7 +126,7 @@ public class ProjectView extends JPanel implements IProjectView {
 					projectController.navigateToDomainDiagram();
 					btnTransform.removeMouseListener(transformToDomainDiagram);
 					btnTransform.addMouseListener(reloadDiagram);
-					btnTransform.setText("EDR");
+					btnTransform.setText("DER");
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -138,6 +138,7 @@ public class ProjectView extends JPanel implements IProjectView {
 			public void mouseClicked(MouseEvent e){
 				try {
 					projectController.showDiagram();
+					refreshTree(projectController.getProjectTree());
 					btnTransform.removeMouseListener(reloadDiagram);
 					btnTransform.addMouseListener(transformToDomainDiagram);
 					btnTransform.setText("Transform");
