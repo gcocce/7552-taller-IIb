@@ -66,11 +66,11 @@ public class DomainDiagramTreeNode extends DefaultMutableTreeNode {
 		tree.nodesWereInserted(this.classesNode, new int[]{index});
 	}
 	
-	public DomainDiagramTreeNode addSubdiagram(DomainDiagram diagram, DefaultTreeModel tree){
+	public DomainDiagramTreeNode addSubDiagram(DomainDiagram diagram, DefaultTreeModel tree){
 		DomainDiagramTreeNode diagramNode = new DomainDiagramTreeNode(diagram, this.projectContext);
 		this.subdiagramsNode.add(diagramNode);
-		int index = this.subdiagramsNode.getChildCount() - 1;
-		tree.nodesWereInserted(this.subdiagramsNode, new int[]{index});
+		int index = subdiagramsNode.getChildCount() - 1;
+		tree.nodesWereInserted(subdiagramsNode, new int[]{index});
 		return diagramNode;
 	}
 

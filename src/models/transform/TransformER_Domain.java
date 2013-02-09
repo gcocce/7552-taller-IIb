@@ -62,6 +62,9 @@ public class TransformER_Domain {
         Element eRelations = dominioDoc.createElement("relationships");
         eDominio.appendChild(eRelations);
         
+        Element eSubdiagrams = dominioDoc.createElement("subdiagrams");
+        eDominio.appendChild(eSubdiagrams);
+        
         // Lista de entities
         Element entitiesElement = (Element) diagram.getElementsByTagName("entities").item(0);
         this.procesarEntidades(entitiesElement);
@@ -70,10 +73,26 @@ public class TransformER_Domain {
         Element relationshipElement = (Element) diagram.getElementsByTagName("relationships").item(0);
         this.procesarRelaciones(relationshipElement);
         
+        // Lista de subdiagramas
+        Element subDiagramsElement = (Element) diagram.getElementsByTagName("subDiagrams").item(0);
+        this.procesarSubDiagramas(subDiagramsElement, eSubdiagrams);
+        
         
         return dominioDoc;
 	}
 	
+	private void procesarSubDiagramas(Element subDiagramsElement, Element target) {
+		NodeList elements = subDiagramsElement.getElementsByTagName("diagram");
+        for (int i = 0; i < elements.getLength(); i++) {
+        	Element eDiagram = (Element) elements.item(i);
+			Element subDiagram = dominioDoc.createElement("domainDiagram");
+			subDiagram.setAttribute("name", eDiagram.getAttribute("name"));
+			subDiagram.setAttribute("id", eDiagram.getAttribute("id"));
+        	target.appendChild(subDiagram);
+        }
+	}
+
+
 	private void procesarRelaciones(Element relationshipsElement){
         Element eClases= (Element)dominioDoc.getElementsByTagName("classes").item(0);
         Element eRelationsDomain= (Element)dominioDoc.getElementsByTagName("relationships").item(0);

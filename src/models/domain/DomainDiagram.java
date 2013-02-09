@@ -25,7 +25,7 @@ public class DomainDiagram implements Iterable<DomainDiagram> {
 		classes = new ArrayList<DomainClass>();
 		relationships = new ArrayList<DomainRelationship>();
 		subDiagrams = new ArrayList<DomainDiagram>();
-		
+		subDiagramNames = new ArrayList<String>();
 	}
 
 	@Override

@@ -170,8 +170,20 @@ public class MockProjectContext implements IProjectContext,IRelationshipEventLis
 	}
 
 	@Override
-	public DomainDiagram getContextDomainDiagram(String defaultDiagramName) {
+	public DomainDiagram getProjectDomainDiagram(String defaultDiagramName) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void addProjectDomainDiagram(DomainDiagram diagram) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void clearProjectDomainDiagrams() {
+		// TODO Auto-generated method stub
+		
 	}
 }
