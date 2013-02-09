@@ -64,8 +64,6 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 
 	private IDomainDiagramController domainDiagramController;
 	private IDomainDiagramControllerFactory domainDiagramControllerFactory;
-	private DomainDiagramTreeNode currentDomainDiagramNode;
-
 	private Diagram mainDiagram;
 
 	public ProjectController(IProjectContext projectContext, IProjectView projectView, 
@@ -166,9 +164,16 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 
 	@Override
 	public void changeElement(TreePath treePath) {
-		if (treePath == null)
-			return;
-		this.projectContext.clearContextDiagrams();
+		if (treePath == null) return;
+		if (treePath.getPathComponent(0) instanceof DomainDiagramTreeNode) {
+			changeDomainDiagramElement(treePath);
+		} else {
+			changeDiagramElement(treePath);
+		}
+	}
+
+	private void changeDiagramElement(TreePath treePath) {
+		projectContext.clearContextDiagrams();
 		Diagram diagramToLoad = null;
 		for (Object o : treePath.getPath()) {
 			if (o instanceof DiagramTreeNode) {
@@ -208,6 +213,15 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 			this.diagramController.updateHierarchy((Hierarchy) o);
 			this.editedNode = node;
 		}
+	}
+
+	private void changeDomainDiagramElement(TreePath treePath) {
+		if (!(treePath.getLastPathComponent() instanceof DomainDiagramTreeNode)) {
+			changeDomainDiagramElement(treePath.getParentPath());
+		}
+		DomainDiagramTreeNode domainNode = (DomainDiagramTreeNode) treePath.getLastPathComponent();
+		DomainDiagram diagram = (DomainDiagram) domainNode.getUserObject();
+		changeCurrentDomainDiagram(diagram);
 	}
 
 	@Override
@@ -381,9 +395,6 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 
 	@Override
 	public void navigateToDomainDiagram() throws Exception {
-		if (domainDiagramController == null)
-		    domainDiagramController = domainDiagramControllerFactory.create();
-		
 		projectContext.clearContextDiagrams();
 		for(Diagram diagram : projectContext.getContextDiagrams()) {
 			String diagramName = diagram.getName();
@@ -395,11 +406,19 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 				 projectContext.addProjectDomainDiagram(domain);
 			}
 		}
-		DomainDiagram domainDiagram = projectContext.getProjectDomainDiagram(DefaultDiagramName);
-		loadDomainDiagram(domainDiagram, null);
-		
+		DomainDiagram mainDomainDiagram = projectContext.getProjectDomainDiagram(DefaultDiagramName);
+		buildDomainDiagramTree(mainDomainDiagram, null);
+		changeCurrentDomainDiagram(mainDomainDiagram);
+	}
+
+	private void changeCurrentDomainDiagram(DomainDiagram diagram) {
+		if (domainDiagramController == null)
+		    domainDiagramController = domainDiagramControllerFactory.create();
+
+		domainDiagramController.load(diagram);
 		shell.setRightContent(domainDiagramController.getView());
 	}
+
 
 	public DomainDiagram transformToDomainDiagram(String currentDiagram) throws Exception {
 
@@ -434,21 +453,19 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 		return diagram;
 	}
 
-	private void loadDomainDiagram(DomainDiagram domainDiagram, DomainDiagramTreeNode parentTreeNode) throws Exception{
+	private void buildDomainDiagramTree(DomainDiagram domainDiagram, DomainDiagramTreeNode parentTreeNode) throws Exception{
 		DomainDiagramTreeNode currentTreeNode = new DomainDiagramTreeNode(domainDiagram, projectContext);
 
 		if (parentTreeNode == null) {
-			currentDomainDiagramNode = currentTreeNode;
-			projectTree = new DefaultTreeModel(currentDomainDiagramNode);
+			projectTree = new DefaultTreeModel(currentTreeNode);
 			projectView.refreshTree(projectTree);
-			domainDiagramController.load(domainDiagram);
 		} else {
 			parentTreeNode.addSubDiagram(domainDiagram, projectTree);
 		}
 
 		for (String childDiagramName : domainDiagram.getSubDiagramNames()) {
 			DomainDiagram childDiagram = projectContext.getProjectDomainDiagram(childDiagramName);
-			loadDomainDiagram(childDiagram, currentTreeNode);
+			buildDomainDiagramTree(childDiagram, currentTreeNode);
 		}
 	}
 

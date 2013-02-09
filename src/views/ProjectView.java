@@ -149,8 +149,8 @@ public class ProjectView extends JPanel implements IProjectView {
 		this.tree.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				TreePath path = tree.getPathForLocation(e.getX(),e.getY());
 				if (e.getClickCount() == 2) {
+					TreePath path = tree.getPathForLocation(e.getX(),e.getY());
 					projectController.changeElement(path);					
 				}
 			}
@@ -159,8 +159,8 @@ public class ProjectView extends JPanel implements IProjectView {
 		this.tree.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				TreePath path = tree.getSelectionPath();
 				if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+					TreePath path = tree.getSelectionPath();
 					projectController.deleteElement(path);
 				}
 			}
