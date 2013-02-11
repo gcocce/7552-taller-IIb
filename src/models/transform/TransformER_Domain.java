@@ -379,7 +379,7 @@ public class TransformER_Domain {
         eCeldaPadre.setAttribute("parent","0");        
         eRoot.appendChild(eCeldaPadre);
 
-        List<DomainClass> ListC=domainDiagram.getDomainClasses();
+        List<DomainClass> ListC= domainDiagram.getDomainClasses();
         Iterator<DomainClass> iterator = ListC.iterator();
     	while (iterator.hasNext()) {
     		String x="0";
@@ -438,8 +438,8 @@ public class TransformER_Domain {
   				  if (comp.compareTo("false")==0){
   					  Element eClasses =(Element)eRelationship.getFirstChild();
   					  
-  					  Element firstC=(Element)eClasses .getFirstChild();
-  					  Element lastC=(Element)eClasses .getLastChild();  					  
+  					  Element firstC=(Element)eClasses.getFirstChild();
+  					  Element lastC=(Element)eClasses.getLastChild();
   					  
   					  String class1id=firstC.getAttribute("id");
   					  String class2id=lastC.getAttribute("id");
@@ -468,9 +468,48 @@ public class TransformER_Domain {
   		   }
         }
 
+    	System.out.println("Buscamos las herencias."); 	
+        Element eHierarchies = (Element)diagramDoc.getElementsByTagName("hierarchies").item(0);
+
+        connectHierarchies(eHierarchies, eRoot);
+
 		return this.newGraphDoc ;
 	}
-	
+
+	private void connectHierarchies(Element eHierarchies, Element eRoot) {
+
+		NodeList hierarchies = eHierarchies.getElementsByTagName("hierarchy");
+
+		for (int i = 0; i < hierarchies.getLength(); i ++) {
+			
+			Element currentHierarchy = (Element) hierarchies.item(i);
+			String parentClassId = currentHierarchy.getAttribute("generalEntityId");
+			String hierarchyId = currentHierarchy.getAttribute("id");
+			NodeList subClasses = currentHierarchy.getLastChild().getChildNodes();
+
+			for (int j = 0; j < subClasses.getLength(); j ++) {
+				Node currentSubClass = subClasses.item(j);
+				String subClassId = currentSubClass.getTextContent();
+
+				Element eRel = newGraphDoc.createElement("mxCell");
+				eRel.setAttribute("edge","1");
+				eRel.setAttribute("id","Hierarchy-" + hierarchyId);
+				eRel.setAttribute("parent","1");
+				eRel.setAttribute("style","endArrow=block;edgeStyle=elbowEdgeStyle;verticalAlign=bottom;align=left;strokeColor=#000000");
+				eRel.setAttribute("source", subClassId);
+				eRel.setAttribute("target", parentClassId);
+
+				Element eGeom= newGraphDoc.createElement("mxGeometry");
+				eGeom.setAttribute("as","geometry");
+				eGeom.setAttribute("relative","1");
+				eRel.appendChild(eGeom);
+
+				eRoot.appendChild(eRel);
+			}
+		}
+	}
+
+
 	private void addLineCell(Element eRoot,DomainClass clase, int heigth){
 		String sID=clase.getSID();
 
