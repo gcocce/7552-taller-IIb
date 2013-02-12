@@ -24,6 +24,7 @@ public class ProjectContext implements IProjectContext {
     public ProjectContext() {
     	this.projectDiagrams = new ArrayList<Diagram>();
     	this.contextDiagrams = new ArrayList<Diagram>();
+    	this.projectDomainDiagrams = new ArrayList<DomainDiagram>();
     }
 
     @Override
@@ -106,6 +107,11 @@ public class ProjectContext implements IProjectContext {
 	}
 	
 	@Override
+	public void addProjectDomainDiagram(DomainDiagram diagram) {
+		this.projectDomainDiagrams.add(diagram);
+	}
+
+	@Override
 	public void addProjectDiagram(Diagram diagram) {
 		this.projectDiagrams.add(diagram);
 	}
@@ -113,6 +119,11 @@ public class ProjectContext implements IProjectContext {
 	@Override
 	public void clearProjectDiagrams() {
 		this.projectDiagrams.clear();
+	}
+	
+	@Override
+	public void clearProjectDomainDiagrams() {
+		this.projectDomainDiagrams.clear();
 	}
 	
 	@Override
@@ -147,7 +158,12 @@ public class ProjectContext implements IProjectContext {
 	}
 	
 	@Override
-	public DomainDiagram getContextDomainDiagram(String diagramName) {
+	public Iterable<Diagram> getContextDiagrams() {
+		return this.projectDiagrams;
+	}
+	
+	@Override
+	public DomainDiagram getProjectDomainDiagram(String diagramName) {
 		for (DomainDiagram diagram : projectDomainDiagrams)
 			if (diagram.getName().equals(diagramName))
 				return diagram;
