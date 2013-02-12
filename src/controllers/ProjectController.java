@@ -64,8 +64,6 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 
 	private IDomainDiagramController domainDiagramController;
 	private IDomainDiagramControllerFactory domainDiagramControllerFactory;
-	private DomainDiagramTreeNode currentDomainDiagramNode;
-
 	private Diagram mainDiagram;
 
 	public ProjectController(IProjectContext projectContext, IProjectView projectView, 
@@ -166,9 +164,16 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 
 	@Override
 	public void changeElement(TreePath treePath) {
-		if (treePath == null)
-			return;
-		this.projectContext.clearContextDiagrams();
+		if (treePath == null) return;
+		if (treePath.getPathComponent(0) instanceof DomainDiagramTreeNode) {
+			changeDomainDiagramElement(treePath);
+		} else {
+			changeDiagramElement(treePath);
+		}
+	}
+
+	private void changeDiagramElement(TreePath treePath) {
+		projectContext.clearContextDiagrams();
 		Diagram diagramToLoad = null;
 		for (Object o : treePath.getPath()) {
 			if (o instanceof DiagramTreeNode) {
@@ -208,6 +213,15 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 			this.diagramController.updateHierarchy((Hierarchy) o);
 			this.editedNode = node;
 		}
+	}
+
+	private void changeDomainDiagramElement(TreePath treePath) {
+		if (!(treePath.getLastPathComponent() instanceof DomainDiagramTreeNode)) {
+			changeDomainDiagramElement(treePath.getParentPath());
+		}
+		DomainDiagramTreeNode domainNode = (DomainDiagramTreeNode) treePath.getLastPathComponent();
+		DomainDiagram diagram = (DomainDiagram) domainNode.getUserObject();
+		changeCurrentDomainDiagram(diagram);
 	}
 
 	@Override
@@ -381,16 +395,30 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 
 	@Override
 	public void navigateToDomainDiagram() throws Exception {
+		projectContext.clearContextDiagrams();
+		for(Diagram diagram : projectContext.getContextDiagrams()) {
+			String diagramName = diagram.getName();
+			if (needsToTransformDiagram(diagramName)) {
+				 DomainDiagram domain = transformToDomainDiagram(diagramName);
+				 projectContext.addProjectDomainDiagram(domain);
+			} else {
+				 DomainDiagram domain = readDomainDiagram(diagramName);
+				 projectContext.addProjectDomainDiagram(domain);
+			}
+		}
+		DomainDiagram mainDomainDiagram = projectContext.getProjectDomainDiagram(DefaultDiagramName);
+		buildDomainDiagramTree(mainDomainDiagram, null);
+		changeCurrentDomainDiagram(mainDomainDiagram);
+	}
+
+	private void changeCurrentDomainDiagram(DomainDiagram diagram) {
 		if (domainDiagramController == null)
 		    domainDiagramController = domainDiagramControllerFactory.create();
-		
-		if (needsToTransformDiagram()) {
-			DomainDiagram domainDiagram = transformToDomainDiagram(DefaultDiagramName);
-			loadDomainDiagram(domainDiagram, null);
-		} else {
-			showDomainDiagram(DefaultDiagramName);
-		}
+
+		domainDiagramController.load(diagram);
+		shell.setRightContent(domainDiagramController.getView());
 	}
+
 
 	public DomainDiagram transformToDomainDiagram(String currentDiagram) throws Exception {
 
@@ -416,22 +444,29 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 		return domainDiagram;
 	}
 
-	public void showDomainDiagram(String name) throws Exception{
+	public DomainDiagram readDomainDiagram(String name) throws Exception{
 		Document document = this.xmlFileManager.read(getDomainFilePath(name));
 		Element documentElement = document.getDocumentElement();
 		DomainDiagram diagram = this.domainDiagramXmlManager.getItemFromXmlElement(documentElement);
 		diagram.setName(name);
 		
-		this.loadDomainDiagram(diagram, null);
+		return diagram;
 	}
 
-	private void loadDomainDiagram(DomainDiagram domainDiagram, DiagramTreeNode parentTreeNode) throws Exception{
-		currentDomainDiagramNode = new DomainDiagramTreeNode(domainDiagram, projectContext);
-		projectTree = new DefaultTreeModel(currentDomainDiagramNode);
-		projectView.refreshTree(projectTree);
-		domainDiagramController.load(domainDiagram);
-		
-		this.shell.setRightContent(this.domainDiagramController.getView());
+	private void buildDomainDiagramTree(DomainDiagram domainDiagram, DomainDiagramTreeNode parentTreeNode) throws Exception{
+		DomainDiagramTreeNode currentTreeNode = new DomainDiagramTreeNode(domainDiagram, projectContext);
+
+		if (parentTreeNode == null) {
+			projectTree = new DefaultTreeModel(currentTreeNode);
+			projectView.refreshTree(projectTree);
+		} else {
+			parentTreeNode.addSubDiagram(domainDiagram, projectTree);
+		}
+
+		for (String childDiagramName : domainDiagram.getSubDiagramNames()) {
+			DomainDiagram childDiagram = projectContext.getProjectDomainDiagram(childDiagramName);
+			buildDomainDiagramTree(childDiagram, currentTreeNode);
+		}
 	}
 
 	private String getDomainFilePath(String name) {
@@ -454,9 +489,9 @@ public class ProjectController implements IProjectController, IDiagramEventListe
 				+ name + "-rep";
 	}
 
-	private boolean needsToTransformDiagram() {	
-		File derDiagram = new File(getDiagramFilePath(DefaultDiagramName));
-		File domainDiagram = new File(getDomainFilePath(DefaultDiagramName));
+	private boolean needsToTransformDiagram(String diagramName) {	
+		File derDiagram = new File(getDiagramFilePath(diagramName));
+		File domainDiagram = new File(getDomainFilePath(diagramName));
 		return derDiagram.lastModified() > domainDiagram.lastModified();
 	}
 

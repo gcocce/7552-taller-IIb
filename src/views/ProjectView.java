@@ -6,7 +6,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -14,9 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
 
 import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -153,8 +149,8 @@ public class ProjectView extends JPanel implements IProjectView {
 		this.tree.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				TreePath path = tree.getPathForLocation(e.getX(),e.getY());
 				if (e.getClickCount() == 2) {
+					TreePath path = tree.getPathForLocation(e.getX(),e.getY());
 					projectController.changeElement(path);					
 				}
 			}
@@ -163,8 +159,8 @@ public class ProjectView extends JPanel implements IProjectView {
 		this.tree.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				TreePath path = tree.getSelectionPath();
 				if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+					TreePath path = tree.getSelectionPath();
 					projectController.deleteElement(path);
 				}
 			}

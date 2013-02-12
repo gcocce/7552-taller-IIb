@@ -14,7 +14,6 @@ import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 
 import persistence.DiagramXmlManager;
-import persistence.DomainDiagramXmlManager;
 import persistence.GraphPersistenceService;
 import persistence.IGraphPersistenceService;
 import persistence.IXmlFileManager;
@@ -52,15 +51,14 @@ import views.IRelationshipEntityView;
 import views.IRelationshipView;
 import views.KeyView;
 import views.ProjectView;
+import views.RelationshipEntityViewImpl;
+import views.RelationshipViewImpl;
 
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.shape.mxIMarker;
 import com.mxgraph.shape.mxMarkerRegistry;
 import com.mxgraph.util.mxPoint;
 import com.mxgraph.view.mxCellState;
-
-import views.RelationshipEntityViewImpl;
-import views.RelationshipViewImpl;
 
 import controllers.AttributeController;
 import controllers.DiagramController;
@@ -78,7 +76,8 @@ import controllers.IRelationshipController;
 import controllers.IRelationshipEntityController;
 import controllers.KeysController;
 import controllers.ProjectController;
-
+import controllers.RelationshipController;
+import controllers.RelationshipEntityController;
 import controllers.factories.AttributeControllerFactory;
 import controllers.factories.DiagramControllerFactory;
 import controllers.factories.DomainDiagramControllerFactory;
@@ -95,8 +94,6 @@ import controllers.factories.IRelationshipEntityControllerFactory;
 import controllers.factories.KeyControllerFactory;
 import controllers.factories.RelationshipControllerFactory;
 import controllers.factories.RelationshipEntityControllerFactory;
-import controllers.RelationshipController;
-import controllers.RelationshipEntityController;
 
 public class Bootstrapper {
 

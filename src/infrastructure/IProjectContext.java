@@ -28,6 +28,9 @@ public interface IProjectContext {
 	Hierarchy getHierarchy(UUID id);
 	Entity getEntity(UUID entityId);
 	Diagram getContextDiagram(String defaultDiagramName);
-	DomainDiagram getContextDomainDiagram(String defaultDiagramName);
+	DomainDiagram getProjectDomainDiagram(String defaultDiagramName);
 	void clearProjectDiagrams();
+	Iterable<Diagram> getContextDiagrams();
+	void addProjectDomainDiagram(DomainDiagram diagram);
+	void clearProjectDomainDiagrams();
 }
