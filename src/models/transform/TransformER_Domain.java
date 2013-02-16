@@ -467,12 +467,13 @@ public class TransformER_Domain {
   					  String class2id=lastC.getAttribute("id");
   					  System.out.println("First class: "+class1id);
   					  System.out.println("Last class: "+class2id);
+  					  String dashInfo = dashClaseAsocionRelation(sName);
   					  
 					  Element eRel = this.newGraphDoc.createElement("mxCell");
 					  eRel.setAttribute("edge","1");
 					  eRel.setAttribute("id","Relacion"+relId+sName);
 					  eRel.setAttribute("parent","1");
-					  eRel.setAttribute("style","endArrow=none;edgeStyle=elbowEdgeStyle;verticalAlign=bottom;align=left;strokeColor=#000000");
+					  eRel.setAttribute("style","endArrow=none;edgeStyle=elbowEdgeStyle;verticalAlign=bottom;align=left;strokeColor=#000000" + dashInfo);
 					  eRel.setAttribute("value",sName);					  
 					  eRel.setAttribute("source",class1id);
 					  eRel.setAttribute("target",class2id);
@@ -497,6 +498,21 @@ public class TransformER_Domain {
 
 		return this.newGraphDoc ;
 	}
+
+	private String dashClaseAsocionRelation(String relationshipName) {
+		if (isClaseAsociacion(relationshipName)) {
+			return ";dashed=1";
+		} else {
+			return "";
+		}
+	}
+
+
+	private boolean isClaseAsociacion(String relationshipName) {
+		return relationshipName.endsWith("Izq") ||
+			   relationshipName.endsWith("Der");
+	}
+
 
 	private void connectHierarchies(Element eHierarchies, Element eRoot) {
 
