@@ -10,6 +10,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import models.domain.DomainAttribute;
 import models.domain.DomainClass;
 import models.domain.DomainDiagram;
 
@@ -313,14 +314,16 @@ public class TransformER_Domain {
 				  
 				  String sId=eAtribute.getAttribute("id");
 				  String sName=eAtribute.getAttribute("name");
-				  String sCardinality = eAtribute.getAttribute("maximumCardinality");
+				  String sMinCardinality = eAtribute.getAttribute("minimumCardinality");
+				  String sMaxCardinality = eAtribute.getAttribute("maximumCardinality");
 				  
 				  System.out.println("Attribute name: " + sName);
 	      
 				  Element eAtributo = dominioDoc.createElement("attribute");
 				  eAtributo.setAttribute("name", sName);
 				  eAtributo.setAttribute("id", sId);
-				  eAtributo.setAttribute("cardinality", sCardinality);
+				  eAtributo.setAttribute("minCardinality", sMinCardinality);
+				  eAtributo.setAttribute("maxCardinality", sMaxCardinality);
 				  
 				  // Procesar nodos hijos
 				  Element eAtributosHijos=(Element) eAtribute.getElementsByTagName("attributes").item(0);
@@ -429,7 +432,7 @@ public class TransformER_Domain {
             Element eGeometry= this.newGraphDoc.createElement("mxGeometry");
             eGeometry.setAttribute("as","geometry");
             eGeometry.setAttribute("height","140.0");
-            eGeometry.setAttribute("width","80.0");
+            eGeometry.setAttribute("width","110.0");
             eGeometry.setAttribute("x",x);
             eGeometry.setAttribute("y",y);
             
@@ -545,7 +548,7 @@ public class TransformER_Domain {
         Element eGeometry= this.newGraphDoc.createElement("mxGeometry");
         eGeometry.setAttribute("as","geometry");
         eGeometry.setAttribute("height","0.0");
-        eGeometry.setAttribute("width","80.0");
+        eGeometry.setAttribute("width","110.0");
         eGeometry.setAttribute("x","0");
         eGeometry.setAttribute("y",Integer.toString(heigth));
         
@@ -566,12 +569,16 @@ public class TransformER_Domain {
 			System.out.println("Se encontro la clase: "+sNombre);
 	        Element eAttributes= (Element)eClass.getElementsByTagName("attributes").item(0);
 	        NodeList nListA = eAttributes.getElementsByTagName("attribute");
+
 	        for (int temp = 0; temp < nListA.getLength(); temp++) {
 	  		   Node nNode = nListA.item(temp);
 	  		   if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eAttribute= (Element) nNode;
 					String sAName=eAttribute.getAttribute("name");
 					String sAID=eAttribute.getAttribute("id");
+					String sMinCard = eAttribute.getAttribute("minCardinality");
+					String sMaxCard = eAttribute.getAttribute("maxCardinality");
+					sAName += cardinalityStringFor(sMinCard, sMaxCard);
 					
 					System.out.println("Se procesa el atributo: "+sAName);
 					
@@ -586,7 +593,7 @@ public class TransformER_Domain {
 		            Element eGeometry= this.newGraphDoc.createElement("mxGeometry");
 		            eGeometry.setAttribute("as","geometry");
 		            eGeometry.setAttribute("height","15.0");
-		            eGeometry.setAttribute("width","60.0");
+		            eGeometry.setAttribute("width","90.0");
 		            eGeometry.setAttribute("x","10");
 		            alto=temp * 15 + 25;
 		            eGeometry.setAttribute("y",Integer.toString(alto));
@@ -599,6 +606,20 @@ public class TransformER_Domain {
 		return alto;
 	}
 	
+	private String cardinalityStringFor(String sMinCard, String sMaxCard) {
+		if (sMinCard.equals("1.0") && sMaxCard.equals("1.0")) {
+			return "";
+		}
+		Double min = Double.parseDouble(sMinCard);
+		if (sMaxCard.equals("Infinity")) {
+			return " [ " + min.intValue() + " .. * ]";
+		} else {
+			Double max = Double.parseDouble(sMaxCard);
+			return " [ " + min.intValue() + " .. " + max.intValue() + " ]";
+		}
+	}
+
+
 	private Element getElementClassbyName(String sNombre){
 		System.out.println("Se busca elemento por Nombre: " + sNombre);
 		Element e = null;
