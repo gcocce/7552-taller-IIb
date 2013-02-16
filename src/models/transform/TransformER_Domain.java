@@ -10,7 +10,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import models.domain.DomainAttribute;
 import models.domain.DomainClass;
 import models.domain.DomainDiagram;
 
@@ -441,7 +440,7 @@ public class TransformER_Domain {
             eRoot.appendChild(eCelda);
 
             // Agregar celdas de los atributos
-            addLineCell( eRoot,dClass, 20);
+            addLineCell( eRoot, dClass, 20);
             int altura=this.addCellAttributes(eRoot, dClass);
             addLineCell( eRoot,dClass,altura+20);
     	}        
@@ -457,11 +456,13 @@ public class TransformER_Domain {
   			   	  System.out.println("First class: "+eRelationship.getAttribute("name"));
   			   	  String sName=eRelationship.getAttribute("name");
   			   	  String relId=eRelationship.getAttribute("id");
-  				  if (comp.compareTo("false")==0){
+  				  if (comp.equals("false")){
   					  Element eClasses =(Element)eRelationship.getFirstChild();
   					  
   					  Element firstC=(Element)eClasses.getFirstChild();
+  					  String firstCardinality = firstC.getAttribute("cardinality");
   					  Element lastC=(Element)eClasses.getLastChild();
+  					  String lastCardinality = lastC.getAttribute("cardinality");
   					  
   					  String class1id=firstC.getAttribute("id");
   					  String class2id=lastC.getAttribute("id");
@@ -477,13 +478,22 @@ public class TransformER_Domain {
 					  eRel.setAttribute("value",sName);					  
 					  eRel.setAttribute("source",class1id);
 					  eRel.setAttribute("target",class2id);
-						
+
 					  Element eGeom= this.newGraphDoc.createElement("mxGeometry");
 					  eGeom.setAttribute("as","geometry");
 					  eGeom.setAttribute("relative","1");
 					  eRel.appendChild(eGeom);
-						
+
+					  if (!firstCardinality.equals("1")) {
+						  labelCardinality(eRoot, sName, relId, firstCardinality, 1);
+					  }
+					  
+					  if (!lastCardinality.equals("1")) {
+						  labelCardinality(eRoot, sName, relId, lastCardinality, -1);
+					  }
+					  
 					  eRoot.appendChild(eRel);
+
   				  }else{
   					  
   					  
@@ -497,6 +507,33 @@ public class TransformER_Domain {
         connectHierarchies(eHierarchies, eRoot);
 
 		return this.newGraphDoc ;
+	}
+
+
+	private void labelCardinality(Element eRoot, String sName, String relId,
+			String cardinality, Integer x) {
+		Element eLabel = this.newGraphDoc.createElement("mxCell");
+		eLabel.setAttribute("id","Relacion"+relId+sName+ x);
+		eLabel.setAttribute("parent","Relacion"+relId+sName);
+		if (x == 1) {
+			eLabel.setAttribute("style","resizable=0;align=right;verticalAlign=bottom;");
+		} else {
+			eLabel.setAttribute("style","resizable=0;align=left;verticalAlign=top;");
+		}
+		eLabel.setAttribute("value",cardinality);
+		eLabel.setAttribute("vertex", "1");
+
+		//System.out.println("Constante: " + com.mxgraph.util.mxConstants.STYLE_VERTICAL_ALIGN);
+		Element eGeometry= this.newGraphDoc.createElement("mxGeometry");
+		eGeometry.setAttribute("as","geometry");
+		eGeometry.setAttribute("relative", "1");
+		eGeometry.setAttribute("height","0");
+		eGeometry.setAttribute("width","0");
+		eGeometry.setAttribute("x", x.toString());
+		eGeometry.setAttribute("y","0");
+		eLabel.appendChild(eGeometry);
+
+		eRoot.appendChild(eLabel);
 	}
 
 	private String dashClaseAsocionRelation(String relationshipName) {
