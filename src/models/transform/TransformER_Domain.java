@@ -136,17 +136,11 @@ public class TransformER_Domain {
 	private void procesarRelacionConAtributos(Element relacionDER, Element eRelationsDomain,
 			Element relationshipClass) {
 
-		String sComposition = relacionDER.getAttribute("composition");
-		  
-		  if(sComposition == "true"){
-			//creo una relacion normal con 2 clases
-			  procesarRelacionSinAtributos(relacionDER,eRelationsDomain); 
-			  
-		  }
-		  else{
-			  //creo 2 relaciones contra la relacion que se hizo clase
-			  crearRelacionDoble( relacionDER, eRelationsDomain, relationshipClass);
-		  }
+		//String sComposition = relacionDER.getAttribute("composition");
+
+		//creo 2 relaciones contra la relacion que se hizo clase (caso de clase de asociacion)
+		crearRelacionDoble( relacionDER, eRelationsDomain, relationshipClass);
+		
 
 	}
 
@@ -169,14 +163,14 @@ public class TransformER_Domain {
 		
 		eRelationIzq.setAttribute("id", sId1);
 		eRelationIzq.setAttribute("name", sName1 + "Izq");
-		eRelationIzq.setAttribute("composition", sComposition);
+		eRelationIzq.setAttribute("composition", "false"); //No tiene sentido que alla una composition en este tipo de mapeo
 		eRelationIzq.setAttribute("directionality", "bidirectional");
 		eRelationsDomain.appendChild(eRelationIzq);
 
 		Element eRelationDer = dominioDoc.createElement("relationship");
 		eRelationDer.setAttribute("id", sId1);
 		eRelationDer.setAttribute("name", sName1 + "Der");
-		eRelationDer.setAttribute("composition", sComposition);
+		eRelationDer.setAttribute("composition", "false"); //No tiene sentido que alla una composition en este tipo de mapeo
 		eRelationDer.setAttribute("directionality", "bidirectional");
 		eRelationsDomain.appendChild(eRelationDer);
 		
